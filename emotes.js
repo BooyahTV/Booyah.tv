@@ -177,85 +177,118 @@ function init(){
 		});
 	});
 }
-
+//todo: PONER EMOTES DE TWITCH.TV
 
 function addEmotesPanel(){
-	console.log("[BOOYAH.TV] Emote panel inserted ")
+	var currentURL = window.location.href
+	channels.forEach((channel) => {
+		if (!currentURL.includes(channel.booyahID)) return;
 
-	var btnHTML = `
-	<div class="components-chat-menu-emotes theme-dark">
-		<div class="toggle-btn" title="Emotes">
-			<div class="components-icon components-icon-emotes">
-				<div id="emotes-icon" onclick="
-					if(document.getElementById('emoteList').style.display == 'inline-flex') {
-						document.getElementById('emoteList').style.display = 'none';
-					}
-					else {
-						document.getElementById('emoteList').style.display = 'inline-flex';
-					}">
+		console.log("[BOOYAH.TV] Emote panel inserted ")
+
+		var btnHTML = `
+		<div class="components-chat-menu-emotes theme-dark">
+			<div class="toggle-btn" title="Emotes">
+				<div class="components-icon components-icon-emotes">
+					<div id="emotes-icon" onclick="
+						if(document.getElementById('emoteList').style.display == 'inline-flex') {
+							document.getElementById('emoteList').style.display = 'none';
+						}
+						else {
+							document.getElementById('emoteList').style.display = 'inline-flex';
+						}">
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>`;
+		</div>`;
 
-
-	var emotesHTML = ''
-
-	betterTTV.forEach(emote => {
-		emotesHTML += 
-		`<div class="user" style="width:32px!important"> 
-		<span class="components-chatbox-user-menu" 
-			><div class="message-avatar components-avatar" style="background-color:transparent"> 
-			<div onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.code} '" style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.code}"> 
-				<img 
-				style="background-color:transparent"
-				class="components-avatar-image" 
-				alt="${emote.code}" 
-				loading="lazy" 
-				src="https://cdn.betterttv.net/emote/${emote.id}/1x" 
-				/> 
-			</div> 
-			<div class="badge-container"></div> 
-			</div> 
-		</div> `
-	})
-
-  
-
-	var emotesHTML = 
-	`<div class="  
-	  components-popover-container components-chat-menu-users-popover 
-	  theme-dark 
-	" 
-	id="emoteList"
-	style=" 
-	  position: fixed; 
-	  top: 0px; 
-	  left: 0px; 
-	  transform: translate(0px, -300px); 
-	  overflow: hidden; 
-	  width: 100%; 
-	  max-height: 300px; 
-	  display:none;
-	" 
-  > 
-	<div class="title"> 
-	  <span>Emotes</span 
-	  ><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 } emotes disponibles</span> 
-	</div> 
-	<div class="user-list-wrapper" data-infinite-scrollable="true"> 
-	  <div class="components-infinite-view has-data"> 
-		<div> 
 		
-		  ${emotesHTML}
-		</div> 
-	  </div> 
-	</div> 
-  </div>`
+		var bttvHTML = ''
+
+		betterTTV.forEach(emote => {
+			bttvHTML += 
+			`<div class="user" style="width:32px!important"> 
+			<span class="components-chatbox-user-menu" 
+				><div class="message-avatar components-avatar" style="background-color:transparent"> 
+				<div onclick=
+				 "var event = new Event('input', { bubbles: true });
+				 var textbox = document.getElementsByClassName('components-input-element')[0]; 
+				 textbox.value +='${emote.code} ';
+				 textbox.focus();
+				 textbox.scrollLeft = textbox.scrollWidth;
+				 textbox.dispatchEvent(event);"
+				 style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.code}"> 
+					<img 
+					style="background-color:transparent"
+					class="components-avatar-image" 
+					alt="${emote.code}" 
+					loading="lazy" 
+					src="https://cdn.betterttv.net/emote/${emote.id}/1x" 
+					/> 
+				</div> 
+				<div class="badge-container"></div> 
+				</div> 
+			</div> `
+		})
+
+		var ffzHTML = ''
+
+		frankerFaceZ.forEach(emote => {
+			ffzHTML += 
+			`<div class="user" style="width:32px!important"> 
+			<span class="components-chatbox-user-menu" 
+				><div class="message-avatar components-avatar" style="background-color:transparent"> 
+				<div onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.name} '" style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}"> 
+					<img 
+					style="background-color:transparent"
+					class="components-avatar-image" 
+					alt="${emote.name}" 
+					loading="lazy" 
+					src="https://cdn.frankerfacez.com/emote/${emote.id}/1" 
+					/> 
+				</div> 
+				<div class="badge-container"></div> 
+				</div> 
+			</div> `
+		})
+
+		var emotesHTML = 
+			`<div class="  
+			components-popover-container components-chat-menu-users-popover 
+			theme-dark 
+			" 
+			id="emoteList"
+			style=" 
+			position: fixed; 
+			top: 0px; 
+			left: 0px; 
+			transform: translate(0px, -300px); 
+			overflow: hidden; 
+			width: 100%; 
+			max-height: 300px; 
+			display:none;
+			" 
+		> 
+			<div class="title"> 
+			<span>Emotes</span 
+			><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 } emotes disponibles</span> 
+			</div> 
+			<div class="user-list-wrapper" data-infinite-scrollable="true"> 
+			<div class="components-infinite-view has-data"> 
+				<div> 
+				<div class="title" style="padding: 12px 12px!important;">BetterTTV</div>
+				${bttvHTML}
+				<div class="title" style="padding: 12px 12px!important;">FrankerFaceZ</div>
+				${ffzHTML}
+				</div> 
+			</div> 
+			</div> 
+		</div>`
 
 
-  $('.btns-bar-chat').first().append(btnHTML);
-  $('.components-chat-menu-users').first().append(emotesHTML);
+		$('.btns-bar-chat').first().append(btnHTML);
+		$('.components-chat-menu-users').first().append(emotesHTML);
+	});
 }
 
 init();
