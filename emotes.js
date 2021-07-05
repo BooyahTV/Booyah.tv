@@ -3,6 +3,8 @@ const globalBetterttvURL = "https://api.betterttv.net/3/cached/emotes/global";
 const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch/";
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
+// twitch id grabed in https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
+
 const channels = [
   {
 	twitchID: 149287198,
@@ -13,6 +15,11 @@ const channels = [
 	booyahID: "63681555",
   },
 ];
+
+var betterTTV = [];
+var frankerFaceZ = [];
+
+// Twitch.tv username colors
 
 const colors = [
   "#002FA7",
@@ -27,28 +34,25 @@ const colors = [
   "#ff0000",
 ];
 
-var betterTTV = [];
-var frankerFaceZ = [];
+// find and replace all instances of an emote given the message and a regex rule.
 
-function replaceEmote(text, regex, url, title) {
-	if(regex.test(text)){
-		console.log('EMOTE: '+title+' found')	
-	}
-
-  return text.replace(
+function replaceEmote(msg, regex, url, title) {
+  return msg.replace(
 	regex,
 	`<img title="${title}" class="moveimage" src="${url}">`
   );
 }
 
-function replaceEmotes(text) {
+// remplaces all bettertTTV and frankerFaceZ emotes in a message.
+
+function replaceEmotes(msg) {
   // BETTER TTV EMOTES
 
   for (let i = 0; i < betterTTV.length; i++) {
 	var bttvRegex = new RegExp("\\b" + betterTTV[i].code + "\\b", "g");
 	var bttvURL = `https://cdn.betterttv.net/emote/${betterTTV[i].id}/1x`;
 
-	text = replaceEmote(text, bttvRegex, bttvURL, betterTTV[i].code);
+	msg = replaceEmote(msg, bttvRegex, bttvURL, betterTTV[i].code);
   }
 
   // BETTER EMOTES EMOTES
@@ -57,11 +61,12 @@ function replaceEmotes(text) {
 	var ffzRegex = new RegExp("\\b" + frankerFaceZ[i].name + "\\b", "g");
 	var ffzURL = `https://cdn.frankerfacez.com/emote/${frankerFaceZ[i].id}/1`;
 	
-	text = replaceEmote(text, ffzRegex, ffzURL, frankerFaceZ[i].name);
+	msg = replaceEmote(msg, ffzRegex, ffzURL, frankerFaceZ[i].name);
   }
 
-  return text;
+  return msg;
 }
+// remplace all emotes in message (bttv, ffz, D:,etc) with an image
 
 function addEmotes(objective) {
 
@@ -71,15 +76,15 @@ function addEmotes(objective) {
 		.slice(-50)
 		.not(":has(img)")
 		.each(function () {
-			var text = $(this).html();
+			var msg = $(this).html();
 
-			text = replaceEmote(text, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3
-			text = replaceEmote(text,new RegExp("\\b" + "D:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x","D:"); // D:
-			text = replaceEmotes(text); // replace all betterttv and franker face z emotes
+			msg = replaceEmote(text, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3
+			msg = replaceEmote(text,new RegExp("\\b" + "D:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x","D:"); // D:
+			msg = replaceEmotes(text); // replace all betterttv and franker face z emotes
 
 			//console.log('[result] ',text)
 
-			$(this).html(text);
+			$(this).html(msg);
 		});
 }
 
