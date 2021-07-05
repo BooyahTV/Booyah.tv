@@ -111,3 +111,28 @@
 	  text-align: center;
 	  font-family: sans-serif;
   }
+  /* le quita el margen a los mensajes */
+  .components-chatbox-message{
+    margin: 3px 3px 3px 3px;
+
+  }
+
+  .scroll-container {
+	margin-left: 9px;
+  }
+
+  #emotes-icon{
+	background-image: url('chrome-extension://__MSG_@@extension_id__/emote-icon.png');
+	background-position: 0px 0px; 
+	width: 28px; 
+	height: 28px;
+}
+#emotes-icon:hover{
+	background-position: 28px 0px; 
+}
+
+.emoteIcon{
+	cursor: pointer;
+	width: 32px;
+	margin: 2px;
+}
