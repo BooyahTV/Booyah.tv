@@ -18,7 +18,7 @@ Canales donde esta disponible la extensión:
 
 ## Emotes
 
-Emotes que estan disponibles:
+Emotes que estan incorporados:
 
 * [BetterTTV Global / por canal](https://betterttv.com)
 * [Franker Face Z](https://www.frankerfacez.com)
