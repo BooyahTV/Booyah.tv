@@ -8,8 +8,6 @@
 2. Nombres de usuario con colores
 3. Fuente de twitch.tv
 
- ![app icon](readme/oldvsnew.png)
-
 ## Canales
 
 Canales donde esta disponible la extensión:
