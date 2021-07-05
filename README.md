@@ -14,7 +14,7 @@ Canales donde esta disponible la extensión:
 
 * Cristianghost (canal por verse)
 * Dylantero (canal por verse)
-* [MOAIGR](https://booyah.live/channels/63681555?source=33)
+* [MoaiGR](https://booyah.live/channels/63681555?source=33)
 
 ## Emotes
 
