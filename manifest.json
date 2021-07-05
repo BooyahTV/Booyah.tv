@@ -13,7 +13,7 @@
 	"content_scripts": [
 		{
 			"css": ["styles.css"],
-			"js": ["jquery.min.js", "emotes.js", "popup.js"],
+			"js": ["jquery.min.js", "emotes.js"],
 			"matches": ["https://booyah.live/channels/*"]
 		}
 	],
