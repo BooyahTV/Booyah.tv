@@ -1,0 +1,25 @@
+{
+	"name": "BOOYAH.tv",
+	"version": "0.1.5",
+	"description": "Emotes de twitch.tv/betterttv/FrankerFaceZ + cristianghost para booyah.live",
+	"manifest_version": 2,
+
+	"permissions": ["activeTab"],
+	"icons": { 
+		"16": "16.png",
+		"48": "48.png",
+	   "128": "128.png" 
+	},
+	"content_scripts": [
+		{
+			"css": ["styles.css"],
+			"js": ["jquery.min.js", "emotes.js", "popup.js"],
+			"matches": ["https://booyah.live/channels/*"]
+		}
+	],
+	"browser_action": {
+		"default_icon": "128.png",
+		"default_popup": "popup.html"
+	},
+	"web_accessible_resources": ["128.png"]
+}

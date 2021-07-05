@@ -1,0 +1,81 @@
+body {
+	font-family: "Open Sans", sans-serif;
+	margin: 0;
+	min-height: 180px;
+	padding: 0;
+	width: 400px;
+	background-color: #3d3d3d;
+}
+
+h1 {
+	font-family: monospace;
+	font-size: 22px;
+	font-weight: 400;
+	margin: 0;
+	color: #c7c7c7;
+}
+
+img {
+	width: 30px;
+}
+
+.modal-header {
+	border-bottom: 0.5px solid #dadada;
+}
+
+.modal-content {
+	padding: 0 22px;
+	margin-top: 10px; /* Add some space below the input */
+}
+
+.logo {
+	padding: 16px;
+}
+
+.logo-icon {
+	vertical-align: text-bottom;
+	margin-right: 12px;
+	border-radius: 50%;
+}
+
+.version {
+	color: #c7c7c7;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.emote {
+	cursor: pointer;
+	max-height: 30px;
+	border: 1px solid transparent;
+	transition: all 0.2s ease-in-out;
+}
+.emote:hover {
+	transform: scale(1.5);
+}
+
+#hide_donations {
+	margin-bottom: 2px;
+	cursor: pointer;
+	vertical-align: middle;
+}
+#hide_donations:hover {
+	filter: brightness(2) invert(1);
+}
+#hide_donations:active {
+	filter: brightness(1);
+}
+
+#myInput {
+	background-image: url("https://cdn.discordapp.com/attachments/818892484490428487/858475232690962522/searchicon.png");
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 20px 20px;
+	width: 70%; /* Full-width */
+	margin-left: 22px;
+	font-size: 16px; /* Increase font-size */
+	padding-left: 20px; /* Add some padding */
+	padding-top: 3px;
+	border: 2px solid #ddd; /* Add a grey border */
+	margin-bottom: 10px; /* Add some space below the input */
+}
