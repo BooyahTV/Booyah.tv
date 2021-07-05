@@ -93,16 +93,14 @@ function watchChatChanges() {
 
 	document.getElementsByClassName("scroll-container")[0].addEventListener("DOMNodeInserted",
 		function (e) {
-			//console.log(   e.target.childNodes )
 
-			
 			for (var j = 0; j < e.target.childNodes.length; j++) {
-				var inner = e.target.childNodes[j];
-				console.log(   inner )
+				var components = e.target.childNodes[j];
 
-				var message = inner.childNodes[0].childNodes[0];
+				// change the username color
+				var usernameContainer = components.childNodes[0].childNodes[0];
 
-				var username = message.childNodes[message.childNodes.length - 1];
+				var username = usernameContainer.childNodes[usernameContainer.childNodes.length - 1];
 
 				var hash = username.innerText.charCodeAt(0);
 
@@ -113,30 +111,43 @@ function watchChatChanges() {
 						color = colors[i];
 					}
 				}
-
-				addEmotes(inner.childNodes[0].childNodes[inner.childNodes[0].childNodes.length - 1]);
-
+				
 				username.style.color = color;
 
-				//console.log(inner)
+				// change the message content with its emotes
+
+				var messageContent = components.childNodes[0].childNodes
+
+				addEmotes(messageContent[messageContent.length - 1]);
+		
 			}
 		},
 		false
 	);
 }
 
-window.onload = function () {
-  setTimeout(function () {
+var existCondition = setInterval(function() {
+	if ($('.scroll-container').first().length) {
+
+
+		watchChatChanges()
+
+		clearInterval(existCondition);
+
+	}
+}, 100); // check every 100ms
+
+function init(){
 
 	var currentURL = window.location.href
-
+	
 	console.log("[BOOYAH.TV] CURRENT URL: "+currentURL)
 	
 	channels.forEach((channel) => {
 		if (!currentURL.includes(channel.booyahID)) return;
-
+	
 		console.log( "[BOOYAH.TV] You are in " + channel.booyahID + " Channel.");
-
+	
 		console.log("[BOOYAH.TV] fetching betterttv for channel: ", betterTTVChannelBaseURL + channel.twitchID );
 		console.log("[BOOYAH.TV] fetching frankerFaceZ for channel: ",frankerfaceZChannelBaseURL + channel.twitchID );
 		
@@ -147,12 +158,12 @@ window.onload = function () {
 		])
 		.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ]) => {
 			betterTTV = betterTTV.concat(globalBetterttv);
-
+	
 			betterTTV = betterTTV.concat(channelBetterttv.channelEmotes);
 			betterTTV = betterTTV.concat(channelBetterttv.sharedEmotes);
-
+	
 			frankerFaceZ = frankerFaceZ.concat(channelFrankerfaceZ.sets[Object.keys(channelFrankerfaceZ.sets)[0]].emoticons);
-
+	
 			console.log("[BOOYAH.TV] betterttv: ", betterTTV);
 			console.log("[BOOYAH.TV] frankerFaceZ: ", frankerFaceZ);
 			
@@ -161,8 +172,5 @@ window.onload = function () {
 			console.log(err);
 		});
 	});
-	
-	watchChatChanges();
-  }, 4000);
-};
-
+}
+init()
