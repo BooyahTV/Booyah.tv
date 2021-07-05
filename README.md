@@ -1,2 +1,2 @@
 # Booyah.tv 0.1
-  ![alt text](128.png) Booyah wajaja Booyah wajaja Booyah
+  ![app icon](128.png) ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah
