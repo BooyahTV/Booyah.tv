@@ -78,11 +78,11 @@ function addEmotes(objective) {
 		.each(function () {
 			var msg = $(this).html();
 
-			msg = replaceEmote(text, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3
-			msg = replaceEmote(text,new RegExp("\\b" + "D:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x","D:"); // D:
-			msg = replaceEmotes(text); // replace all betterttv and franker face z emotes
+			msg = replaceEmote(msg, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3
+			msg = replaceEmote(msg,new RegExp("\\b" + "D:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x","D:"); // D:
+			msg = replaceEmotes(msg); // replace all betterttv and franker face z emotes
 
-			//console.log('[result] ',text)
+			//console.log('[result] ',msg)
 
 			$(this).html(msg);
 		});
