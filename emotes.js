@@ -39,7 +39,7 @@ const colors = [
 function replaceEmote(msg, regex, url, title) {
   return msg.replace(
 	regex,
-	`<img title="${title}" class="moveimage" src="${url}">`
+	`<img title="${title}" class='moveimage' src='${url}'>`
   );
 }
 
@@ -88,57 +88,44 @@ function addEmotes(objective) {
 		});
 }
 
+function changeChatOnChange(e){
+
+	for (var j = 0; j < e.target.childNodes.length; j++) {
+		var components = e.target.childNodes[j];
+
+		// change the username color
+		var usernameContainer = components.childNodes[0].childNodes[0];
+
+		var username = usernameContainer.childNodes[usernameContainer.childNodes.length - 1];
+
+		var hash = username.innerText.charCodeAt(0);
+
+		var color = "#ffffff";
+
+		for (let i = 0; i < colors.length; i++) {
+			if (hash % i === 0) {
+				color = colors[i];
+			}
+		}
+		
+		username.style.color = color;
+
+		// change the message content with its emotes
+
+		var messageContent = components.childNodes[0].childNodes
+
+		addEmotes(messageContent[messageContent.length - 1]);
+
+	}
+}
+
 function watchChatChanges() {
 	console.log('[BOOYAH.TV] Watching Chat Changes')
 
-	document.getElementsByClassName("scroll-container")[0].addEventListener("DOMNodeInserted",
-		function (e) {
+	document.getElementsByClassName("scroll-container")[0].removeEventListener('DOMNodeInserted', changeChatOnChange, true);
 
-			for (var j = 0; j < e.target.childNodes.length; j++) {
-				var components = e.target.childNodes[j];
-
-				// change the username color
-				var usernameContainer = components.childNodes[0].childNodes[0];
-
-				var username = usernameContainer.childNodes[usernameContainer.childNodes.length - 1];
-
-				var hash = username.innerText.charCodeAt(0);
-
-				var color = "#ffffff";
-
-				for (let i = 0; i < colors.length; i++) {
-					if (hash % i === 0) {
-						color = colors[i];
-					}
-				}
-				
-				username.style.color = color;
-
-				// change the message content with its emotes
-
-				var messageContent = components.childNodes[0].childNodes
-
-				addEmotes(messageContent[messageContent.length - 1]);
-		
-			}
-		},
-		false
-	);
+	document.getElementsByClassName("scroll-container")[0].addEventListener("DOMNodeInserted",changeChatOnChange,true);
 }
-
-var chatExist = setInterval(function() {
-	if ($('.scroll-container').first().length) {
-
-		
-		clearInterval(chatExist);
-		
-		watchChatChanges()
-		setTimeout(function() {
-			addEmotesPanel()
-		},1000)
-	}
-}, 1000); // check every 100ms
-
 
 
 function init(){
@@ -178,13 +165,15 @@ function init(){
 	});
 }
 //todo: PONER EMOTES DE TWITCH.TV
+emotePanelExist = false
 
 function addEmotesPanel(){
+	
 	var currentURL = window.location.href
 	channels.forEach((channel) => {
 		if (!currentURL.includes(channel.booyahID)) return;
-
-		console.log("[BOOYAH.TV] Emote panel inserted ")
+		console.log("[BOOYAH.TV] Emote panel added");
+		emotePanelExist = true
 
 		var btnHTML = `
 		<div class="components-chat-menu-emotes theme-dark">
@@ -291,4 +280,32 @@ function addEmotesPanel(){
 	});
 }
 
-init();
+init()
+
+var url = ''
+
+
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	if (request.message === 'TabUpdated') {
+		console.log(request.url)
+		
+		if (url != request.url){
+			var chatExist = setInterval(function() {
+				if ($('.scroll-container').first().length) {
+					console.log("[BOOYAH.TV] insert on reload");
+			
+					
+					clearInterval(chatExist);
+					
+					watchChatChanges()
+					
+					setTimeout(function() {
+						addEmotesPanel()
+					},1000)
+				}
+			}, 1000);
+		}
+		url = request.url
+	}
+  })
