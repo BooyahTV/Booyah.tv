@@ -11,10 +11,32 @@ const channels = [
 	booyahID: "T",
   },
   {
-	twitchID: 68111739,
+	twitchID: 68111739, //149287198 <-cristianghost
 	booyahID: "63681555",
   },
 ];
+
+var twitchEmotes = [
+	{id:'425618', name: 'LUL'},
+	{id:'160404', name: 'TehePelo'},
+	{id:'120232', name: 'TriHard'},
+	{id:'114836', name: 'Jebaited'},
+	{id:'84608', name: 'cmonBruh'},
+	{id:'81248', name: 'OSFrog'},
+	{id:'58765', name: 'NotLikeThis'},
+	{id:'55338', name: 'KappaPride'},
+	{id:'28087', name: 'WutFace'},
+	{id:'27602', name: 'BuddhaBar'},
+	{id:'22639', name: 'BabyRage'},
+	{id:'3792', name: 'ANELE'},
+	{id:'86', name: 'BibleThump'},
+	{id:'69', name: 'BloodTrail'},
+	{id:'41', name: 'Kreygasm'},
+	{id:'25', name: 'Kappa'},
+];
+
+var globalEmotes = [];
+var channelEmotes = [];
 
 var betterTTV = [];
 var frankerFaceZ = [];
@@ -46,6 +68,14 @@ function replaceEmote(msg, regex, url, title) {
 // remplaces all bettertTTV and frankerFaceZ emotes in a message.
 
 function replaceEmotes(msg) {
+  // TWITCH EMOTES
+  
+  for (let i = 0; i < twitchEmotes.length; i++) {
+	var twitchRegex = new RegExp("\\b" + twitchEmotes[i].name + "\\b", "g");
+	var twitchURL = `https://static-cdn.jtvnw.net/emoticons/v2/${twitchEmotes[i].id}/default/dark/1.0`;
+
+	msg = replaceEmote(msg, twitchRegex, twitchURL, twitchEmotes[i].name);
+  }
   // BETTER TTV EMOTES
 
   for (let i = 0; i < betterTTV.length; i++) {
@@ -64,6 +94,8 @@ function replaceEmotes(msg) {
 	msg = replaceEmote(msg, ffzRegex, ffzURL, frankerFaceZ[i].name);
   }
 
+  
+
   return msg;
 }
 // remplace all emotes in message (bttv, ffz, D:,etc) with an image
@@ -80,6 +112,7 @@ function addEmotes(objective) {
 
 			msg = replaceEmote(msg, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3
 			msg = replaceEmote(msg,new RegExp("\\b" + "D:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x","D:"); // D:
+			msg = replaceEmote(msg,new RegExp("\\b" + ":tf:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/54fa8f1401e468494b85b537/1x",":tf:"); // :tf:
 			msg = replaceEmotes(msg); // replace all betterttv and franker face z emotes
 
 			//console.log('[result] ',msg)
@@ -153,6 +186,9 @@ function init(){
 			betterTTV = betterTTV.concat(channelBetterttv.channelEmotes);
 			betterTTV = betterTTV.concat(channelBetterttv.sharedEmotes);
 	
+			globalEmotes = channelEmotes.concat(globalBetterttv)
+			channelEmotes = channelEmotes.concat(channelBetterttv.channelEmotes)
+
 			frankerFaceZ = frankerFaceZ.concat(channelFrankerfaceZ.sets[Object.keys(channelFrankerfaceZ.sets)[0]].emoticons);
 	
 			console.log("[BOOYAH.TV] betterttv: ", betterTTV);
@@ -164,8 +200,14 @@ function init(){
 		});
 	});
 }
-//todo: PONER EMOTES DE TWITCH.TV
+
 emotePanelExist = false
+
+function toggleDonos(){
+	var donations = document.getElementsByClassName("components-gifter-rank")[0]; 
+					if(donations.style.display =="none") donations.style.display = ""
+					else donations.style.display = "none";
+}
 
 function addEmotesPanel(){
 	
@@ -175,7 +217,9 @@ function addEmotesPanel(){
 		console.log("[BOOYAH.TV] Emote panel added");
 		emotePanelExist = true
 
-		var btnHTML = `
+		toggleDonos()
+
+		var emoteButtonHTML = `
 		<div class="components-chat-menu-emotes theme-dark">
 			<div class="toggle-btn" title="Emotes">
 				<div class="components-icon components-icon-emotes">
@@ -190,11 +234,55 @@ function addEmotesPanel(){
 				</div>
 			</div>
 		</div>`;
+		
+
+		var toggleDonoPayload = `
+		var donations = document.getElementsByClassName('components-gifter-rank')[0]; 
+		if(donations.style.display =='none'){
+			donations.style.display = ''
+			document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
+		}
+		else{
+			donations.style.display = 'none';
+			document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
+		}`
+		
+
+		var toggleDonoButtonHTML = `<div><button onclick="${toggleDonoPayload}" id="hidebutton">Ver Donaciones</button></div>`;
 
 		
+		var twitchHTML = ''
+		
+		twitchEmotes.forEach(emote => {
+			twitchHTML += 
+			`<div class="user" style="width:32px!important"> 
+			<span class="components-chatbox-user-menu" 
+				><div class="message-avatar components-avatar" style="background-color:transparent"> 
+				<div onclick=
+				 "var event = new Event('input', { bubbles: true });
+				 var textbox = document.getElementsByClassName('components-input-element')[0]; 
+				 textbox.value +='${emote.name} ';
+				 textbox.focus();
+				 textbox.scrollLeft = textbox.scrollWidth;
+				 textbox.dispatchEvent(event);"
+				 style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}"> 
+					<img 
+					style="background-color:transparent"
+					class="components-avatar-image" 
+					alt="${emote.name}" 
+					loading="lazy" 
+					src="https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0" 
+					/> 
+				</div> 
+				<div class="badge-container"></div> 
+				</div> 
+			</div> `
+		})
+
+
 		var bttvHTML = ''
 
-		betterTTV.forEach(emote => {
+		globalEmotes.forEach(emote => {
 			bttvHTML += 
 			`<div class="user" style="width:32px!important"> 
 			<span class="components-chatbox-user-menu" 
@@ -224,10 +312,10 @@ function addEmotesPanel(){
 
 		frankerFaceZ.forEach(emote => {
 			ffzHTML += 
-			`<div class="user" style="width:32px!important"> 
-			<span class="components-chatbox-user-menu" 
+			`<div class="user" style="width:${emote.width}px;height:${emote.height}px"> 
+			<span style="width:${emote.width}px;height:${emote.height}px" class="components-chatbox-user-menu" 
 				><div class="message-avatar components-avatar" style="background-color:transparent"> 
-				<div onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.name} '" style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}"> 
+				<div  style="width:${emote.width}px;height:${emote.height}px;border-radius: 0%!important" onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.name} '" class="components-avatar-image-container" title="${emote.name}"> 
 					<img 
 					style="background-color:transparent"
 					class="components-avatar-image" 
@@ -240,6 +328,29 @@ function addEmotesPanel(){
 				</div> 
 			</div> `
 		})
+
+		var channelHTML = ''
+
+		channelEmotes.forEach(emote => {
+			channelHTML += 
+			`<div class="user" style="width:32px!important"> 
+			<span class="components-chatbox-user-menu" 
+				><div class="message-avatar components-avatar" style="background-color:transparent"> 
+				<div onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.code} '" style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}"> 
+					<img 
+					style="background-color:transparent"
+					class="components-avatar-image" 
+					alt="${emote.code}" 
+					loading="lazy" 
+					src="https://cdn.betterttv.net/emote/${emote.id}/1x" 
+					/> 
+				</div> 
+				<div class="badge-container"></div> 
+				</div> 
+			</div> `
+		})
+
+		
 
 		var emotesHTML = 
 			`<div class="  
@@ -260,22 +371,26 @@ function addEmotesPanel(){
 		> 
 			<div class="title"> 
 			<span>Emotes</span 
-			><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 } emotes disponibles</span> 
+			><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1 } emotes disponibles</span> 
 			</div> 
 			<div class="user-list-wrapper" data-infinite-scrollable="true"> 
 			<div class="components-infinite-view has-data"> 
 				<div> 
+				<div class="title" style="padding: 12px 12px!important;">Emotes de Twitch</div>
+				${twitchHTML}
 				<div class="title" style="padding: 12px 12px!important;">BetterTTV</div>
 				${bttvHTML}
-				<div class="title" style="padding: 12px 12px!important;">FrankerFaceZ</div>
+				<div class="title" style="padding: 12px 12px!important;">Emotes del canal</div>
+				${channelHTML}
 				${ffzHTML}
 				</div> 
 			</div> 
 			</div> 
 		</div>`
 
-
-		$('.btns-bar-chat').first().append(btnHTML);
+		$('.components-profile-card-right').first().append(toggleDonoButtonHTML);
+		
+		$('.btns-bar-chat').first().append(emoteButtonHTML);
 		$('.components-chat-menu-users').first().append(emotesHTML);
 	});
 }

@@ -124,15 +124,35 @@
   #emotes-icon{
 	background-image: url('chrome-extension://__MSG_@@extension_id__/emote-icon.png');
 	background-position: 0px 0px; 
-	width: 28px; 
+	width: 26px; 
 	height: 28px;
 }
 #emotes-icon:hover{
-	background-position: 28px 0px; 
+	background-position: 26px 0px; 
 }
 
 .emoteIcon{
 	cursor: pointer;
 	width: 32px;
 	margin: 2px;
+}
+
+#hidebutton{
+	background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    border-spacing: 0;
+    color: #c5aa09;
+    font-family: 'PT Sans Narrow',sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.42rem;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    text-decoration: none;
+    text-indent: 0;
+    width: 100%;
+    text-align: center;
+    font-family: Inter, sans-serif;
 }
