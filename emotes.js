@@ -11,7 +11,7 @@ const channels = [
 	booyahID: "T",
   },
   {
-	twitchID: 68111739, //149287198 <-cristianghost
+	twitchID: 149287198, // 68111739
 	booyahID: "63681555",
   },
 ];
@@ -374,13 +374,13 @@ function addEmotesPanel(){
 			><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1 } emotes disponibles</span> 
 			</div> 
 			<div class="user-list-wrapper" data-infinite-scrollable="true"> 
-			<div class="components-infinite-view has-data"> 
+			<div class="components-infinite-view has-data" style="text-align: center;"> 
 				<div> 
-				<div class="title" style="padding: 12px 12px!important;">Emotes de Twitch</div>
+				<div class="title" style="padding: 12px 12px!important;"><div id="twitchicon"></div><span class="titletxt">Emoticonos de Twitch</span></div>
 				${twitchHTML}
-				<div class="title" style="padding: 12px 12px!important;">BetterTTV</div>
+				<div class="title" style="padding: 12px 12px!important;"><div id="bttvicon"></div><span class="titletxt">BetterTTV</span></div>
 				${bttvHTML}
-				<div class="title" style="padding: 12px 12px!important;">Emotes del canal</div>
+				<div class="title" style="padding: 12px 12px!important;"><div id="ffzicon"></div><span class="titletxt">Emoticonos del canal</span></div>
 				${channelHTML}
 				${ffzHTML}
 				</div> 
