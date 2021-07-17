@@ -69,7 +69,7 @@ function replaceEmote(msg, regex, url, title) {
 
 function replaceEmotes(msg) {
   // TWITCH EMOTES
-  
+
   for (let i = 0; i < twitchEmotes.length; i++) {
 	var twitchRegex = new RegExp("\\b" + twitchEmotes[i].name + "\\b", "g");
 	var twitchURL = `https://static-cdn.jtvnw.net/emoticons/v2/${twitchEmotes[i].id}/default/dark/1.0`;
@@ -90,11 +90,11 @@ function replaceEmotes(msg) {
   for (let i = 0; i < frankerFaceZ.length; i++) {
 	var ffzRegex = new RegExp("\\b" + frankerFaceZ[i].name + "\\b", "g");
 	var ffzURL = `https://cdn.frankerfacez.com/emote/${frankerFaceZ[i].id}/1`;
-	
+
 	msg = replaceEmote(msg, ffzRegex, ffzURL, frankerFaceZ[i].name);
   }
 
-  
+
 
   return msg;
 }
@@ -140,7 +140,7 @@ function changeChatOnChange(e){
 				color = colors[i];
 			}
 		}
-		
+
 		username.style.color = color;
 
 		// change the message content with its emotes
@@ -164,17 +164,17 @@ function watchChatChanges() {
 function init(){
 
 	var currentURL = window.location.href
-	
+
 	console.log("[BOOYAH.TV] CURRENT URL: "+currentURL)
-	
+
 	channels.forEach((channel) => {
 		if (!currentURL.includes(channel.booyahID)) return;
-	
+
 		console.log( "[BOOYAH.TV] You are in " + channel.booyahID + " Channel.");
-	
+
 		console.log("[BOOYAH.TV] fetching betterttv for channel: ", betterTTVChannelBaseURL + channel.twitchID );
 		console.log("[BOOYAH.TV] fetching frankerFaceZ for channel: ",frankerfaceZChannelBaseURL + channel.twitchID );
-		
+
 		Promise.all([
 			fetch(globalBetterttvURL).then((value) => value.json()),
 			fetch(betterTTVChannelBaseURL + channel.twitchID).then((value) => value.json() ),
@@ -182,18 +182,18 @@ function init(){
 		])
 		.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ]) => {
 			betterTTV = betterTTV.concat(globalBetterttv);
-	
+
 			betterTTV = betterTTV.concat(channelBetterttv.channelEmotes);
 			betterTTV = betterTTV.concat(channelBetterttv.sharedEmotes);
-	
+
 			globalEmotes = channelEmotes.concat(globalBetterttv)
 			channelEmotes = channelEmotes.concat(channelBetterttv.channelEmotes)
 
 			frankerFaceZ = frankerFaceZ.concat(channelFrankerfaceZ.sets[Object.keys(channelFrankerfaceZ.sets)[0]].emoticons);
-	
+
 			console.log("[BOOYAH.TV] betterttv: ", betterTTV);
 			console.log("[BOOYAH.TV] frankerFaceZ: ", frankerFaceZ);
-			
+
 		})
 		.catch((err) => {
 			console.log(err);
@@ -204,13 +204,13 @@ function init(){
 emotePanelExist = false
 
 function toggleDonos(){
-	var donations = document.getElementsByClassName("components-gifter-rank")[0]; 
+	var donations = document.getElementsByClassName("components-gifter-rank")[0];
 					if(donations.style.display =="none") donations.style.display = ""
 					else donations.style.display = "none";
 }
 
 function addEmotesPanel(){
-	
+
 	var currentURL = window.location.href
 	channels.forEach((channel) => {
 		if (!currentURL.includes(channel.booyahID)) return;
@@ -234,10 +234,10 @@ function addEmotesPanel(){
 				</div>
 			</div>
 		</div>`;
-		
+
 
 		var toggleDonoPayload = `
-		var donations = document.getElementsByClassName('components-gifter-rank')[0]; 
+		var donations = document.getElementsByClassName('components-gifter-rank')[0];
 		if(donations.style.display =='none'){
 			donations.style.display = ''
 			document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
@@ -246,36 +246,36 @@ function addEmotesPanel(){
 			donations.style.display = 'none';
 			document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
 		}`
-		
+
 
 		var toggleDonoButtonHTML = `<div><button onclick="${toggleDonoPayload}" id="hidebutton">Ver Donaciones</button></div>`;
 
-		
+
 		var twitchHTML = ''
-		
+
 		twitchEmotes.forEach(emote => {
-			twitchHTML += 
-			`<div class="user" style="width:32px!important"> 
-			<span class="components-chatbox-user-menu" 
-				><div class="message-avatar components-avatar" style="background-color:transparent"> 
+			twitchHTML +=
+			`<div class="user" style="width:32px!important">
+			<span class="components-chatbox-user-menu"
+				><div class="message-avatar components-avatar" style="background-color:transparent">
 				<div onclick=
 				 "var event = new Event('input', { bubbles: true });
-				 var textbox = document.getElementsByClassName('components-input-element')[0]; 
+				 var textbox = document.getElementsByClassName('components-input-element')[0];
 				 textbox.value +='${emote.name} ';
 				 textbox.focus();
 				 textbox.scrollLeft = textbox.scrollWidth;
 				 textbox.dispatchEvent(event);"
-				 style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}"> 
-					<img 
+				 style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}">
+					<img
 					style="background-color:transparent"
-					class="components-avatar-image" 
-					alt="${emote.name}" 
-					loading="lazy" 
-					src="https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0" 
-					/> 
-				</div> 
-				<div class="badge-container"></div> 
-				</div> 
+					class="components-avatar-image"
+					alt="${emote.name}"
+					loading="lazy"
+					src="https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0"
+					/>
+				</div>
+				<div class="badge-container"></div>
+				</div>
 			</div> `
 		})
 
@@ -283,99 +283,89 @@ function addEmotesPanel(){
 		var bttvHTML = ''
 
 		globalEmotes.forEach(emote => {
-			bttvHTML += 
-			`<div class="user" style="width:32px!important"> 
-			<span class="components-chatbox-user-menu" 
-				><div class="message-avatar components-avatar" style="background-color:transparent"> 
+			bttvHTML +=
+			`<div class="user" style="width:32px!important">
+			<span class="components-chatbox-user-menu"
+				><div class="message-avatar components-avatar" style="background-color:transparent">
 				<div onclick=
 				 "var event = new Event('input', { bubbles: true });
-				 var textbox = document.getElementsByClassName('components-input-element')[0]; 
+				 var textbox = document.getElementsByClassName('components-input-element')[0];
 				 textbox.value +='${emote.code} ';
 				 textbox.focus();
 				 textbox.scrollLeft = textbox.scrollWidth;
 				 textbox.dispatchEvent(event);"
-				 style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.code}"> 
-					<img 
+				 style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.code}">
+					<img
 					style="background-color:transparent"
-					class="components-avatar-image" 
-					alt="${emote.code}" 
-					loading="lazy" 
-					src="https://cdn.betterttv.net/emote/${emote.id}/1x" 
-					/> 
-				</div> 
-				<div class="badge-container"></div> 
-				</div> 
+					class="components-avatar-image"
+					alt="${emote.code}"
+					loading="lazy"
+					src="https://cdn.betterttv.net/emote/${emote.id}/1x"
+					/>
+				</div>
+				<div class="badge-container"></div>
+				</div>
 			</div> `
 		})
 
 		var ffzHTML = ''
 
 		frankerFaceZ.forEach(emote => {
-			ffzHTML += 
-			`<div class="user" style="width:${emote.width}px;height:${emote.height}px"> 
-			<span style="width:${emote.width}px;height:${emote.height}px" class="components-chatbox-user-menu" 
-				><div class="message-avatar components-avatar" style="background-color:transparent"> 
-				<div  style="width:${emote.width}px;height:${emote.height}px;border-radius: 0%!important" onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.name} '" class="components-avatar-image-container" title="${emote.name}"> 
-					<img 
+			ffzHTML +=
+			`<div class="user" style="width:${emote.width}px;height:${emote.height}px">
+			<span style="width:${emote.width}px;height:${emote.height}px" class="components-chatbox-user-menu"
+				><div class="message-avatar components-avatar" style="background-color:transparent">
+				<div  style="width:${emote.width}px;height:${emote.height}px;border-radius: 0%!important" onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.name} '" class="components-avatar-image-container" title="${emote.name}">
+					<img
 					style="background-color:transparent"
-					class="components-avatar-image" 
-					alt="${emote.name}" 
-					loading="lazy" 
-					src="https://cdn.frankerfacez.com/emote/${emote.id}/1" 
-					/> 
-				</div> 
-				<div class="badge-container"></div> 
-				</div> 
+					class="components-avatar-image"
+					alt="${emote.name}"
+					loading="lazy"
+					src="https://cdn.frankerfacez.com/emote/${emote.id}/1"
+					/>
+				</div>
+				<div class="badge-container"></div>
+				</div>
 			</div> `
 		})
 
 		var channelHTML = ''
 
 		channelEmotes.forEach(emote => {
-			channelHTML += 
-			`<div class="user" style="width:32px!important"> 
-			<span class="components-chatbox-user-menu" 
-				><div class="message-avatar components-avatar" style="background-color:transparent"> 
-				<div onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.code} '" style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}"> 
-					<img 
+			channelHTML +=
+			`<div class="user" style="width:32px!important">
+			<span class="components-chatbox-user-menu"
+				><div class="message-avatar components-avatar" style="background-color:transparent">
+				<div onclick="  document.getElementsByTagName('textarea')[0].value  =  document.getElementsByTagName('textarea')[0].value  + '${emote.code} '" style=" border-radius: 0%!important" class="components-avatar-image-container" title="${emote.name}">
+					<img
 					style="background-color:transparent"
-					class="components-avatar-image" 
-					alt="${emote.code}" 
-					loading="lazy" 
-					src="https://cdn.betterttv.net/emote/${emote.id}/1x" 
-					/> 
-				</div> 
-				<div class="badge-container"></div> 
-				</div> 
+					class="components-avatar-image"
+					alt="${emote.code}"
+					loading="lazy"
+					src="https://cdn.betterttv.net/emote/${emote.id}/1x"
+					/>
+				</div>
+				<div class="badge-container"></div>
+				</div>
 			</div> `
 		})
 
-		
 
-		var emotesHTML = 
-			`<div class="  
-			components-popover-container components-chat-menu-users-popover 
-			theme-dark 
-			" 
+
+		var emotesHTML =
+			`<div class="
+			components-popover-container components-chat-menu-users-popover
+			theme-dark
+			"
 			id="emoteList"
-			style=" 
-			position: fixed; 
-			top: 0px; 
-			left: 0px; 
-			transform: translate(0px, -300px); 
-			overflow: hidden; 
-			width: 100%; 
-			max-height: 300px; 
-			display:none;
-			" 
-		> 
-			<div class="title"> 
-			<span>Emotes</span 
-			><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1 } emotes disponibles</span> 
-			</div> 
-			<div class="user-list-wrapper" data-infinite-scrollable="true"> 
-			<div class="components-infinite-view has-data" style="text-align: center;"> 
-				<div> 
+		>
+			<div class="title">
+			<span>Emotes</span
+			><span class="ccu">${betterTTV.length+1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1 } emotes disponibles</span>
+			</div>
+			<div class="user-list-wrapper" data-infinite-scrollable="true">
+			<div class="components-infinite-view has-data" style="text-align: center;">
+				<div>
 				<div class="title" style="padding: 12px 12px!important;"><div id="twitchicon"></div><span class="titletxt">Emoticonos de Twitch</span></div>
 				${twitchHTML}
 				<div class="title" style="padding: 12px 12px!important;"><div id="bttvicon"></div><span class="titletxt">BetterTTV</span></div>
@@ -383,13 +373,13 @@ function addEmotesPanel(){
 				<div class="title" style="padding: 12px 12px!important;"><div id="ffzicon"></div><span class="titletxt">Emoticonos del canal</span></div>
 				${channelHTML}
 				${ffzHTML}
-				</div> 
-			</div> 
-			</div> 
+				</div>
+			</div>
+			</div>
 		</div>`
 
 		$('.components-profile-card-right').first().append(toggleDonoButtonHTML);
-		
+
 		$('.btns-bar-chat').first().append(emoteButtonHTML);
 		$('.components-chat-menu-users').first().append(emotesHTML);
 	});
@@ -404,17 +394,17 @@ var url = ''
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.message === 'TabUpdated') {
 		console.log(request.url)
-		
+
 		if (url != request.url){
 			var chatExist = setInterval(function() {
 				if ($('.scroll-container').first().length) {
 					console.log("[BOOYAH.TV] insert on reload");
-			
-					
+
+
 					clearInterval(chatExist);
-					
+
 					watchChatChanges()
-					
+
 					setTimeout(function() {
 						addEmotesPanel()
 					},1000)

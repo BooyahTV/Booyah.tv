@@ -63,7 +63,7 @@
 	src: url(https://fonts.gstatic.com/s/inter/v3/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2) format('woff2');
 	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
-  
+
   .components-chatbox-message {
 	margin: 4px 0px 0;
   }
@@ -80,19 +80,19 @@
 	font-family: 'Inter', sans-serif;
 	  font-weight: bold;
   }
-  
+
   body{
 	background-color: rgb(25, 25, 25);
   }
-  
+
   .scroll-container {
 	padding-left: 10px;
   }
-  
+
   .viewer-count{
 	color: red!important;
   }
-  
+
   #hide{
 	  background: none repeat scroll 0 0 transparent;
 	  border: medium none;
@@ -123,12 +123,12 @@
 
   #emotes-icon{
 	background-image: url('chrome-extension://__MSG_@@extension_id__/icons/emote-icon.png');
-	background-position: 0px 0px; 
-	width: 26px; 
+	background-position: 0px 0px;
+	width: 26px;
 	height: 28px;
 }
 #emotes-icon:hover{
-	background-position: 26px 0px; 
+	background-position: 26px 0px;
 }
 
 .emoteIcon{
@@ -159,15 +159,15 @@
 
 #bttvicon{
 	background-image: url('https://cdn.betterttv.net/emote/5590b223b344e2c42a9e28e3/1x');
-	background-position: 0px 0px; 
-	width: 28px; 
+	background-position: 0px 0px;
+	width: 28px;
 	height: 28px;
 }
 
 #ffzicon{
 	background-image: url('https://cdn.frankerfacez.com/emoticon/243789/1');
-	background-position: 0px 0px; 
-	width: 32px; 
+	background-position: 0px 0px;
+	width: 32px;
 	height: 25px;
 }
 
@@ -180,4 +180,15 @@
 .title .titletxt{
 	left: 50px;
     position: absolute;
+}
+
+.emoteList{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	transform: translate(0px, -300px);
+	overflow: hidden;
+	width: 100%;
+	max-height: 300px;
+	display:none;
 }
