@@ -358,6 +358,16 @@ function addEmotesPanel(){
 			theme-dark
 			"
 			id="emoteList"
+			style="
+			position: fixed; 
+			top: 0px;
+			left: 0px;
+			transform: translate(0px, -300px);
+			overflow: hidden;
+			width: 100%;
+			max-height: 300px;
+			display:none;
+			"
 		>
 			<div class="title">
 			<span>Emotes</span
