@@ -28,6 +28,7 @@ Canales donde esta disponible la extensión:
 
 Emotes que estan incorporados:
 
+* Emotes de twitch
 * Emotes de subs
 * [BetterTTV Global / por canal](https://betterttv.com)
 * [Franker Face Z](https://www.frankerfacez.com)

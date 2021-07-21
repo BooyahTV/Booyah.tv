@@ -399,30 +399,53 @@ function createPanelHTML(panel){
 }
 
 
+// button payloads
+
+var toggleDonoPayload = `
+var donations = document.getElementsByClassName('components-gifter-rank')[0];
+if(donations.style.display =='none'){
+	donations.style.display = ''
+	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
+	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
+
+	document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
+}
+
+
+else{
+	donations.style.display = 'none';
+	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
+	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
+	
+	document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
+}`
+
+// fold emote list
+
+var foldPayload = `function fold(folder, list){
+	var listElement = document.getElementById(list)
+
+	if(listElement.style.display =='none'){
+		listElement.style.display = ''
+		folder.innerHTML = 'V'
+
+	}else{
+		listElement.style.display = 'none'
+		folder.innerHTML = '<'
+
+	}
+}`;
+
+var script = document.createElement('script');
+script.textContent = foldPayload;
+(document.head||document.documentElement).appendChild(script);
+script.remove();
+
 function insertDOM(){
 	console.log("[BOOYAH.TV] Emote panel added");
 
 	// Donations
 
-
-	var toggleDonoPayload = `
-	var donations = document.getElementsByClassName('components-gifter-rank')[0];
-	if(donations.style.display =='none'){
-		donations.style.display = ''
-		document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
-		document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
-
-		document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
-	}
-	
-
-	else{
-		donations.style.display = 'none';
-		document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
-		document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
-		
-		document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
-	}`
 	
 	var toggleDonoButtonHTML = `<div id="donobutton"><button onclick="${toggleDonoPayload}" id="hidebutton">Ocultar donaciones</button></div>`;
 	
@@ -511,15 +534,15 @@ function insertDOM(){
 			<div class="user-list-wrapper" data-infinite-scrollable="true">
 			<div class="components-infinite-view has-data" style="text-align: center;">
 				<div>
-  				<div class="title emoteCategory"><div id="twitchicon"></div><span>Emoticonos de Twitch</span></div>
-  				${twitchHTML}
-				${ currentChannel.subEmotes ? '<div class="title emoteCategory"><div id="twitchicon"></div><span>Emotes de subs</span></div>' : ''}
-  				${subHTML}
-  				<div class="title emoteCategory"><div id="bttvicon"></div><span>BetterTTV</span></div>
-  				${bttvHTML}
-  				<div class="title emoteCategory"><div id="ffzicon"></div><span>Emoticonos del canal</span></div>
-  				${channelHTML}
-  				${ffzHTML}
+  				<div class="title emoteCategory"><div id="twitchicon"></div><span>Emoticonos de Twitch</span><span class="fold" onclick="fold(this, 'twitch')">V</span></div>
+  				<div id="twitch">${twitchHTML} </div>
+				${currentChannel.subEmotes ? `<div class="title emoteCategory"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold" onclick="fold(this, 'subs')">V</span></div>` : ''}
+				<div id="subs"> ${subHTML} </div>
+  				<div class="title emoteCategory"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold" onclick="fold(this, 'bttv')">V</span></div>
+  				<div id="bttv"> ${bttvHTML} </div>
+  				<div class="title emoteCategory"><div id="ffzicon"></div><span>Emoticonos del canal</span><span class="fold" onclick="fold(this, 'channel')">V</span></div>
+  				<div id="channel">${channelHTML}
+  				${ffzHTML} </div>
   				</div>
   			</div>
 			</div>
