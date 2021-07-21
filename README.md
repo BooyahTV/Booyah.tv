@@ -12,7 +12,8 @@
 ![app icon](readme/oldvsnew.png)
 ### Emotes
 ![app icon](readme/emotepanel.png)
-
+### Paneles
+![app icon](readme/paneles.png)
 
 ## Canales
 
