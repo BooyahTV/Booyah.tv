@@ -5,50 +5,103 @@ const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
 // twitch id grabed in https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
 
-var currentChannel;
+var channel;
 
 const channels = [
-  {
-  	twitchID: 149287198,
-  	booyahID: "T",
-	  
-},
-{
-	twitchID: 68111739, // 149287198
-	booyahID: "63681555",
-	subEmotes: [ // for test
-		{name: 'cristianSerotonina',id: '303892010'},
-		{name: 'cristianNormie',id: '303891994'},
-		{name: 'cristianPicardia',id: '303891853'},
-		{name: 'cristianPog',id: '303891704'},
-		{name: 'cristianL',id: '303511499'},
-		{name: 'cristianAYAYA',id: '303307414'},
-		{name: 'cristianEpico',id: '302211115'},
-		{name: 'cristianBAN',id: '301078636'},
-		{name: 'cristianSad',id: '301077023'},
-		{name: 'cristianUWU',id: '301076947'},
-		{name: 'cristianCursed',id: '301076882'},
-		{name: 'cristianM',id: '1933721'},
-		{name: 'cristianLUL',id: '1933714'},
-		{name: 'cristianPelao',id: '1733212'},
-		{name: 'cristianPou',id: '1494247'},
-		{name: 'cristianChupAYAYA',id: '1178616'},
-		{name: 'cristianPecky',id: '306756023'},
-		{name: 'cristianWaton',id: '306756092'},
-		{name: 'cristianAweonaso',id: '306756484'}
-	],
+	{ // suwie
+		twitchID: 191996164,
+		booyahID: 71614581
+	},
+	{ // cristianghost
+		twitchID: 149287198,
+		booyahID: 71484262,
+		chatroomID: 71061287,
+		subEmotes: [ 
+			{name: 'cristianSerotonina',id: '303892010'},
+			{name: 'cristianNormie',id: '303891994'},
+			{name: 'cristianPicardia',id: '303891853'},
+			{name: 'cristianPog',id: '303891704'},
+			{name: 'cristianL',id: '303511499'},
+			{name: 'cristianAYAYA',id: '303307414'},
+			{name: 'cristianEpico',id: '302211115'},
+			{name: 'cristianBAN',id: '301078636'},
+			{name: 'cristianSad',id: '301077023'},
+			{name: 'cristianUWU',id: '301076947'},
+			{name: 'cristianCursed',id: '301076882'},
+			{name: 'cristianM',id: '1933721'},
+			{name: 'cristianLUL',id: '1933714'},
+			{name: 'cristianPelao',id: '1733212'},
+			{name: 'cristianPou',id: '1494247'},
+			{name: 'cristianChupAYAYA',id: '1178616'},
+			{name: 'cristianPecky',id: '306756023'},
+			{name: 'cristianWaton',id: '306756092'},
+			{name: 'cristianAweonaso',id: '306756484'}
+		],
 
-	panels: [
-		{
-			img: 'https://panels-images.twitch.tv/panel-149287198-image-05234ad8-c503-467c-bad5-9a963dd717d6',
-			url: 'https://swd.cl/twitch/cristianghost/'
-		},
-		{
-			img: 'https://panels-images.twitch.tv/panel-149287198-image-771b0c21-31cc-4213-8340-8d7a4a016539',
-			url: 'https://streamelements.com/cristianghost/tip'
-		}
-	]
-  },
+		panels: [
+			{
+				type: 'image',
+				img: 'https://panels-images.twitch.tv/panel-149287198-image-05234ad8-c503-467c-bad5-9a963dd717d6',
+				url: 'https://swd.cl/twitch/cristianghost/'
+			},
+			{
+				type: 'image',
+				img: 'https://panels-images.twitch.tv/panel-149287198-image-771b0c21-31cc-4213-8340-8d7a4a016539',
+				url: 'https://streamelements.com/cristianghost/tip'
+			},
+			{
+				type: 'image',
+				img: 'https://panels-images.twitch.tv/panel-149287198-image-69a26a8d-aec9-409f-add8-6df53d73edd1',
+				url: 'http://discord.gg/aweonasogang'
+			},
+			{
+				type: 'html',
+				html: `
+				<div
+					class="sc-AxjAm dGeTii default-panel"
+					data-test-selector="channel_panel_test_selector"
+					data-a-target="panel-7"
+					>
+					<img
+						data-test-selector="image_test_selector"
+						src="https://panels-images.twitch.tv/panel-149287198-image-a27899e7-0c17-41cd-93bd-c7a696788be4"
+						alt="Contenido del panel"
+					/>
+					<div data-test-selector="description_test_selector">
+						<div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset">
+						<div class="panel-description">
+							<ul>
+							<li><strong>Tarjeta:</strong> GeForce RTX 3080 Trinity</li>
+							<li><strong>Procesador:</strong> i9-10850K</li>
+							<li><strong>Ram:</strong> 32 GB</li>
+							<li><strong>Placa madre:</strong> Z490 AORUS Pro AX</li>
+							<li><strong>Mouse:</strong> Logitech G502 Hero SE</li>
+							<li>
+								<strong>Teclado:</strong> SKYLOONG SK61 (Gateron Optical Brown)
+							</li>
+							<li><strong>Micrófono:</strong> Electro-voice RE20</li>
+							<li><strong>Interfaz:</strong> GoXLR Mini</li>
+							<li><strong>Cámara:</strong> Sony A5100</li>
+							<li><strong>Lente:</strong> Sigma 16mm 1.4 DC</li>
+							<li><strong>Audìfonos:</strong> Sennheiser 660s</li>
+							<li><strong>AMP de Audífonos:</strong> FiiO E10K</li>
+							<li><strong>Silla:</strong> Ergohuman (cuero)</li>
+							</ul>
+						</div>
+						</div>
+					</div>
+					</div>
+					`
+			}
+		],
+		offline: 'https://static-cdn.jtvnw.net/jtv_user_pictures/521c25d4-10d4-4d80-9c1a-79bed60e9f4f-channel_offline_image-1920x1080.jpeg'
+	},
+	{ // moai
+		twitchID: 68111739, // 149287198
+		booyahID: 63681555,
+		offline: 'https://static-cdn.jtvnw.net/jtv_user_pictures/e4b0fa86-491f-441f-a219-daf76914dd69-channel_offline_image-1920x1080.jpeg'
+
+	},
 ];
 
 var twitchEmotes = [
@@ -114,14 +167,14 @@ function replaceEmotes(msg) {
 
   
   // SUB EMOTES
-  if (currentChannel) {
-	for (let i = 0; i < currentChannel.subEmotes.length; i++) {
-		var subRegex = new RegExp("\\b" + currentChannel.subEmotes[i].name + "\\b", "g");
-		var subURL = `https://static-cdn.jtvnw.net/emoticons/v2/${currentChannel.subEmotes[i].id}/default/dark/1.0`;
+  if (channel) {
+	for (let i = 0; i < channel.subEmotes.length; i++) {
+		var subRegex = new RegExp("\\b" + channel.subEmotes[i].name + "\\b", "g");
+		var subURL = `https://static-cdn.jtvnw.net/emoticons/v2/${channel.subEmotes[i].id}/default/dark/1.0`;
 
-		msg = replaceEmote(msg, subRegex, subURL, currentChannel.subEmotes[i].name);
+		msg = replaceEmote(msg, subRegex, subURL, channel.subEmotes[i].name);
 	}
-	}
+  }
   // BETTER TTV EMOTES
 
   for (let i = 0; i < betterTTV.length; i++) {
@@ -214,7 +267,8 @@ function init(){
 	console.log("[BOOYAH.TV] CURRENT URL: "+currentURL)
 
 	channels.forEach((channel) => {
-		if (!currentURL.includes(channel.booyahID)) return;
+		// check if user is in channel or its chatroom (popup)
+		if (!(currentURL.includes(channel.booyahID) || currentURL.includes(channel.chatroomID))) return;
 
 		console.log( "[BOOYAH.TV] You are in " + channel.booyahID + " Channel.");
 
@@ -227,6 +281,13 @@ function init(){
 			fetch(frankerfaceZChannelBaseURL + channel.twitchID).then((value) => value.json() ),
 		])
 		.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ]) => {
+
+			globalEmotes = [];
+			channelEmotes = [];
+			
+			betterTTV = [];
+			frankerFaceZ = [];
+
 			betterTTV = betterTTV.concat(globalBetterttv);
 
 			betterTTV = betterTTV.concat(channelBetterttv.channelEmotes);
@@ -239,6 +300,9 @@ function init(){
 
 			console.log("[BOOYAH.TV] betterttv: ", betterTTV);
 			console.log("[BOOYAH.TV] frankerFaceZ: ", frankerFaceZ);
+
+			console.log("[BOOYAH.TV] channelEmotes: ", channelEmotes);
+
 
 		})
 		.catch((err) => {
@@ -255,7 +319,8 @@ function toggleDonos(){
 	}
 	else{
 		donations.style.display = "none";
-	} 
+	}
+	  
 }
 
 function sendEmotePayload(emoteName){
@@ -282,12 +347,14 @@ function sendEmotePayload(emoteName){
 }
 
 
-function createEmoteHTML(name, url){
-  return `<div class="user" style="width:32px!important">
-  <span class="components-chatbox-user-menu"
+function createEmoteHTML(name, url,width=null,height=null){
+  var size = width ? `style="border-radius: 0%!important;width:${width}px!important;height:${height}px!important`: `style="border-radius: 0%!important;width:auto!important"`
+
+  return `<div class="user" ${size}>
+  <span class="components-chatbox-user-menu"  
     ><div class="message-avatar components-avatar" style="background-color:transparent">
     <div onclick="${sendEmotePayload(name)}"
-     style=" border-radius: 0%!important" class="components-avatar-image-container" title="${name}">
+     ${size} class="components-avatar-image-container" title="${name}">
       <img
       style="background-color:transparent"
       class="components-avatar-image"
@@ -302,66 +369,82 @@ function createEmoteHTML(name, url){
 }
 
 function createPanelHTML(panel){
-	return `<div
-	class="sc-AxjAm dGeTii default-panel"
-	data-test-selector="channel_panel_test_selector"
-	data-a-target="panel-1"
-  >
-	<a
-	  data-test-selector="link_url_test_selector"
-	  class="ScCoreLink-udwpw5-0 FXIKh tw-link"
-	  rel="noopener noreferrer"
-	  target="_blank"
-	  href="${panel.url}"
-	  ><img
-		data-test-selector="image_test_selector"
-		src="${panel.img}"
-		alt="Contenido del panel"
-	/></a>
-  </div>
-  
-  `
+	switch (panel.type) {
+		case 'html':
+			return panel.html
+			
+			break;
+	
+		case 'image':
+			return `<div
+				class="sc-AxjAm dGeTii default-panel"
+				data-test-selector="channel_panel_test_selector"
+				data-a-target="panel-1"
+			>
+				<a
+				data-test-selector="link_url_test_selector"
+				class="ScCoreLink-udwpw5-0 FXIKh tw-link"
+				rel="noopener noreferrer"
+				target="_blank"
+				href="${panel.url}"
+				><img
+					data-test-selector="image_test_selector"
+					src="${panel.img}"
+					alt="Contenido del panel"
+				/></a>
+			</div>
+			`
+		break;
+	}
 }
 
 
-function addEmotesPanel(){
-
-	// delates the panels
-	var panels = document.getElementsByClassName('default-panel');
-
-	while (panels[0]) {
-		panels[0].parentNode.removeChild(panels[0]);
-	}
+function insertDOM(){
+	console.log("[BOOYAH.TV] Emote panel added");
 
 	// Donations
 
-	toggleDonos()
 
 	var toggleDonoPayload = `
 	var donations = document.getElementsByClassName('components-gifter-rank')[0];
 	if(donations.style.display =='none'){
 		donations.style.display = ''
+		document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
+		document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
+
 		document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
 	}
+	
+
 	else{
 		donations.style.display = 'none';
+		document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
+		document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
+		
 		document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
 	}`
-
-
-	var toggleDonoButtonHTML = `<div id="donobutton"><button onclick="${toggleDonoPayload}" id="hidebutton">Ver Donaciones</button></div>`;
+	
+	var toggleDonoButtonHTML = `<div id="donobutton"><button onclick="${toggleDonoPayload}" id="hidebutton">Ocultar donaciones</button></div>`;
 	
 	if (!document.body.contains(document.getElementById("donobutton"))){
 		$('.components-profile-card-right').first().append(toggleDonoButtonHTML);
 	};
 
+	// on send emote
+
+	document.querySelector('.send-btn').addEventListener("click", function() {
+		var emoteList = document.getElementById('emoteList')
+
+		emoteList.style.display = 'none';
+	});
+	
 	var currentURL = window.location.href
 
-	channels.forEach((channel) => {
-		if (!currentURL.includes(channel.booyahID)) return;
+	channels.forEach((currentChannel) => {
+		if (!currentURL.includes(currentChannel.booyahID) ) return;
 		console.log("[BOOYAH.TV] Emote panel added");
 
-		currentChannel = channel
+		channel = currentChannel
 
 		// Emote List
 
@@ -407,11 +490,11 @@ function addEmotesPanel(){
 		})
 
 		frankerFaceZ.forEach(emote => {
-			ffzHTML += createEmoteHTML(emote.name, `https://cdn.frankerfacez.com/emote/${emote.id}/1`)
+			ffzHTML += createEmoteHTML(emote.name, `https://cdn.frankerfacez.com/emote/${emote.id}/1`, emote.width, emote.height)
 		})
 
 		channelEmotes.forEach(emote => {
-			channelHTML += createEmoteHTML(emote.name, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
+			channelHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
 		})
 
 		var emoteCount = betterTTV.length+1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1
@@ -449,57 +532,110 @@ function addEmotesPanel(){
 
 		$('.components-chat-menu-users').first().append(emotesHTML);
 
-		// Panels DOM
-
-		if (currentChannel.panels){
-			var panelsHTML = ''
-
-			currentChannel.panels.forEach(panel => {
-				panelsHTML += createPanelHTML(panel)
-			})
-
-
-
-			$('.gift-container').first().append(panelsHTML);
-		}
-
-
 
 	});
 }
 
-init()
+
 
 var url = ''
-
-
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.message === 'TabUpdated') {
 		console.log('====================PAGE CHANGED====================')
+        if (url != request.url){
 
-		if (url != request.url){
-			var chatExist = setInterval(function() {
-				if ($('.scroll-container').first().length) {
-					console.log("[BOOYAH.TV] insert on reload");
-
-
-					clearInterval(chatExist);
-
-					addEmotesPanel()
-					
-					watchChatChanges()
-
-				}
-			}, 3000);
-		}
-		url = request.url
+            initExtension()
+        }
+        
+        url = request.url
 	}
-  })
+})
+
+
+function initExtension(){
+	init()
+
+	var currentURL = window.location.href
+
+	// emotes ,chat colors, donations button
+	var chatExist = setInterval(function() {
+		if ($('.scroll-container').first().length) {
+			console.log("[BOOYAH.TV] insert on reload");
+
+			
+			clearInterval(chatExist);
+
+			insertDOM()
+			
+			watchChatChanges()
+
+		}
+	}, 3000);
+
+	// offline
+
+	var offlineExist = setInterval(function() {
+		if ($('.views-channel-offline-layer').length) {
+			console.log("[BOOYAH.TV] insert offline backround");
+
+			clearInterval(offlineExist);
+		
+			channels.forEach((currentChannel) => {
+				if (!currentURL.includes(currentChannel.booyahID) ) return;
+
+				if (currentChannel.offline) {
+			
+					document.getElementsByClassName('views-channel-offline-layer')[0].innerHTML = '';
+					document.getElementsByClassName('views-channel-offline-layer')[0].style.background = 'url("'+currentChannel.offline+'")'
+					document.getElementsByClassName('views-channel-offline-layer')[0].style.backgroundSize = 'cover'
+					
+				}
+			})
+		
+		}
+	}, 3000);
+
+	// panels 
+
+	var panelsExist = setInterval(function() {
+		if ($('.gift-container').first().length) {
+			console.log("[BOOYAH.TV] insert panels");
+
+			clearInterval(panelsExist);
+
+			// delates the panels
+			var panels = document.getElementsByClassName('default-panel');
+
+			while (panels[0]) {
+				panels[0].parentNode.removeChild(panels[0]);
+			}
+
+			// Panels DOM
+			channels.forEach((currentChannel) => {
+				if (!currentURL.includes(currentChannel.booyahID) ) return;
+
+				if (currentChannel.panels){
+					var panelsHTML = ''
+
+					currentChannel.panels.forEach(panel => {
+						panelsHTML += createPanelHTML(panel)
+					})
+
+					$('.gift-container').first().append(panelsHTML);
+				}
+			})
+
+		}
+	}, 3000);
+	
+
+}
+
+initExtension()
 
  // Let users close emote list with Escape.
 document.addEventListener('keydown', (event) => {
-	console.log('keydown event\n\n' + 'key: ' + event.key);
 
 	if ( event.code === 'Escape' ) {
 		var emoteList = document.getElementById('emoteList')
@@ -507,3 +643,6 @@ document.addEventListener('keydown', (event) => {
 		emoteList.style.display = 'none';
 	}
 });
+
+
+

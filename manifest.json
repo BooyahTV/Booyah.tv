@@ -1,20 +1,20 @@
 {
 	"name": "BOOYAH.tv",
-	"version": "0.1.5",
+	"version": "0.1.65",
 	"description": "Emotes de twitch.tv/Betterttv/FrankerFaceZ para booyah.live",
 	"manifest_version": 2,
 
-	"permissions": ["activeTab","tabs"],
+	"permissions": ["activeTab","tabs","storage"],
 	"icons": {
 		"16": "16.png",
 		"48": "48.png",
-	   "128": "128.png"
+	   	"128": "128.png"
 	},
 	"content_scripts": [
 		{
 			"css": ["styles.css"],
 			"js": ["jquery.min.js", "emotes.js"],
-			"matches": ["https://booyah.live/channels/*"]
+			"matches": ["https://booyah.live/channels/*","https://booyah.live/standalone/*"]
 		}
 	],
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],
