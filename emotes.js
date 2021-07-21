@@ -10,7 +10,8 @@ var channel;
 const channels = [
 	{ // suwie
 		twitchID: 191996164,
-		booyahID: 71614581
+		booyahID: 71614581,
+		offline: 'https://static-cdn.jtvnw.net/jtv_user_pictures/c33fa0bd-28e3-46f1-93cf-c33041d27517-channel_offline_image-1920x1080.jpeg'
 	},
 	{ // cristianghost
 		twitchID: 149287198,
@@ -635,6 +636,17 @@ function initExtension(){
 
 			while (panels[0]) {
 				panels[0].parentNode.removeChild(panels[0]);
+			}
+
+			// panels title
+
+			if (!$('#panelsTitle').first().length) {
+				$('.gift-container').first().append(`
+					<div id="panelsTitle" class="components-tabs align-start size-big theme-tab desktop">
+						<span class="tab-label tab-current">Paneles</span>
+					</div>
+					</br>
+				`);
 			}
 
 			// Panels DOM

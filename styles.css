@@ -255,3 +255,7 @@ body {
   left: 10px!important;
   color: rgb(255, 176, 0)
 }
+
+.panelsTitle{
+  margin-left: 16px;
+}
