@@ -8,8 +8,9 @@
 2. Nombres de usuario con colores
 3. Fuente de twitch.tv
 
+### Chat
 ![app icon](readme/oldvsnew.png)
-
+### Emotes
 ![app icon](readme/emotepanel.png)
 
 
