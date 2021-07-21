@@ -33,9 +33,10 @@ Emotes que estan incorporados:
 * Emotes de twitch
 * Emotes de subs
 * [BetterTTV Global](https://betterttv.com)
-* [Franker Face Z / del canal](https://www.frankerfacez.com)
+* [Franker Face Z Global / del canal](https://www.frankerfacez.com)
 
 ## Falta por implementar...
 
 * Autocompletador de emotes de Franker Face Z (**:OMEGA..** y se despliega un panel de emotes)
+* Popup
 * Crear una version para Firefox, Safari,etc
