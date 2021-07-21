@@ -11,11 +11,11 @@
 6. Diseño similar a Twitch.tv (fuentes, etc)
 
 ### Chat
-![app icon](readme/oldvsnew.png)
+![Chat](readme/oldvsnew.png)
 ### Panel de Emotes
-![app icon](readme/emotepanel.png)
+![Panel de Emotes](readme/emotepanel.png)
 ### Paneles
-![app icon](readme/paneles.png)
+![Paneles](readme/paneles.png)
 
 ## Canales
 
@@ -32,8 +32,8 @@ Emotes que estan incorporados:
 
 * Emotes de twitch
 * Emotes de subs
-* [BetterTTV Global / por canal](https://betterttv.com)
-* [Franker Face Z](https://www.frankerfacez.com)
+* [BetterTTV Global](https://betterttv.com)
+* [Franker Face Z / del canal](https://www.frankerfacez.com)
 
 ## Falta por implementar...
 
