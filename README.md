@@ -6,7 +6,9 @@
 
 1. Emotes incorporados sin nesesidad de configuración alguna
 2. Nombres de usuario con colores
-3. Fuente de twitch.tv
+4. Panel de emotes
+5. Poder ocultar las donaciones (fogatas, y esas weas)
+6. Diseño similar a Twitch.tv (fuentes, etc)
 
 ### Chat
 ![app icon](readme/oldvsnew.png)
@@ -24,7 +26,7 @@ Canales donde esta disponible la extensión:
 * [MoaiGR](https://booyah.live/channels/63681555)
 * [Suwie](https://booyah.live/channels/71614581)
 
-## Emotes
+## Panel de Emotes
 
 Emotes que estan incorporados:
 
