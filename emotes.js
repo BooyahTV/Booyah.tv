@@ -325,26 +325,70 @@ function toggleDonos(){
 	  
 }
 
+// donations payload
+
+var toggleDonoPayload = `
+var donations = document.getElementsByClassName('components-gifter-rank')[0];
+if(donations.style.display =='none'){
+	donations.style.display = ''
+	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
+	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
+
+	document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
+}
+
+
+else{
+	donations.style.display = 'none';
+	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
+	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
+	
+	document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
+}`
+
+// fold emote list payload
+
+var foldPayload = `function fold(emoteList, list){
+	var listElement = document.getElementById(list)
+	console.log(emoteList)
+	console.log(emoteList.children)
+	console.log(emoteList.children[emoteList.children.lenght -1] )
+	var foldElement = emoteList.children[2] 
+	if(listElement.style.display =='none'){
+		listElement.style.display = ''
+		foldElement.innerHTML = 'V'
+
+	}else{
+		listElement.style.display = 'none'
+		foldElement.innerHTML = '<'
+
+	}
+}`;
+
 function sendEmotePayload(emoteName){
 
   return `
-  // https://github.com/facebook/react/issues/10135
-  const textarea = document.getElementsByTagName('textarea')[0]
-  function setNativeValue(element, value) {
-	const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
-	const prototype = Object.getPrototypeOf(element)
-	const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
+  if(document.getElementsByTagName('textarea')[0].value.length + ${emoteName.length + 1} <= 140) {
+	// https://github.com/facebook/react/issues/10135
+	const textarea = document.getElementsByTagName('textarea')[0]
+	function setNativeValue(element, value) {
+		const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
+		const prototype = Object.getPrototypeOf(element)
+		const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
 
-	if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
-	  prototypeValueSetter.call(element, value)
-	} else if (valueSetter) {
-	  valueSetter.call(element, value)
-	} else {
-	  throw new Error('The given element does not have a value setter')
+		if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+			prototypeValueSetter.call(element, value)
+		} else if (valueSetter) {
+			valueSetter.call(element, value)
+		} else {
+			throw new Error('The given element does not have a value setter')
+		}
 	}
+		setNativeValue(textarea, document.getElementsByTagName('textarea')[0].value +'${emoteName} ')
+
+	  textarea.dispatchEvent(new Event('input', { bubbles: true }))
   }
-  setNativeValue(textarea, document.getElementsByTagName('textarea')[0].value +'${emoteName} ')
-  textarea.dispatchEvent(new Event('input', { bubbles: true }))
+
 `
 }
 
@@ -399,47 +443,6 @@ function createPanelHTML(panel){
 		break;
 	}
 }
-
-
-// button payloads
-
-var toggleDonoPayload = `
-var donations = document.getElementsByClassName('components-gifter-rank')[0];
-if(donations.style.display =='none'){
-	donations.style.display = ''
-	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
-	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
-
-	document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
-}
-
-
-else{
-	donations.style.display = 'none';
-	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
-	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
-	
-	document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
-}`
-
-// fold emote list
-
-var foldPayload = `function fold(emoteList, list){
-	var listElement = document.getElementById(list)
-	console.log(emoteList)
-	console.log(emoteList.children)
-	console.log(emoteList.children[emoteList.children.lenght -1] )
-	var foldElement = emoteList.children[2] 
-	if(listElement.style.display =='none'){
-		listElement.style.display = ''
-		foldElement.innerHTML = 'V'
-
-	}else{
-		listElement.style.display = 'none'
-		foldElement.innerHTML = '<'
-
-	}
-}`;
 
 var script = document.createElement('script');
 script.textContent = foldPayload;
