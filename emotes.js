@@ -16,7 +16,7 @@ const channels = [
 		twitchID: 149287198,
 		booyahID: 71484262,
 		chatroomID: 71061287,
-		subEmotes: [ 
+		subsEmotes: [ 
 			{name: 'cristianSerotonina',id: '303892010'},
 			{name: 'cristianNormie',id: '303891994'},
 			{name: 'cristianPicardia',id: '303891853'},
@@ -165,14 +165,13 @@ function replaceEmotes(msg) {
 	msg = replaceEmote(msg, twitchRegex, twitchURL, twitchEmotes[i].name);
   }
 
-  
   // SUB EMOTES
-  if (channel) {
-	for (let i = 0; i < channel.subEmotes.length; i++) {
-		var subRegex = new RegExp("\\b" + channel.subEmotes[i].name + "\\b", "g");
-		var subURL = `https://static-cdn.jtvnw.net/emoticons/v2/${channel.subEmotes[i].id}/default/dark/1.0`;
+  if (channel.subsEmotes) {
+	for (let i = 0; i < channel.subsEmotes.length; i++) {
+		var subRegex = new RegExp("\\b" + channel.subsEmotes[i].name + "\\b", "g");
+		var subURL = `https://static-cdn.jtvnw.net/emoticons/v2/${channel.subsEmotes[i].id}/default/dark/1.0`;
 
-		msg = replaceEmote(msg, subRegex, subURL, channel.subEmotes[i].name);
+		msg = replaceEmote(msg, subRegex, subURL, channel.subsEmotes[i].name);
 	}
   }
   // BETTER TTV EMOTES
@@ -266,19 +265,21 @@ function init(){
 
 	console.log("[BOOYAH.TV] CURRENT URL: "+currentURL)
 
-	channels.forEach((channel) => {
+	channels.forEach((currentChannel) => {
 		// check if user is in channel or its chatroom (popup)
-		if (!(currentURL.includes(channel.booyahID) || currentURL.includes(channel.chatroomID))) return;
+		if (!(currentURL.includes(currentChannel.booyahID) || currentURL.includes(currentChannel.chatroomID))) return;
 
-		console.log( "[BOOYAH.TV] You are in " + channel.booyahID + " Channel.");
+		channel = currentChannel
 
-		console.log("[BOOYAH.TV] fetching betterttv for channel: ", betterTTVChannelBaseURL + channel.twitchID );
-		console.log("[BOOYAH.TV] fetching frankerFaceZ for channel: ",frankerfaceZChannelBaseURL + channel.twitchID );
+		console.log( "[BOOYAH.TV] You are in " + currentChannel.booyahID + " Channel.");
+
+		console.log("[BOOYAH.TV] fetching betterttv for channel: ", betterTTVChannelBaseURL + currentChannel.twitchID );
+		console.log("[BOOYAH.TV] fetching frankerFaceZ for channel: ",frankerfaceZChannelBaseURL + currentChannel.twitchID );
 
 		Promise.all([
 			fetch(globalBetterttvURL).then((value) => value.json()),
-			fetch(betterTTVChannelBaseURL + channel.twitchID).then((value) => value.json() ),
-			fetch(frankerfaceZChannelBaseURL + channel.twitchID).then((value) => value.json() ),
+			fetch(betterTTVChannelBaseURL + currentChannel.twitchID).then((value) => value.json() ),
+			fetch(frankerfaceZChannelBaseURL + currentChannel.twitchID).then((value) => value.json() ),
 		])
 		.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ]) => {
 
@@ -422,16 +423,19 @@ else{
 
 // fold emote list
 
-var foldPayload = `function fold(folder, list){
+var foldPayload = `function fold(emoteList, list){
 	var listElement = document.getElementById(list)
-
+	console.log(emoteList)
+	console.log(emoteList.children)
+	console.log(emoteList.children[emoteList.children.lenght -1] )
+	var foldElement = emoteList.children[2] 
 	if(listElement.style.display =='none'){
 		listElement.style.display = ''
-		folder.innerHTML = 'V'
+		foldElement.innerHTML = 'V'
 
 	}else{
 		listElement.style.display = 'none'
-		folder.innerHTML = '<'
+		foldElement.innerHTML = '<'
 
 	}
 }`;
@@ -467,8 +471,6 @@ function insertDOM(){
 		if (!currentURL.includes(currentChannel.booyahID) ) return;
 		console.log("[BOOYAH.TV] Emote panel added");
 
-		channel = currentChannel
-
 		// Emote List
 
 		var emoteButtonHTML = `
@@ -503,8 +505,8 @@ function insertDOM(){
 			twitchHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
 		})
 
-		if (currentChannel.subEmotes){
-			currentChannel.subEmotes.forEach(emote => {
+		if (currentChannel.subsEmotes){
+			currentChannel.subsEmotes.forEach(emote => {
 				subHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
 			})
 		}
@@ -534,27 +536,28 @@ function insertDOM(){
 			<div class="user-list-wrapper" data-infinite-scrollable="true">
 			<div class="components-infinite-view has-data" style="text-align: center;">
 				<div>
-  				<div class="title emoteCategory"><div id="twitchicon"></div><span>Emoticonos de Twitch</span><span class="fold" onclick="fold(this, 'twitch')">V</span></div>
+  				<div class="title emoteCategory" onclick="fold(this, 'twitch')"><div id="twitchicon"></div><span>Emoticonos de Twitch</span><span class="fold">V</span></div>
   				<div id="twitch">${twitchHTML} </div>
-				${currentChannel.subEmotes ? `<div class="title emoteCategory"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold" onclick="fold(this, 'subs')">V</span></div>` : ''}
+				${currentChannel.subsEmotes ? `<div class="title emoteCategory"  onclick="fold(this, 'subs')"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold"">V</span></div>` : ''}
 				<div id="subs"> ${subHTML} </div>
-  				<div class="title emoteCategory"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold" onclick="fold(this, 'bttv')">V</span></div>
+  				<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>
   				<div id="bttv"> ${bttvHTML} </div>
-  				<div class="title emoteCategory"><div id="ffzicon"></div><span>Emoticonos del canal</span><span class="fold" onclick="fold(this, 'channel')">V</span></div>
-  				<div id="channel">${channelHTML}
+  				<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emoticonos del canal</span><span class="fold">V</span></div>
+  				<div id="channelEmotes">${channelHTML}
   				${ffzHTML} </div>
   				</div>
   			</div>
 			</div>
 		</div>`
 
-
+		
 		if (document.body.contains(document.getElementById("emoteList"))){
 			document.getElementById("emoteList").remove();
 		};
 
 		$('.components-chat-menu-users').first().append(emotesHTML);
 
+	//	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
 
 	});
 }

@@ -186,6 +186,12 @@ body {
   height: 24px;
 }
 
+#channelIcon {
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+}
+
 .emoteCategory {
   padding: 12px 12px !important;
 }
