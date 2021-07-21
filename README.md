@@ -34,3 +34,8 @@ Emotes que estan incorporados:
 * Emotes de subs
 * [BetterTTV Global / por canal](https://betterttv.com)
 * [Franker Face Z](https://www.frankerfacez.com)
+
+## Falta por implementar...
+
+* Autocompletador de emotes de Franker Face Z (**:OMEGA..** y se despliega un panel de emotes)
+* Crear una version para Firefox, Safari,etc
