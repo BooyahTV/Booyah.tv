@@ -12,7 +12,7 @@
 
 ### Chat
 ![app icon](readme/oldvsnew.png)
-### Emotes
+### Panel de Emotes
 ![app icon](readme/emotepanel.png)
 ### Paneles
 ![app icon](readme/paneles.png)
@@ -26,7 +26,7 @@ Canales donde esta disponible la extensión:
 * [MoaiGR](https://booyah.live/channels/63681555)
 * [Suwie](https://booyah.live/channels/71614581)
 
-## Panel de Emotes
+## Emotes
 
 Emotes que estan incorporados:
 
