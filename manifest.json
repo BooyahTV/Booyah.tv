@@ -1,7 +1,7 @@
 {
 	"name": "BOOYAH.tv",
 	"version": "0.2",
-	"description": "Emotes de twitch.tv/Betterttv/FrankerFaceZ para booyah.live",
+	"description": "Emotes de twitch / Betterttv / FrankerFaceZ para booyah.live, ademas de otras caracteristicas de twitch.tv",
 	"manifest_version": 2,
 
 	"permissions": ["activeTab","tabs","storage"],

@@ -529,7 +529,7 @@ function insertDOM(){
 			`<div class="
 			components-popover-container components-chat-menu-users-popover
 			theme-dark"
-			id="emoteList">
+			id="emoteList" style="min-height: 300px;">
 			<div class="title">
 			<span>Emotes</span
 			><span class="ccu">${ emoteCount } emotes disponibles</span>
@@ -638,20 +638,21 @@ function initExtension(){
 				panels[0].parentNode.removeChild(panels[0]);
 			}
 
-			// panels title
-
-			if (!$('#panelsTitle').first().length) {
-				$('.gift-container').first().append(`
-					<div id="panelsTitle" class="components-tabs align-start size-big theme-tab desktop">
-						<span class="tab-label tab-current">Paneles</span>
-					</div>
-					</br>
-				`);
-			}
 
 			// Panels DOM
 			channels.forEach((currentChannel) => {
 				if (!currentURL.includes(currentChannel.booyahID) ) return;
+
+				// panels title
+
+				if (!$('#panelsTitle').first().length) {
+					$('.gift-container').first().append(`
+						<div id="panelsTitle" class="components-tabs align-start size-big theme-tab desktop">
+							<span class="tab-label tab-current">Paneles</span>
+						</div>
+						</br>
+					`);
+				}
 
 				if (currentChannel.panels){
 					var panelsHTML = ''
@@ -672,10 +673,12 @@ function initExtension(){
 
 initExtension()
 
- // Let users close emote list with Escape.
-document.addEventListener('keydown', (event) => {
+	// Let users close emote list with Escape and Enter if is focusing the textarea.
+	document.addEventListener('keydown', (event) => {
+	// dummy element
+	var txtArea =  document.getElementsByTagName('textarea')[0]
 
-	if ( event.code === 'Escape' ) {
+	if ( event.code === 'Escape' || event.code === 'Enter' && document.activeElement === txtArea) {
 		var emoteList = document.getElementById('emoteList')
 
 		emoteList.style.display = 'none';
