@@ -527,22 +527,40 @@ script.textContent = foldPayload;
 (document.head||document.documentElement).appendChild(script);
 script.remove();
 
+function checkifoffline(){
+
+	if ($('.viewer-count span')[0].innerText == "0"){
+		$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="moveimage" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
+	}else{
+		console.log('chat')
+		$('.chatroom-head')[0].innerHTML = `El Chat`
+	}
+}
+
 function insertDOM(){
 	console.log("[BOOYAH.TV] Emote panel added");
 
+	setInterval(function(){ checkifoffline()},5000)
+	checkifoffline()
+
 	// on send emote
+	if ($('.send-btn').length){
 
-	document.querySelector('.send-btn').addEventListener("click", function() {
-		var emoteList = document.getElementById('emoteList')
+		document.querySelector('.send-btn').addEventListener("click", function() {
+			var emoteList = document.getElementById('emoteList')
+			
+			emoteList.style.display = 'none';
+		});
+	}
+	if ($('.toggle-btn').length){
 
-		emoteList.style.display = 'none';
-	});
 	document.querySelector('.toggle-btn').addEventListener("click", function() {
 		var emoteList = document.getElementById('emoteList')
 
 		emoteList.style.display = 'none';
 	});
-	
+}
+
 	var currentURL = window.location.href
 
 	channels.forEach((currentChannel) => {

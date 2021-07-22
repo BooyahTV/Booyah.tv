@@ -231,26 +231,6 @@ body {
    color: red !important; 
 }
 
-.components-profile-card .components-profile-card-center{
- /* justify-content: center!important; */
-
-}
-.views-channel .components-profile-card-center-bottom .user-name{
-  
-  /* font-size: 20px!important; */
-
-}
-
-
-.views-channel .channel-top-bar .components-profile-card .components-profile-card-center-bottom{
- /* height: 40px!important;*/
-}
-
-.viewer-count{
-  /*font-size: 20px!important;*/
-
-}
-
 .fold{
   position: relative!important;
   left: 10px!important;
@@ -259,10 +239,6 @@ body {
 
 .panelsTitle{
   margin-left: 16px;
-}
-
-.components-profile-card-right{
-  /*min-height: 800px;*/
 }
 .channel-infos{
   margin-top: 0px!important;
