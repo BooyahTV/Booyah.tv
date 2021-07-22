@@ -8,9 +8,9 @@ const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 var channel;
 
 const channels = [
-	{
+	{ //donsebastian
 		twitchID: 38108090,
-		booyahID: 13259566,
+		booyahID: 'donsebastian',
 		panels: [
 			{
 				type: 'html',
@@ -48,11 +48,6 @@ const channels = [
 				type: 'html',
 				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-8"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://discord.io/donsebastian"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-3809013e-289f-495d-a694-ecf0beb3f27d" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>¡Se parte de la comunidad! Aunque no seas sub, compartimos bellos memes y momentos profundos</p></div></div></div></div>`
 			}
-			
-
-
-
-			
 		]
 	},
 	{ // suwie
@@ -732,17 +727,6 @@ function initExtension(){
 				// panels title
 
 				if ( currentChannel.panels  ) {
-
-					if (!$('#panelsTitle').first().length){
-
-						/*$('.gift-container').first().append(`
-						<div id="panelsTitle" class="components-tabs align-start size-big theme-tab desktop">
-						<span class="tab-label tab-current">Paneles</span>
-						</div>
-						</br>
-						`);*/
-					}
-
 
 					var panelsHTML = ''
 

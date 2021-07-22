@@ -25,6 +25,7 @@ Canales donde esta disponible la extensión:
 * Dylantero
 * [MoaiGR](https://booyah.live/channels/63681555)
 * [Suwie](https://booyah.live/channels/71614581)
+* [SebastianLive](https://booyah.live/donsebastian)
 
 ## Emotes
 

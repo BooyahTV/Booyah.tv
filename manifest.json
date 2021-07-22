@@ -14,7 +14,7 @@
 		{
 			"css": ["styles.css"],
 			"js": ["jquery.min.js", "emotes.js"],
-			"matches": ["https://booyah.live/channels/*","https://booyah.live/standalone/*"]
+			"matches": ["https://booyah.live/channels/*","https://booyah.live/standalone/*","https://booyah.live/donsebastian*"]
 		}
 	],
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],
