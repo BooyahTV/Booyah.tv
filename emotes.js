@@ -420,11 +420,11 @@ function sendEmotePayload(emoteName){
 
 
 function createEmoteHTML(name, url,width=null,height=null){
-  var size = width ? `style="border-radius: 0%!important;width:${width}px!important;height:${height}px!important`: `style="border-radius: 0%!important;width:auto!important"`
+  var size = width ? `style="border-radius: 0%!important;width:${width}px!important;height:${height}px!important"`: `style="border-radius: 0%!important;width:auto!important"`
 
-  return `<div class="user" ${size}>
-  <span class="components-chatbox-user-menu"  
-    ><div class="message-avatar components-avatar" style="background-color:transparent">
+  return `<div class="user emote" ${size}>
+  <span class="components-chatbox-user-menu"  ${size} 
+    ><div style="background-color:transparent">
     <div onclick="${sendEmotePayload(name)}"
      ${size} class="components-avatar-image-container" title="${name}">
       <img
