@@ -124,6 +124,16 @@ var twitchEmotes = [
 	{id:'25', name: 'Kappa'},
 ];
 
+// forsenE, etc
+var globalChannelEmotes = [
+	{id:'521050', name: 'forsenE'},
+	{id:'116051', name: 'forsen1'},
+	{id:'116052', name: 'forsen2'},
+	{id:'emotesv2_2f9a36844b054423833c817b5f8d4225', name: 'forsenPls'},
+	
+];
+
+
 var globalEmotes = [];
 var channelEmotes = [];
 
@@ -148,6 +158,7 @@ const colors = [
 // find and replace all instances of an emote given the message and a regex rule.
 
 function replaceEmote(msg, regex, url, title) {
+
   return msg.replace(
 	regex,
 	`<img title="${title}" class='moveimage' src='${url}'>`
@@ -165,9 +176,18 @@ function replaceEmotes(msg) {
 
 	msg = replaceEmote(msg, twitchRegex, twitchURL, twitchEmotes[i].name);
   }
+  // GLOBAL CHANNEL EMOTES
+
+  for (let i = 0; i < globalChannelEmotes.length; i++) {
+	var globalChannelEmotesRegex = new RegExp("\\b" + globalChannelEmotes[i].name + "\\b", "g");
+	var globalChannelEmotesURL = `https://static-cdn.jtvnw.net/emoticons/v2/${globalChannelEmotes[i].id}/default/dark/1.0`;
+
+	msg = replaceEmote(msg, globalChannelEmotesRegex, globalChannelEmotesURL, globalChannelEmotes[i].name);
+  }
+  
 
   // SUB EMOTES
-  if (channel.subsEmotes) {
+  if (channel && channel.subsEmotes) {
 	for (let i = 0; i < channel.subsEmotes.length; i++) {
 		var subRegex = new RegExp("\\b" + channel.subsEmotes[i].name + "\\b", "g");
 		var subURL = `https://static-cdn.jtvnw.net/emoticons/v2/${channel.subsEmotes[i].id}/default/dark/1.0`;
@@ -227,6 +247,11 @@ function changeChatOnChange(e){
 
 		// change the username color
 		var usernameContainer = components.childNodes[0].childNodes[0];
+
+		if(components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge'){
+			components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
+		}
+	//	message-badge
 
 		var username = usernameContainer.childNodes[usernameContainer.childNodes.length - 1];
 
@@ -509,7 +534,7 @@ function insertDOM(){
 			twitchHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
 		})
 
-		if (currentChannel.subsEmotes){
+		if (currentChannel && currentChannel.subsEmotes){
 			currentChannel.subsEmotes.forEach(emote => {
 				subHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
 			})
@@ -648,16 +673,18 @@ function initExtension(){
 
 				// panels title
 
-				if (!$('#panelsTitle').first().length) {
-					$('.gift-container').first().append(`
+				if ( currentChannel.panels  ) {
+
+					if (!$('#panelsTitle').first().length){
+
+						$('.gift-container').first().append(`
 						<div id="panelsTitle" class="components-tabs align-start size-big theme-tab desktop">
-							<span class="tab-label tab-current">Paneles</span>
+						<span class="tab-label tab-current">Paneles</span>
 						</div>
 						</br>
-					`);
-				}
+						`);
+					}
 
-				if (currentChannel.panels){
 					var panelsHTML = ''
 
 					currentChannel.panels.forEach(panel => {

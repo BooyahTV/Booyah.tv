@@ -14,29 +14,3 @@ chrome.runtime.onInstalled.addListener(function() {
       }
     })
 });
-
-
-
-/*chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if(request) {
-      if (request.msg == "sendEmote") {
-        chrome.tabs.query(
-          { active: true, currentWindow: true },
-          function (activeTabs) {
-            chrome.tabs.executeScript(activeTabs[0].id, {
-              code: `
-                var event = new Event("input", { bubbles: true });
-                var textbox = document.getElementsByClassName("components-input-element")[0]; 
-                textbox.value +="${request.data.name} ";
-                textbox.focus();
-                textbox.scrollLeft = textbox.scrollWidth;
-                textbox.dispatchEvent(event);
-              `,
-            });
-          }
-        );
-      }
-  }
-});
-*/
-
