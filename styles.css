@@ -99,9 +99,6 @@ body {
   padding-left: 10px;
 }
 
-.viewer-count {
-  color: red !important;
-}
 
 #hide {
   background: none repeat scroll 0 0 transparent;
@@ -202,13 +199,14 @@ body {
 }
 #emoteList {
   position: fixed;
-  top: 0px;
   left: 0px;
   transform: translate(0px, -300px);
   overflow: hidden;
   width: 100%;
   max-height: 300px;
   display: none;
+  top: -72px;
+
 }
 
 .default-panel {
@@ -229,24 +227,27 @@ body {
   display: none;
 }
 /* USERNAME AND VIEWS*/
+.viewer-count {
+   color: red !important; 
+}
 
 .components-profile-card .components-profile-card-center{
-  justify-content: center!important;
+ /* justify-content: center!important; */
 
 }
 .views-channel .components-profile-card-center-bottom .user-name{
   
-  font-size: 20px!important;
+  /* font-size: 20px!important; */
 
 }
 
 
 .views-channel .channel-top-bar .components-profile-card .components-profile-card-center-bottom{
-  height: 40px!important;
+ /* height: 40px!important;*/
 }
 
 .viewer-count{
-  font-size: 20px!important;
+  /*font-size: 20px!important;*/
 
 }
 
@@ -258,4 +259,20 @@ body {
 
 .panelsTitle{
   margin-left: 16px;
+}
+
+.components-profile-card-right{
+  /*min-height: 800px;*/
+}
+.channel-infos{
+  margin-top: 0px!important;
+
+}
+.viewer-count{
+  font-size: 20px!important;
+}
+
+/* panels */
+.ScTitleText-sc-1gsen4-0{
+  font-size: 20px;
 }
