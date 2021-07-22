@@ -195,6 +195,7 @@ function replaceEmotes(msg) {
 		msg = replaceEmote(msg, subRegex, subURL, channel.subsEmotes[i].name);
 	}
   }
+
   // BETTER TTV EMOTES
 
   for (let i = 0; i < betterTTV.length; i++) {
@@ -204,7 +205,7 @@ function replaceEmotes(msg) {
 	msg = replaceEmote(msg, bttvRegex, bttvURL, betterTTV[i].code);
   }
 
-  // BETTER EMOTES EMOTES
+  // FRANKER FACE Z EMOTES
 
   for (let i = 0; i < frankerFaceZ.length; i++) {
 	var ffzRegex = new RegExp("\\b" + frankerFaceZ[i].name + "\\b", "g");

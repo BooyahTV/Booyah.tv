@@ -35,7 +35,7 @@ Emotes que estan incorporados:
 * [BetterTTV Global](https://betterttv.com)
 * [Franker Face Z Global / del canal](https://www.frankerfacez.com)
 
-## Emotes de Twitch
+#### Emotes de Twitch
 | Nombre |   |
 |--------|---|
 |   LUL     |  ![](https://static-cdn.jtvnw.net/emoticons/v2/425618/default/dark/1.0) |
