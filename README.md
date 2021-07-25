@@ -1,4 +1,4 @@
-# Booyah.tv 0.3
+# Booyah.tv 0.35
   ![app icon](48.png) Esta extención incorpora elementos de twitch.tv a booyah.live ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah
 
 
@@ -26,6 +26,7 @@ Canales donde esta disponible la extensión:
 * [MoaiGR](https://booyah.live/channels/63681555)
 * [Suwie](https://booyah.live/channels/71614581)
 * [donsebastian](https://booyah.live/donsebastian)
+* [puvlo](https://booyah.live/channels/62813927)
 
 ## Emotes
 

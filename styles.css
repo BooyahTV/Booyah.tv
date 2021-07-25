@@ -244,11 +244,19 @@ body {
   margin-top: 0px!important;
 
 }
-.viewer-count{
+.channel-infos .viewer-count{
   font-size: 20px!important;
 }
 
 /* panels */
 .ScTitleText-sc-1gsen4-0{
   font-size: 20px;
+}
+.donoBadge{
+  width: 16px;
+  height: 16px;
+}
+.tipsbadge{
+  padding: 16px!important;
+
 }
