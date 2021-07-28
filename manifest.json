@@ -4,7 +4,7 @@
 	"description": "Emotes de twitch / Betterttv / FrankerFaceZ para booyah.live, ademas de otras caracteristicas de twitch.tv",
 	"manifest_version": 2,
 
-	"permissions": ["activeTab","tabs","storage"],
+	"permissions": ["activeTab","tabs"],
 	"icons": {
 		"16": "16.png",
 		"48": "48.png",
@@ -14,9 +14,14 @@
 		{
 			"css": ["styles.css"],
 			"js": ["jquery.min.js", "emotes.js"],
-			"matches": ["https://booyah.live/channels/*","https://booyah.live/standalone/*","https://booyah.live/donsebastian*"]
+			"matches": ["https://booyah.live/*"]
 		}
 	],
+	"browser_action": {
+		"default_icon": "48.png",
+		"default_popup": "popup.html",
+		"default_title": "Booyah.TV"
+	},
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],
 	"background": {
 		"scripts":["background.js"]

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="popup.js"></script>
+    <style>
+      body {
+        margin: 20px;
+        background-color: rgb(22, 24, 26);
+      }
+      button {
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+      }
+      .channel {
+        width: 260px;
+        border-bottom: solid #ffffff33 1px;
+        margin-bottom: 16px;
+      }
+
+      .channel:last-child {
+        border-bottom: none;
+      }
+
+      .channel button {
+        text-decoration: none; /* no underline */
+        color: white;
+        display: inline-flex;
+      }
+      .channel .icon {
+        border-radius: 50%;
+        width: 36px;
+        display: inline-block;
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      .channel .nickname {
+        display: inline-block;
+        font-size: 20px;
+        line-height: 40px;
+        padding-left: 12px;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      .channel .live {
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        right: 20px;
+        top: 30px;
+        background: red;
+        display: none;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid rgb(151, 73, 254); /* Blue */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="channels">
+      <div class="loader"></div>
+    </div>
+  </body>
+</html>

@@ -10,153 +10,166 @@ var channel;
 var donations;
 
 const channels = [
-	{ //puvloo
-		twitchID:474990645,
-		booyahID:62813927,
-		bttv:false,
-		ffz: false,
-		subsEmotes: [
-			{name: 'puvlooPOG',id: '305388833'},
-			{name: 'puvlooFRUTA',id: '304379794'},
-			{name: 'puvlooCOMBO1',id: '304379754'},
-			{name: 'puvlooROSAS',id: '304379852'},
-			{name: 'puvlooCORAZON',id: '304379724'},
-			{name: 'puvlooCHI',id: '304379655'},
-			{name: 'puvlooDINERO',id: '304379268'},
-			{name: 'puvlooBATMAN',id: '304369130'},
-			{name: 'puvlooBEBESAD',id: '304368803'},
-			{name: 'puvlooOjo',id: '303233509'},
-			{name: 'puvlooSLEEP',id: '302293141'},
-			{name: 'puvlooWhat',id: '302189921'},
-			{name: 'puvlooMonkey',id: '305612040'},
-			{name: 'puvlooAsco',id: '306362105'},
-			{name: 'puvlooAJJA',id: '306362177'},
-			{name: 'puvlooZADDY',id: '306362216'},
-			{name: 'puvlooMrLimpio',id: '306362342'},
-			{name: 'puvlooPreocupado',id: '306362344'}
-		]
-	},
-	{ //donsebastian
-		twitchID: 38108090,
-		booyahID: 'donsebastian',
-		bttv:true,
-		ffz: true,
-		panels: [
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-0"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/DonSebastian_M"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-b9deeb77-e4d7-45fb-9fd3-c710f564ca6f" alt="Contenido del panel"></a></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-1"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/donsebastian_m/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-fac9000f-2e62-46e9-9609-6bb0a4ba13c7" alt="Contenido del panel"></a></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/xHebHaHCHL"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-fe9a2dbe-147a-4b21-9ad3-b60bfcf712de" alt="Contenido del panel"></a></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://steamcommunity.com/tradeoffer/new/?partner=41366819&amp;token=pWEPdp5z"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-57bd901c-8318-4bef-a549-be772eb16c27" alt="Contenido del panel"></a></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://streamlabs.com/donsebastianlive"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-72c73c1e-3fca-40ba-a79f-39d89a446ea8" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>Si quieres puedes donar, es totalmente opcional y solo tendran mi agradecimiento eterno &lt;3. Esto ayuda a mejorar el stream.</p></div></div></div></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-7cfc6f5d-2297-4b0f-bde1-68d37257c629" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>De Rancagua, Chile, streams casi todos los dias. Reacciones, jugar y politica.</p></div></div></div></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-5"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="http://www.flow.cl/btn.php?token=1ljjapn"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-20c471a6-9349-45c6-99b9-8c2735d3f8ad" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>Si quieres donar en moneda local lo puedes hacer por Pagos WebPay, tarjetas de casas comerciales y pagos en comercios habilitados.</p></div></div></div></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-7"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-b9ee181a-a081-4ceb-8e6b-3ef97c0aea55" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>•Procesador: Intel i5 10400.</p><p>•RAM: 16GB, DDR4, 2666 MHz.</p><p>•Video: Nvidia Asus OC RTX 2060 6GB.</p><p>•Motherboard: Asus Tuf Gaming B460M-Plus.</p><p>•SSD1: Western Digital blue NVME 1TB.</p><p>•SSD2: Crucial BX500 480 GB.</p><p>•HDD: Western Digital Blue 1TB.</p><p>•Mouse: Logitech G302.</p><p>•Teclado: Logitech G710+.</p><p>•Audifonos: Sennheiser HD 400S.</p><p>•WebCam: Logitech C920 HD Pro.</p><p>•Microfono: BM800 + Samson S • Phantom</p></div></div></div></div>`
-			},
-			{
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-8"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://discord.io/donsebastian"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-3809013e-289f-495d-a694-ecf0beb3f27d" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>¡Se parte de la comunidad! Aunque no seas sub, compartimos bellos memes y momentos profundos</p></div></div></div></div>`
-			}
-		]
-	},
-	{ // suwie
-		twitchID: 191996164,
-		booyahID: 71614581,
-		bttv:true,
-		ffz: true,
-		offline: 'https://static-cdn.jtvnw.net/jtv_user_pictures/c33fa0bd-28e3-46f1-93cf-c33041d27517-channel_offline_image-1920x1080.jpeg'
-	},
-	{ // cristianghost
-		twitchID: 149287198,
-		booyahID: 71484262,
-		chatroomID: 71061287,
-		bttv:true,
-		ffz: true,
-		subsBadges: [
-			'5eb60657-af78-4a2b-97f5-eda2d4cf47e6' // 1 mes
-		],
-		subsEmotes: [ 
-			{name: 'cristianSerotonina',id: '303892010'},
-			{name: 'cristianNormie',id: '303891994'},
-			{name: 'cristianPicardia',id: '303891853'},
-			{name: 'cristianPog',id: '303891704'},
-			{name: 'cristianL',id: '303511499'},
-			{name: 'cristianAYAYA',id: '303307414'},
-			{name: 'cristianEpico',id: '302211115'},
-			{name: 'cristianBAN',id: '301078636'},
-			{name: 'cristianSad',id: '301077023'},
-			{name: 'cristianUWU',id: '301076947'},
-			{name: 'cristianCursed',id: '301076882'},
-			{name: 'cristianM',id: '1933721'},
-			{name: 'cristianLUL',id: '1933714'},
-			{name: 'cristianPelao',id: '1733212'},
-			{name: 'cristianPou',id: '1494247'},
-			{name: 'cristianChupAYAYA',id: '1178616'},
-			{name: 'cristianPecky',id: '306756023'},
-			{name: 'cristianWaton',id: '306756092'},
-			{name: 'cristianAweonaso',id: '306756484'}
-		],
+  {
+    //puvloo
+    twitchID: 474990645,
+    booyahID: 62813927,
+	chatroomID: 62474863,
+    bttv: false,
+    ffz: false,
+    subsEmotes: [
+      { name: "puvlooPOG", id: "305388833" },
+      { name: "puvlooFRUTA", id: "304379794" },
+      { name: "puvlooCOMBO1", id: "304379754" },
+      { name: "puvlooROSAS", id: "304379852" },
+      { name: "puvlooCORAZON", id: "304379724" },
+      { name: "puvlooCHI", id: "304379655" },
+      { name: "puvlooDINERO", id: "304379268" },
+      { name: "puvlooBATMAN", id: "304369130" },
+      { name: "puvlooBEBESAD", id: "304368803" },
+      { name: "puvlooOjo", id: "303233509" },
+      { name: "puvlooSLEEP", id: "302293141" },
+      { name: "puvlooWhat", id: "302189921" },
+      { name: "puvlooMonkey", id: "305612040" },
+      { name: "puvlooAsco", id: "306362105" },
+      { name: "puvlooAJJA", id: "306362177" },
+      { name: "puvlooZADDY", id: "306362216" },
+      { name: "puvlooMrLimpio", id: "306362342" },
+      { name: "puvlooPreocupado", id: "306362344" },
+    ],
+  },
+  {
+    //donsebastian
+    twitchID: 38108090,
+    booyahID: "donsebastian",
+	chatroomID: 13037025,
+    bttv: true,
+    ffz: true,
+    panels: [
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-0"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/DonSebastian_M"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-b9deeb77-e4d7-45fb-9fd3-c710f564ca6f" alt="Contenido del panel"></a></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-1"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/donsebastian_m/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-fac9000f-2e62-46e9-9609-6bb0a4ba13c7" alt="Contenido del panel"></a></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/xHebHaHCHL"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-fe9a2dbe-147a-4b21-9ad3-b60bfcf712de" alt="Contenido del panel"></a></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://steamcommunity.com/tradeoffer/new/?partner=41366819&amp;token=pWEPdp5z"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-57bd901c-8318-4bef-a549-be772eb16c27" alt="Contenido del panel"></a></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://streamlabs.com/donsebastianlive"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-72c73c1e-3fca-40ba-a79f-39d89a446ea8" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>Si quieres puedes donar, es totalmente opcional y solo tendran mi agradecimiento eterno &lt;3. Esto ayuda a mejorar el stream.</p></div></div></div></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-7cfc6f5d-2297-4b0f-bde1-68d37257c629" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>De Rancagua, Chile, streams casi todos los dias. Reacciones, jugar y politica.</p></div></div></div></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-5"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="http://www.flow.cl/btn.php?token=1ljjapn"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-20c471a6-9349-45c6-99b9-8c2735d3f8ad" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>Si quieres donar en moneda local lo puedes hacer por Pagos WebPay, tarjetas de casas comerciales y pagos en comercios habilitados.</p></div></div></div></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-7"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-b9ee181a-a081-4ceb-8e6b-3ef97c0aea55" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>•Procesador: Intel i5 10400.</p><p>•RAM: 16GB, DDR4, 2666 MHz.</p><p>•Video: Nvidia Asus OC RTX 2060 6GB.</p><p>•Motherboard: Asus Tuf Gaming B460M-Plus.</p><p>•SSD1: Western Digital blue NVME 1TB.</p><p>•SSD2: Crucial BX500 480 GB.</p><p>•HDD: Western Digital Blue 1TB.</p><p>•Mouse: Logitech G302.</p><p>•Teclado: Logitech G710+.</p><p>•Audifonos: Sennheiser HD 400S.</p><p>•WebCam: Logitech C920 HD Pro.</p><p>•Microfono: BM800 + Samson S • Phantom</p></div></div></div></div>`,
+      },
+      {
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-8"><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://discord.io/donsebastian"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-38108090-image-3809013e-289f-495d-a694-ecf0beb3f27d" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p>¡Se parte de la comunidad! Aunque no seas sub, compartimos bellos memes y momentos profundos</p></div></div></div></div>`,
+      },
+    ],
+  },
+  {
+    // suwie
+    twitchID: 191996164,
+    booyahID: 71614581,
+	chatroomID: 71191348,
+    bttv: true,
+    ffz: true,
+  },
+  {
+    // cristianghost
+    twitchID: 149287198,
+    booyahID: 71484262,
+    chatroomID: 71061287,
+    bttv: true,
+    ffz: true,
+    subsBadges: [
+      "5eb60657-af78-4a2b-97f5-eda2d4cf47e6", // 1 mes
+    ],
+    subsEmotes: [
+      { name: "cristianSerotonina", id: "303892010" },
+      { name: "cristianNormie", id: "303891994" },
+      { name: "cristianPicardia", id: "303891853" },
+      { name: "cristianPog", id: "303891704" },
+      { name: "cristianL", id: "303511499" },
+      { name: "cristianAYAYA", id: "303307414" },
+      { name: "cristianEpico", id: "302211115" },
+      { name: "cristianBAN", id: "301078636" },
+      { name: "cristianSad", id: "301077023" },
+      { name: "cristianUWU", id: "301076947" },
+      { name: "cristianCursed", id: "301076882" },
+      { name: "cristianM", id: "1933721" },
+      { name: "cristianLUL", id: "1933714" },
+      { name: "cristianPelao", id: "1733212" },
+      { name: "cristianPou", id: "1494247" },
+      { name: "cristianChupAYAYA", id: "1178616" },
+      { name: "cristianPecky", id: "306756023" },
+      { name: "cristianWaton", id: "306756092" },
+      { name: "cristianAweonaso", id: "306756484" },
+    ],
 
-		panels: [
-			{ // cuenta rut dono
-				type: 'image',
-				img: 'https://panels-images.twitch.tv/panel-149287198-image-05234ad8-c503-467c-bad5-9a963dd717d6',
-				url: 'https://swd.cl/twitch/cristianghost/'
-			},
-			{ // paypal dono
-				type: 'image',
-				img: 'https://panels-images.twitch.tv/panel-149287198-image-771b0c21-31cc-4213-8340-8d7a4a016539',
-				url: 'https://streamelements.com/cristianghost/tip'
-			},
-			{ // discord
-				type: 'image',
-				img: 'https://panels-images.twitch.tv/panel-149287198-image-69a26a8d-aec9-409f-add8-6df53d73edd1',
-				url: 'http://discord.gg/aweonasogang'
-			},
-			{ // instagram
-				type: 'image',
-				img: 'https://panels-images.twitch.tv/panel-149287198-image-b9bbf71c-1121-4e8a-92a5-47843aacd384',
-				url: 'https://www.instagram.com/cristianghostnzalez/'
-			},
-			{ // twiter
-				type: 'image',
-				img: 'https://panels-images.twitch.tv/panel-149287198-image-810ac60c-6e19-4e2c-b0b3-e21a01db912c',
-				url: 'https://twitter.com/CristianGhost_'
-			},
-			{ // canal secundario
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><h3 data-test-selector="title_test_selector" class="sc-AxirZ ScTitleText-sc-1gsen4-0 hUUiQw tw-title">Canal secundario!</h3><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/channel/UCjk1aSSyCg5KOmzoIn34r1Q"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-149287198-image-db91318f-0990-4521-a39d-5310b095eed3" alt="Contenido del panel"></a></div>`,
-				
-			},
-			{ // contacto
-				type: 'html',
-				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-9"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-149287198-image-92d1e342-5384-496e-81a9-f669cdbf042d" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p><em>cristianghost@rift-agency.com</em>, <strong>intentaré responder lo más rápido posible!</strong></p></div></div></div></div>`,				
-			},
-			
-			{ // spects
-				type: 'html',
-				html: `
+    panels: [
+      {
+        // cuenta rut dono
+        type: "image",
+        img: "https://panels-images.twitch.tv/panel-149287198-image-05234ad8-c503-467c-bad5-9a963dd717d6",
+        url: "https://swd.cl/twitch/cristianghost/",
+      },
+      {
+        // paypal dono
+        type: "image",
+        img: "https://panels-images.twitch.tv/panel-149287198-image-771b0c21-31cc-4213-8340-8d7a4a016539",
+        url: "https://streamelements.com/cristianghost/tip",
+      },
+      {
+        // discord
+        type: "image",
+        img: "https://panels-images.twitch.tv/panel-149287198-image-69a26a8d-aec9-409f-add8-6df53d73edd1",
+        url: "http://discord.gg/aweonasogang",
+      },
+      {
+        // instagram
+        type: "image",
+        img: "https://panels-images.twitch.tv/panel-149287198-image-b9bbf71c-1121-4e8a-92a5-47843aacd384",
+        url: "https://www.instagram.com/cristianghostnzalez/",
+      },
+      {
+        // twiter
+        type: "image",
+        img: "https://panels-images.twitch.tv/panel-149287198-image-810ac60c-6e19-4e2c-b0b3-e21a01db912c",
+        url: "https://twitter.com/CristianGhost_",
+      },
+      {
+        // canal secundario
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><h3 data-test-selector="title_test_selector" class="sc-AxirZ ScTitleText-sc-1gsen4-0 hUUiQw tw-title">Canal secundario!</h3><a data-test-selector="link_url_test_selector" class="ScCoreLink-udwpw5-0 FXIKh tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/channel/UCjk1aSSyCg5KOmzoIn34r1Q"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-149287198-image-db91318f-0990-4521-a39d-5310b095eed3" alt="Contenido del panel"></a></div>`,
+      },
+      {
+        // contacto
+        type: "html",
+        html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-9"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-149287198-image-92d1e342-5384-496e-81a9-f669cdbf042d" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p><em>cristianghost@rift-agency.com</em>, <strong>intentaré responder lo más rápido posible!</strong></p></div></div></div></div>`,
+      },
+
+      {
+        // spects
+        type: "html",
+        html: `
 				<div
 					class="sc-AxjAm dGeTii default-panel"
 					data-test-selector="channel_panel_test_selector"
@@ -191,19 +204,18 @@ const channels = [
 						</div>
 					</div>
 					</div>
-					`
-			}
-		],
-		offline: 'https://static-cdn.jtvnw.net/jtv_user_pictures/521c25d4-10d4-4d80-9c1a-79bed60e9f4f-channel_offline_image-1920x1080.jpeg',
-	},
-	{ // moai
-		twitchID: 68111739, // 149287198
-		booyahID: 63681555,
-		bttv:true,
-		ffz: true,
-		offline: 'https://static-cdn.jtvnw.net/jtv_user_pictures/e4b0fa86-491f-441f-a219-daf76914dd69-channel_offline_image-1920x1080.jpeg'
-
-	},
+					`,
+      },
+    ],
+  },
+  {
+    // moai
+    twitchID: 68111739, // 149287198
+    booyahID: 63681555,
+    chatroomID: 63325494,
+    bttv: true,
+    ffz: true,
+  },
 ];
 
 var twitchEmotes = [
@@ -231,7 +243,7 @@ var globalChannelEmotes = [
 	{id:'116051', name: 'forsen1'},
 	{id:'116052', name: 'forsen2'},
 	{id:'emotesv2_2f9a36844b054423833c817b5f8d4225', name: 'forsenPls'},
-	
+	{url:'https://zzls.xyz/booyah.tv/1x.png', name: 'YEAHBUTBOOYAHTV'}
 ];
 
 
@@ -273,7 +285,7 @@ function replaceEmote(msg, regex, url, title) {
 
   return msg.replace(
 	regex,
-	`<img title="${title}" class='moveimage' src='${url}'>`
+	`<img title="${title}" class='emote' src='${url}'>`
   );
 }
 
@@ -292,8 +304,12 @@ function replaceEmotes(msg) {
 
   for (let i = 0; i < globalChannelEmotes.length; i++) {
 	var globalChannelEmotesRegex = new RegExp("\\b" + globalChannelEmotes[i].name + "\\b", "g");
-	var globalChannelEmotesURL = `https://static-cdn.jtvnw.net/emoticons/v2/${globalChannelEmotes[i].id}/default/dark/1.0`;
-
+	var globalChannelEmotesURL = ''
+	if (globalChannelEmotes[i].id){
+		globalChannelEmotesURL = `https://static-cdn.jtvnw.net/emoticons/v2/${globalChannelEmotes[i].id}/default/dark/1.0`;
+	}else{
+		globalChannelEmotesURL	= globalChannelEmotes[i].url
+	}
 	msg = replaceEmote(msg, globalChannelEmotesRegex, globalChannelEmotesURL, globalChannelEmotes[i].name);
   }
   
@@ -513,7 +529,6 @@ function loadAPIs(){
 }
 
 
-
 // donations payload
 
 var toggleDonoPayload = `
@@ -639,10 +654,10 @@ script.textContent = foldPayload;
 script.remove();
 
 function checkifoffline(){
-	if($('.viewer-count').length){
+	if($('.viewer-count span').length){
 
 		if ($('.viewer-count span')[0].innerText == "0"){
-			$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="moveimage" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
+			$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="emote" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
 		}else{
 			console.log('chat')
 			$('.chatroom-head')[0].innerHTML = `El Chat`
@@ -663,16 +678,19 @@ function insertDOM(){
 			var emoteList = document.getElementById('emoteList')
 			
 			emoteList.style.display = 'none';
+
+			saveMessage()
 		});
 	}
+
 	if ($('.toggle-btn').length){
 
-	document.querySelector('.toggle-btn').addEventListener("click", function() {
-		var emoteList = document.getElementById('emoteList')
+		document.querySelector('.toggle-btn').addEventListener("click", function() {
+			var emoteList = document.getElementById('emoteList')
 
-		emoteList.style.display = 'none';
-	});
-}
+			emoteList.style.display = 'none';
+		});
+	}
 
 	var currentURL = window.location.href
 
@@ -782,9 +800,42 @@ function insertDOM(){
 	//	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
 
 	});
+
+	
+
+	
+
 }
 
+function insertVOD() {
+	var currentURL = window.location.href
 
+	if(currentURL.includes('vods')){
+		let VODID = currentURL.substring(currentURL.lastIndexOf('/') + 1)
+		let url = `https://booyah.live/api/v3/playbacks/${VODID}`
+
+		console.log(VODID, url)
+
+		fetch(url)
+		.then(response => response.json())
+		.then(data =>{
+			console.log(data)
+			var resolution = data.playback.endpoint_list[0].resolution // 1080
+			var downloadurl = data.playback.endpoint_list[0].download_url
+
+			var downloadbtn = `
+			<a title="Desacargar VOD en ${resolution}p" target="_blank" download="${data.playback.name}.mp4" href="${downloadurl}" class="downloadvod components-button components-button-size-small components-button-type-outlined-dark desktop components-button-inline components-button-has-icon">
+				<span class="button-content">
+					<i class="follow-btn-divider"></i>Descargar VOD
+				</span>
+			</a>
+			`
+
+		$('.video-btns').first().append(downloadbtn);
+
+		});
+	}
+}
 
 var url = window.location.href
 
@@ -792,129 +843,200 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.message === 'TabUpdated') {
 		console.log('====================PAGE CHANGED====================')
         if (url != request.url){
-
-            initExtension()
+			
+			initExtension()
         }
         
         url = request.url
 	}
 })
 
+chrome.runtime.sendMessage({type: "setUID", uid: localStorage.getItem('loggedUID')});
+
 
 function initExtension(){
 	loadAPIs()
-
+	
 	var currentURL = window.location.href
+	
+	// VOD
+	setTimeout(function() {
+		if ($('.video-btns').first().length) {
+			console.log("[BOOYAH.TV] insert VOD");
+			
+					
+			insertVOD()
+			
+		}
+	}, 3000);
+	
+
+
 
 	// emotes ,chat colors, donations button
 	var chatExist = setInterval(function() {
-		if ($('.toggle-btn').first().length) {
+		if ($('.scroll-container').first().length) {
 			console.log("[BOOYAH.TV] insert on reload");
-
+			
 			
 			clearInterval(chatExist);
-
+			
 			insertDOM()
 			
 			watchChatChanges()
-
-		}
-	}, 3000);
-
-	// offline
-
-	var offlineExist = setInterval(function() {
-		if ($('.views-channel-offline-layer').length) {
-			console.log("[BOOYAH.TV] insert offline backround");
-
-			clearInterval(offlineExist);
-		
-			channels.forEach((currentChannel) => {
-				if (!currentURL.includes(currentChannel.booyahID) ) return;
-
-				if (currentChannel.offline) {
 			
-					document.getElementsByClassName('views-channel-offline-layer')[0].innerHTML = '';
-					document.getElementsByClassName('views-channel-offline-layer')[0].style.background = 'url("'+currentChannel.offline+'")'
-					document.getElementsByClassName('views-channel-offline-layer')[0].style.backgroundSize = 'cover'
-					
-				}
-			})
-		
 		}
 	}, 3000);
-
+	
 	// panels 
-
+	
 	var panelsExist = setInterval(function() {
 		if ($('.gift-container').first().length) {
 			console.log("[BOOYAH.TV] insert panels");
-
+			
 			clearInterval(panelsExist);
-
+			
 			// delates the panels
 			var panels = document.getElementsByClassName('default-panel');
-
+			
 			while (panels[0]) {
 				panels[0].parentNode.removeChild(panels[0]);
 			}
-
-
+			
+			
 			// Panels DOM
 			channels.forEach((currentChannel) => {
 				if (!currentURL.includes(currentChannel.booyahID) ) return;
-
+				
 				// panels title
-
+				
 				if ( currentChannel.panels  ) {
-
+					
 					var panelsHTML = ''
-
+					
 					currentChannel.panels.forEach(panel => {
 						panelsHTML += createPanelHTML(panel)
 					})
-
-
+					
+					
 					var panels = `<div class="box">
 						<div class="views-channel-video-list">
 							<div class="list-title">
-							<div class="components-tabs align-start size-big theme-tab desktop">
+								<div class="components-tabs align-start size-big theme-tab desktop">
 								<span class="tab-label tab-current">Panels</span>
-							</div>
+								</div>
 							</div>
 							<div class="components-infinite-view">
 							${panelsHTML}
 							</div>
 						</div>
-					</div>`
-
+					</div>`;
 					
-
+					
+					
 					$('.channel-top-bar').first().append(panelsHTML);
 				}
 			})
-
+			
 		}
 	}, 3000);
 	
-
+	
 }
 
 initExtension()
 
+var messageLog = []
+var messageCursor = 0
+
+/* Creating a function called PosEnd
+         in JavaScript to place the cursor 
+         at the end */
+function moveTextareCursor(textarea) {
+	var len = textarea.value.length;
+		
+	// Mostly for Web Browsers
+	if (textarea.setSelectionRange) {
+		textarea.focus();
+		textarea.setSelectionRange(len, len);
+	} else if (textarea.createTextRange) {
+		var t = textarea.createTextRange();
+		t.collapse(true);
+		t.moveEnd('character', len);
+		t.moveStart('character', len);
+		t.select();
+	}
+}
+
+function saveMessage(){
+	if (messageLog.length > 2){
+		messageLog.pop()
+	}
+
+	messageLog.unshift(document.getElementsByTagName('textarea')[0].innerHTML);
+
+	messageCursor = 0
+	console.log(messageLog)
+}
+
+function retriveMessage(){
+
+	if (messageLog.length < 1) return
+
+	// https://github.com/facebook/react/issues/10135
+	const textarea = document.getElementsByTagName('textarea')[0]
+
+	function setNativeValue(element, value) {
+		const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
+		const prototype = Object.getPrototypeOf(element)
+		const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
+
+		if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+			prototypeValueSetter.call(element, value)
+		} else if (valueSetter) {
+			valueSetter.call(element, value)
+		} else {
+			throw new Error('The given element does not have a value setter')
+		}
+	}
+
+	setNativeValue(textarea, messageLog[messageCursor])
+
+	textarea.dispatchEvent(new Event('input', { bubbles: true }))
+
+	setTimeout(() => {
+		moveTextareCursor(textarea)
+	}, 10);
+
+	if(messageCursor < messageLog.length -1){
+		messageCursor += 1
+	}
+}
 
 // Let users close emote list with Escape and Enter if is focusing the textarea.
 document.addEventListener('keydown', (event) => {
 	// dummy element
 	var txtArea =  document.getElementsByTagName('textarea')[0]
-
-	if ( event.code === 'Escape' || event.code === 'Enter' && document.activeElement === txtArea) {
+	
+	if ( (event.code === 'Escape' || event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {
 		var emoteList = document.getElementById('emoteList')
-
-		emoteList.style.display = 'none';
-		document.getElementsByClassName('components-chat-menu-emoji')[0].style.display = '';
-
+		
+		if(emoteList.length){
+			emoteList.style.display = 'none';
+			document.getElementsByClassName('components-chat-menu-emoji')[0].style.display = '';
+		}
+		
 	}
-});
 
+	
+	if ( (event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea ) {
+		saveMessage()
+		
+	}
+	if ( event.code === 'ArrowUp' && document.activeElement === txtArea ) {
+		retriveMessage()
+		
+	}
+
+});
 

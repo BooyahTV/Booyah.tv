@@ -14,3 +14,18 @@ chrome.runtime.onInstalled.addListener(function() {
       }
     })
 });
+
+chrome.runtime.onMessage.addListener(
+  function(message, sender, sendResponse) {
+      switch(message.type) {
+          case "setUID":
+              uid = message.uid;
+              break;
+          case "getUID":
+            sendResponse(uid);
+            break;
+          default:
+              console.error("Unrecognised message: ", message);
+      }
+  }
+);
