@@ -326,7 +326,7 @@ function replaceEmotes(msg) {
   }
 
   // BETTER TTV EMOTES
-  if(channel.bttv){
+  if(channel && channel.bttv){
 
 	for (let i = 0; i < betterTTV.length; i++) {
 		var bttvRegex = new RegExp("\\b" + betterTTV[i].code + "\\b", "g");
@@ -337,7 +337,7 @@ function replaceEmotes(msg) {
 	}
 
   // FRANKER FACE Z EMOTES
-  if(channel.ffz){
+  if(channel && channel.ffz){
 
 	for (let i = 0; i < frankerFaceZ.length; i++) {
 		var ffzRegex = new RegExp("\\b" + frankerFaceZ[i].name + "\\b", "g");
@@ -659,7 +659,6 @@ function checkifoffline(){
 		if ($('.viewer-count span')[0].innerText == "0"){
 			$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="emote" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
 		}else{
-			console.log('chat')
 			$('.chatroom-head')[0].innerHTML = `El Chat`
 		}
 	}
