@@ -22,7 +22,9 @@ chrome.runtime.onMessage.addListener(
               uid = message.uid;
               break;
           case "getUID":
-            sendResponse(uid);
+            if(uid){
+              sendResponse(uid);
+            }
             break;
           default:
               console.error("Unrecognised message: ", message);

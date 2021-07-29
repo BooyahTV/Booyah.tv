@@ -1,10 +1,10 @@
 {
-	"name": "BOOYAH.tv",
-	"version": "0.35",
-	"description": "Emotes de twitch / Betterttv / FrankerFaceZ para booyah.live, ademas de otras caracteristicas de twitch.tv",
+	"name": "Booyah.tv",
+	"version": "0.37",
+	"description": "Esta extension incorpora elementos de Twitch.tv a booyah.live, emotes, fuente, etc.",
 	"manifest_version": 2,
 
-	"permissions": ["activeTab","tabs"],
+	"permissions": ["tabs"],
 	"icons": {
 		"16": "16.png",
 		"48": "48.png",
@@ -12,15 +12,20 @@
 	},
 	"content_scripts": [
 		{
-			"css": ["styles.css"],
-			"js": ["jquery.min.js", "emotes.js"],
+			"css": ["css/emotes.css"],
+			"js": ["jquery.min.js", "content_scripts/emotes.js"],
 			"matches": ["https://booyah.live/*"]
+		},
+		{
+			"css": ["css/VOD.css"],
+			"js": ["jquery.min.js", "content_scripts/VOD.js"],
+			"matches": ["https://booyah.live/vods/*"]
 		}
 	],
 	"browser_action": {
 		"default_icon": "48.png",
 		"default_popup": "popup.html",
-		"default_title": "Booyah.TV"
+		"default_title": "Booyah.tv"
 	},
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],
 	"background": {

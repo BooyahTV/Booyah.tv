@@ -27,9 +27,10 @@ chrome.runtime.sendMessage({ type: "getUID" }, function (uid) {
             <img class="icon" src="${channel.thumbnail}"></img>
             <span class="nickname"> ${channel.nickname}</span>
           </button>
-          <div id="live_${channel.uid}" class="live"></div>
         </div>        
         `;
+        //           <div id="live_${channel.uid}" class="live"></div>
+
       });
       
       
@@ -54,9 +55,9 @@ chrome.runtime.sendMessage({ type: "getUID" }, function (uid) {
             document.getElementById(stream.channel_id).setAttribute('title',stream.name);
 
 
-            if(stream.is_streaming){
+            /*if(stream.is_streaming){
               document.getElementById('live_'+stream.channel_id).style.display = 'inline-block'
-            }
+            }*/
             
 
           })

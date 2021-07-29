@@ -807,36 +807,6 @@ function insertDOM(){
 
 }
 
-function insertVOD() {
-	var currentURL = window.location.href
-
-	if(currentURL.includes('vods')){
-		let VODID = currentURL.substring(currentURL.lastIndexOf('/') + 1)
-		let url = `https://booyah.live/api/v3/playbacks/${VODID}`
-
-		console.log(VODID, url)
-
-		fetch(url)
-		.then(response => response.json())
-		.then(data =>{
-			console.log(data)
-			var resolution = data.playback.endpoint_list[0].resolution // 1080
-			var downloadurl = data.playback.endpoint_list[0].download_url
-
-			var downloadbtn = `
-			<a title="Desacargar VOD en ${resolution}p" target="_blank" download="${data.playback.name}.mp4" href="${downloadurl}" class="downloadvod components-button components-button-size-small components-button-type-outlined-dark desktop components-button-inline components-button-has-icon">
-				<span class="button-content">
-					<i class="follow-btn-divider"></i>Descargar VOD
-				</span>
-			</a>
-			`
-
-		$('.video-btns').first().append(downloadbtn);
-
-		});
-	}
-}
-
 var url = window.location.href
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -869,8 +839,6 @@ function initExtension(){
 			
 		}
 	}, 3000);
-	
-
 
 
 	// emotes ,chat colors, donations button
@@ -886,7 +854,7 @@ function initExtension(){
 			watchChatChanges()
 			
 		}
-	}, 3000);
+	}, 500);
 	
 	// panels 
 	
@@ -939,12 +907,18 @@ function initExtension(){
 			})
 			
 		}
-	}, 3000);
+	}, 500);
 	
 	
 }
 
-initExtension()
+//init estension when the page is first loaded
+
+if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded',initExtension);
+} else {
+    initExtension();
+}
 
 var messageLog = []
 var messageCursor = 0
@@ -1021,7 +995,8 @@ document.addEventListener('keydown', (event) => {
 	if ( (event.code === 'Escape' || event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {
 		var emoteList = document.getElementById('emoteList')
 		
-		if(emoteList.length){
+
+		if(document.body.contains(emoteList)){
 			emoteList.style.display = 'none';
 			document.getElementsByClassName('components-chat-menu-emoji')[0].style.display = '';
 		}
@@ -1039,4 +1014,3 @@ document.addEventListener('keydown', (event) => {
 	}
 
 });
-
