@@ -12,14 +12,9 @@
 	},
 	"content_scripts": [
 		{
-			"css": ["css/emotes.css"],
+			"css": ["css/emotes.css","css/VOD.css"],
 			"js": ["jquery.min.js", "content_scripts/emotes.js"],
 			"matches": ["https://booyah.live/*"]
-		},
-		{
-			"css": ["css/VOD.css"],
-			"js": ["jquery.min.js", "content_scripts/VOD.js"],
-			"matches": ["https://booyah.live/vods/*"]
 		}
 	],
 	"browser_action": {
