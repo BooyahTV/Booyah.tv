@@ -1,6 +1,6 @@
 {
 	"name": "Booyah.tv",
-	"version": "0.37",
+	"version": "0.45",
 	"description": "Esta extension incorpora elementos de Twitch.tv a booyah.live, emotes, fuente, etc.",
 	"manifest_version": 2,
 
@@ -12,8 +12,8 @@
 	},
 	"content_scripts": [
 		{
-			"css": ["css/emotes.css","css/VOD.css"],
-			"js": ["jquery.min.js", "content_scripts/emotes.js"],
+			"css": ["css/emotes.css","css/jquery.modal.min.css"],
+			"js": ["jquery.min.js","jquery.modal.min.js","typeahead.bundle.min.js", "content_scripts/emotes.js"],
 			"matches": ["https://booyah.live/*"]
 		}
 	],

@@ -15,6 +15,8 @@ chrome.runtime.onInstalled.addListener(function() {
     })
 });
 
+var uid = null
+
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {
       switch(message.type) {

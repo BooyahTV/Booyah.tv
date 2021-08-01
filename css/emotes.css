@@ -99,7 +99,6 @@ body {
   padding-left: 10px;
 }
 
-
 #hide {
   background: none repeat scroll 0 0 transparent;
   border: medium none;
@@ -120,7 +119,7 @@ body {
 }
 /* le quita el margen a los mensajes */
 .components-chatbox-message {
-	margin: 2px 12px 0 !important;
+  margin: 2px 12px 0 !important;
 }
 
 .scroll-container {
@@ -206,7 +205,6 @@ body {
   max-height: 300px;
   display: none;
   top: -72px;
-
 }
 
 .default-panel {
@@ -216,11 +214,11 @@ body {
   margin: 10px !important;
   vertical-align: top;
 }
-.components-chatbox-banners{
+.components-chatbox-banners {
   display: none;
 }
 .views-standalone-chatroom {
-  background-color: rgb(24,24,27)!important;
+  background-color: rgb(24, 24, 27) !important;
 }
 
 .message-connection-status {
@@ -228,35 +226,91 @@ body {
 }
 /* USERNAME AND VIEWS*/
 .viewer-count {
-   color: red !important; 
+  color: red !important;
 }
 
-.fold{
-  position: relative!important;
-  left: 10px!important;
-  color: rgb(255, 176, 0)
+.fold {
+  position: relative !important;
+  left: 10px !important;
+  color: rgb(255, 176, 0);
 }
 
-.panelsTitle{
+.panelsTitle {
   margin-left: 16px;
 }
-.channel-infos{
-  margin-top: 0px!important;
-
+.channel-infos {
+  margin-top: 0px !important;
 }
-.channel-infos .viewer-count{
-  font-size: 20px!important;
+.channel-infos .viewer-count {
+  font-size: 20px !important;
+}
+
+.components-chat-menu-users-popover .user:last-child {
+  margin-bottom: 0px !important;
 }
 
 /* panels */
-.ScTitleText-sc-1gsen4-0{
+.ScTitleText-sc-1gsen4-0 {
   font-size: 20px;
 }
-.donoBadge{
+.donoBadge {
   width: 16px;
   height: 16px;
 }
-.tipsbadge{
-  padding: 16px!important;
+.tipsbadge {
+  padding: 16px !important;
+}
 
+.downloadvod {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+
+  text-decoration: none;
+  color: initial;
+  margin-left: 40px !important;
+  padding: 20px !important;
+  background-color: #2525ff !important;
+}
+#createClip {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  color: white !important;
+  text-decoration: none;
+  color: initial;
+  margin-left: 40px !important;
+  margin-right: 20px !important;
+  padding: 20px !important;
+  background-color: #e6269c !important;
+}
+#clipModal {
+  padding: 30px;
+  text-align: center;
+}
+#clipModal h1 {
+  text-align: center;
+  color: black;
+  font-size: 30px;
+  padding-bottom: 30px;
+  height: 90%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#clipModal input {
+  padding: 6px;
+  border-radius: 6px;
+  border: #00000075 solid 1px;
+}
+
+#clipModal div {
+  color: black;
+  font-size: 20px;
+}
+#clipBtn {
+  padding: 20px;
+  margin-top: 30px;
+  background-color: rgb(230, 38, 156) !important;
 }

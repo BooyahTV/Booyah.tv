@@ -9,6 +9,8 @@ const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 var channel;
 var donations;
 
+var nickname;
+
 const channels = [
   {
     //puvloo
@@ -219,6 +221,8 @@ const channels = [
 ];
 
 var twitchEmotes = [
+	// https://twitchemotes.com
+
 	{id:'425618', name: 'LUL'},
 	{id:'160404', name: 'TehePelo'},
 	{id:'120232', name: 'TriHard'},
@@ -235,15 +239,34 @@ var twitchEmotes = [
 	{id:'69', name: 'BloodTrail'},
 	{id:'41', name: 'Kreygasm'},
 	{id:'25', name: 'Kappa'},
+	{id:'461298', name: 'DarkMode'},
+	{id:'245', name: 'ResidentSleeper'},
+
+	
+
+	{id:'555555579', name: '8-)', scaped: true},
+	{id:'2', 		 name: ':(', scaped: true},
+	{id:'1', 		 name: ':)', scaped: true},
+	{id:'555555559', name: ':-(', scaped: true},
+	{id:'555555557', name: ':-)', scaped: true},
+	{id:'555555586', name: ':-/', scaped: true},
+	{id:'555555561', name: ':-D', scaped: true},
+	{id:'555555581', name: ':-O', scaped: true},
+	{id:'555555592', name: ':-P', scaped: true},
+	{id:'555555568', name: ':-Z', scaped: true},
+	{id:'555555588', name: ":-\\", scaped: true},
+	{id:'555555583', name: ":-o", scaped: true},
 ];
 
 // forsenE, etc
-var globalChannelEmotes = [
+var booyahtvEmotes = [
+	{url:'https://zzls.xyz/booyah.tv/1x.png', name: 'YEAHBUTBOOYAHTV'},
+
 	{id:'521050', name: 'forsenE'},
 	{id:'116051', name: 'forsen1'},
 	{id:'116052', name: 'forsen2'},
 	{id:'emotesv2_2f9a36844b054423833c817b5f8d4225', name: 'forsenPls'},
-	{url:'https://zzls.xyz/booyah.tv/1x.png', name: 'YEAHBUTBOOYAHTV'}
+
 ];
 
 
@@ -268,16 +291,46 @@ const colors = [
   "#ff0000",
 ];
 
-var bannedWords = [
-	'nigga',
-	'niga',
-	'nigger',
-	'niger',
-	'maricon',
-	'violar',
-	'viole',
-	'violé',
-]
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+
+function escapeRegex(string) {
+    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+function fallbackCopyTextToClipboard(text) {
+	var textArea = document.createElement("textarea");
+	textArea.value = text;
+	
+	// Avoid scrolling to bottom
+	textArea.style.top = "0";
+	textArea.style.left = "0";
+	textArea.style.position = "fixed";
+  
+	document.body.appendChild(textArea);
+	textArea.focus();
+	textArea.select();
+  
+	try {
+	  var successful = document.execCommand('copy');
+	  var msg = successful ? 'successful' : 'unsuccessful';
+	  console.log('Fallback: Copying text command was ' + msg);
+	} catch (err) {
+	  console.error('Fallback: Oops, unable to copy', err);
+	}
+  
+	document.body.removeChild(textArea);
+  }
+  function copyTextToClipboard(text) {
+	if (!navigator.clipboard) {
+	  fallbackCopyTextToClipboard(text);
+	  return;
+	}
+	navigator.clipboard.writeText(text).then(function() {
+	  console.log('Async: Copying to clipboard was successful!');
+	}, function(err) {
+	  console.error('Async: Could not copy text: ', err);
+	});
+  }
 
 // find and replace all instances of an emote given the message and a regex rule.
 
@@ -295,22 +348,34 @@ function replaceEmotes(msg) {
   // TWITCH EMOTES
 
   for (let i = 0; i < twitchEmotes.length; i++) {
-	var twitchRegex = new RegExp("\\b" + twitchEmotes[i].name + "\\b", "g");
-	var twitchURL = `https://static-cdn.jtvnw.net/emoticons/v2/${twitchEmotes[i].id}/default/dark/1.0`;
+	let regex = ''
+	// TODO: refactor
+	if ( twitchEmotes[i].scaped){
+		
+		regex = escapeRegex(twitchEmotes[i].name)
+	}else{
+		regex = "\\b" + twitchEmotes[i].name + "\\b"
+	}
+	
+	regex = new RegExp(regex, "g"); // use scaped if exists
 
-	msg = replaceEmote(msg, twitchRegex, twitchURL, twitchEmotes[i].name);
+	let url = `https://static-cdn.jtvnw.net/emoticons/v2/${twitchEmotes[i].id}/default/dark/1.0`;
+
+	msg = replaceEmote(msg, regex, url, twitchEmotes[i].name);
   }
+
   // GLOBAL CHANNEL EMOTES
 
-  for (let i = 0; i < globalChannelEmotes.length; i++) {
-	var globalChannelEmotesRegex = new RegExp("\\b" + globalChannelEmotes[i].name + "\\b", "g");
-	var globalChannelEmotesURL = ''
-	if (globalChannelEmotes[i].id){
-		globalChannelEmotesURL = `https://static-cdn.jtvnw.net/emoticons/v2/${globalChannelEmotes[i].id}/default/dark/1.0`;
+  for (let i = 0; i < booyahtvEmotes.length; i++) {
+	let regex = new RegExp("\\b" + booyahtvEmotes[i].name + "\\b", "g");
+	let url = ''
+
+	if (booyahtvEmotes[i].url){
+		url	= booyahtvEmotes[i].url
 	}else{
-		globalChannelEmotesURL	= globalChannelEmotes[i].url
+		url = `https://static-cdn.jtvnw.net/emoticons/v2/${booyahtvEmotes[i].id}/default/dark/1.0`;
 	}
-	msg = replaceEmote(msg, globalChannelEmotesRegex, globalChannelEmotesURL, globalChannelEmotes[i].name);
+	msg = replaceEmote(msg, regex, url, booyahtvEmotes[i].name);
   }
   
 
@@ -318,10 +383,10 @@ function replaceEmotes(msg) {
 
   if (channel && channel.subsEmotes) {
 	for (let i = 0; i < channel.subsEmotes.length; i++) {
-		var subRegex = new RegExp("\\b" + channel.subsEmotes[i].name + "\\b", "g");
-		var subURL = `https://static-cdn.jtvnw.net/emoticons/v2/${channel.subsEmotes[i].id}/default/dark/1.0`;
+		let regex = new RegExp("\\b" + channel.subsEmotes[i].name + "\\b", "g");
+		let url = `https://static-cdn.jtvnw.net/emoticons/v2/${channel.subsEmotes[i].id}/default/dark/1.0`;
 
-		msg = replaceEmote(msg, subRegex, subURL, channel.subsEmotes[i].name);
+		msg = replaceEmote(msg, regex, url, channel.subsEmotes[i].name);
 	}
   }
 
@@ -329,21 +394,21 @@ function replaceEmotes(msg) {
   if(channel && channel.bttv){
 
 	for (let i = 0; i < betterTTV.length; i++) {
-		var bttvRegex = new RegExp("\\b" + betterTTV[i].code + "\\b", "g");
-		var bttvURL = `https://cdn.betterttv.net/emote/${betterTTV[i].id}/1x`;
+		let regex = new RegExp("\\b" + betterTTV[i].code + "\\b", "g");
+		let url = `https://cdn.betterttv.net/emote/${betterTTV[i].id}/1x`;
 		
-		msg = replaceEmote(msg, bttvRegex, bttvURL, betterTTV[i].code);
+		msg = replaceEmote(msg, regex, url, betterTTV[i].code);
 	}
-	}
+  }
 
   // FRANKER FACE Z EMOTES
   if(channel && channel.ffz){
 
 	for (let i = 0; i < frankerFaceZ.length; i++) {
-		var ffzRegex = new RegExp("\\b" + frankerFaceZ[i].name + "\\b", "g");
-		var ffzURL = `https://cdn.frankerfacez.com/emote/${frankerFaceZ[i].id}/1`;
+		let regex = new RegExp("\\b" + frankerFaceZ[i].name + "\\b", "g");
+		let url = `https://cdn.frankerfacez.com/emote/${frankerFaceZ[i].id}/1`;
 
-		msg = replaceEmote(msg, ffzRegex, ffzURL, frankerFaceZ[i].name);
+		msg = replaceEmote(msg, regex, url, frankerFaceZ[i].name);
 	}
   }
 
@@ -362,15 +427,11 @@ function addEmotes(objective) {
 		.each(function () {
 			var msg = $(this).html();
 
-			msg = replaceEmote(msg, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3
+			msg = replaceEmote(msg, new RegExp("( |^)" + "&lt;3" + "\\b(?!&lt;3)", "g"), "https://static-cdn.jtvnw.net/emoticons/v1/9/1.0", "<3"); // harth <3			
 			msg = replaceEmote(msg,new RegExp("\\b" + "D:" + "( |$)", "g"),"https://cdn.betterttv.net/emote/55028cd2135896936880fdd7/1x","D:"); // D:
 			msg = replaceEmote(msg,new RegExp(":tf:", "g"),"https://cdn.betterttv.net/emote/54fa8f1401e468494b85b537/1x",":tf:"); // :tf:
-			msg = replaceEmotes(msg); // replace all twitch, sub emotes, betterttv and franker face z emotes
 
-			// banned words
-			bannedWords.forEach(word => {
-				msg = msg.replace(new RegExp("\\b" + word + "( |$)", "gi"),"****")
-			});
+			msg = replaceEmotes(msg); // replace all twitch, sub emotes, betterttv and franker face z emotes
 
 			//console.log('[result] ',msg)
 
@@ -385,6 +446,15 @@ function changeChatOnChange(e){
 
 		// change the username color
 		var usernameContainer = components.childNodes[0].childNodes[0];
+
+		// put tag in chatbox
+		usernameContainer.onclick = event => {
+			if (event.detail === 2) {
+
+				tagUserByMessage(event.target)
+			}
+		 };
+
 
 		if(components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge'){
 			components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
@@ -406,7 +476,7 @@ function changeChatOnChange(e){
 
 		username.style.color = color;
 
-		
+
 		/*donations.forEach(user => {
 			if (user.username == username.innerText){
 				var badge = document.createElement("img");
@@ -425,15 +495,24 @@ function changeChatOnChange(e){
 		})*/
 		
 
+
+		var messageContent = components.childNodes[0].childNodes // Marcelo : sdfsdf
+
+		var messageText = messageContent[messageContent.length - 1] //sdfsdf
+
+		// check tag
+
+		if(nickname){
+			if(messageText.innerHTML.includes('@') && messageText.innerHTML.includes(nickname)){
+				console.log('[BOOYAH.TV] tagged')
+				e.target.style.background = '#c51919'
+				username.style.color =  'rgb(255 255 255)'
+
+			}
+		}
 		// change the message content with its emotes
 
-		var messageContent = components.childNodes[0].childNodes
-
-		// ban words
-
-		bannedWords
-
-		addEmotes(messageContent[messageContent.length - 1]);
+		addEmotes(messageText);
 
 	}
 }
@@ -450,6 +529,31 @@ function watchChatChanges() {
 function loadAPIs(){
 
 	var currentURL = window.location.href
+
+	// save nickname
+	let uid = localStorage.getItem('loggedUID')
+	console.log('[BOOYAH.TV] USER ID: '+uid)
+
+	if(uid){
+		fetch(`https://booyah.live/api/v3/users/${uid}`)
+		.then(response => response.json())
+		.then(data => {
+			nickname = data.user.nickname
+			console.log('[BOOYAH.TV] nickname: '+nickname)
+
+		});
+	}
+
+	if(currentURL.includes('vods')){
+		// TODO: show loading overlay
+	}
+
+	// inser VOD btn
+	setTimeout(function () {
+		if(currentURL.includes('vods')){
+			insertVOD(currentURL)
+		}
+	}, 3000);
 
 	console.log("[BOOYAH.TV] CURRENT URL: "+currentURL)
 
@@ -491,6 +595,76 @@ function loadAPIs(){
 			console.log("[BOOYAH.TV] frankerFaceZ: ", frankerFaceZ);
 
 			console.log("[BOOYAH.TV] channelEmotes: ", channelEmotes);
+	
+
+			// emotes ,chat colors, donations button
+			var chatExist = setInterval(function() {
+				if ($('.scroll-container').first().length) {
+					console.log("[BOOYAH.TV] insert on reload");
+					
+					
+					clearInterval(chatExist);
+					
+					insertDOM()
+					
+					watchChatChanges()
+					
+				}
+			}, 500);
+			
+			// panels 
+			
+			var panelsExist = setInterval(function() {
+				if ($('.gift-container').first().length) {
+					console.log("[BOOYAH.TV] insert panels");
+					
+					clearInterval(panelsExist);
+					
+					// delates the panels
+					var panels = document.getElementsByClassName('default-panel');
+					
+					while (panels[0]) {
+						panels[0].parentNode.removeChild(panels[0]);
+					}
+					
+					
+					// Panels DOM
+					channels.forEach((currentChannel) => {
+						if (!currentURL.includes(currentChannel.booyahID) ) return;
+						
+						// panels title
+						
+						if ( currentChannel.panels  ) {
+							
+							var panelsHTML = ''
+							
+							currentChannel.panels.forEach(panel => {
+								panelsHTML += createPanelHTML(panel)
+							})
+							
+							
+							var panels = `<div class="box">
+								<div class="views-channel-video-list">
+									<div class="list-title">
+										<div class="components-tabs align-start size-big theme-tab desktop">
+										<span class="tab-label tab-current">Panels</span>
+										</div>
+									</div>
+									<div class="components-infinite-view">
+									${panelsHTML}
+									</div>
+								</div>
+							</div>`;
+							
+							
+							
+							$('.channel-top-bar').first().append(panelsHTML);
+						}
+					})
+					
+				}
+			}, 500);
+
 
 
 			/*fetch('http://localhost:3000/tips/'+channel.twitchID)
@@ -740,6 +914,7 @@ function insertDOM(){
 				subHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
 			})
 		}
+		
 		if(channel && channel.bttv){
 			globalEmotes.forEach(emote => {
 				bttvHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
@@ -753,7 +928,7 @@ function insertDOM(){
 		}
 		
 
-		if(channel.bttv && channelEmotes && typeof channelEmotes[0] != 'undefined' ){
+		if(channel && channel.bttv && channelEmotes && typeof channelEmotes[0] != 'undefined' ){
 			console.log(channelEmotes)
 			channelEmotes.forEach(emote => {
 				channelHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
@@ -780,8 +955,8 @@ function insertDOM(){
 				<div id="subs"> ${subHTML} </div>
 				${currentChannel.bttv ? `<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>`: ''}
   				<div id="bttv"> ${bttvHTML} </div>
-  				${channel.bttv && channelEmotes && typeof channelEmotes[0] != 'undefined' ? `<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emoticonos del canal</span><span class="fold">V</span></div>
-  				<div id="channelEmotes">`: ''} ${channelHTML}
+  				${ channelEmotes || channel.ffz ? `<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emoticonos del canal</span><span class="fold">V</span></div>` : ''}
+  				<div id="channelEmotes"> ${channelHTML}
   				${ffzHTML} </div>
   				</div>
   			</div>
@@ -796,6 +971,49 @@ function insertDOM(){
 
 		$('.components-chat-menu-users').first().append(emotesHTML);
 
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches, substringRegex;
+		
+				// an array that will be populated with substring matches
+				matches = [];
+		
+				// regex used to determine if a string contains the substring `q`
+				substrRegex = new RegExp(q, 'i');
+		
+				// iterate through the pool of strings and for any string that
+				// contains the substring `q`, add it to the `matches` array
+				$.each(strs, function(i, str) {
+				if (substrRegex.test(str)) {
+					matches.push(str);
+				}
+				});
+		
+				cb(matches);
+			};
+		};
+		
+		/*var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+			'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+			'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+			'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+			'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+			'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+			'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+			'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+			'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+		];
+		
+		$('.components-input-element').first().typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 1
+		},
+		{
+		name: 'states',
+			source: substringMatcher(states)
+		});*/
+
 	//	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
 
 	});
@@ -806,32 +1024,116 @@ function insertDOM(){
 
 }
 
-function insertVOD() {
+function insertClipBtn(parent){
+
+
+	var clipBtnHTML = `
+
+		<!-- Modal HTML embedded directly into document -->
+		<div id="clipModal" class="modal">
+		<div id="clipMessage" style="display:none">¡link del clip copiado!</div>
+		<h1><svg width="48px" version="1.1" viewBox="0 0 20 20" x="0px" y="0px"><g><path fill="#e6269c" d="M14.594 4.495l-.585-1.91L15.922 2l.585 1.91-1.913.585zM11.14 3.46l.585 1.911 1.913-.584-.585-1.91-1.913.583zM8.856 6.247l-.584-1.91 1.912-.584.585 1.91-1.913.584zM5.403 5.213l.584 1.91L7.9 6.54l-.585-1.911-1.912.584zM2.534 6.09L3.118 8l1.913-.584-.585-1.91-1.912.583zM5 9H3v7a2 2 0 002 2h10a2 2 0 002-2V9h-2v7H5V9z"></path><path fill="#e6269c" d="M8 9H6v2h2V9zM9 9h2v2H9V9zM14 9h-2v2h2V9z"></path></g></svg>Crear Clip.</h1>
+		<div>
+		Nombre: 
+		<input id="clipName" pleaceholder=""></input>
+		</div>
+		<button class="components-button components-button-size-small components-button-type-outlined-dark desktop components-button-inline components-button-has-icon" id="clipBtn">Copiar link del clip</button>
+		</div>
+
+		<a href="#clipModal"  id="createClip" rel="modal:open" title="Crear Clip" target="_blank" class="createclip components-button components-button-size-small components-button-type-outlined-dark desktop components-button-inline components-button-has-icon">
+		<span class="button-content">
+		<i class="follow-btn-divider"></i>Crear Clip
+		</span>
+		</a>
+	`;
+	
+	parent.first().append(clipBtnHTML).ready(function () {
+		var clipBtn = document.querySelector('#clipBtn');
+		var clipName = document.querySelector('#clipName');
+		var clipMessage = document.querySelector('#clipMessage');
+
+		
+
+		clipBtn.addEventListener('click', function(event) {
+			var nicknameParam = ''
+			if(nickname !== null){
+				nicknameParam = `&nickname=${nickname}`
+			}
+			
+			var video = document.getElementById("vjs_video_3_html5_api");
+
+			copyTextToClipboard( `${window.location.href.split('?')[0]}?timestamp=${Math.floor(video.currentTime)}&clipname=${clipName.value}${nicknameParam}`);
+			
+			clipMessage.style.display = "block"
+
+			setTimeout(function(){
+				clipMessage.style.display = "none"
+			},5000)
+		});
+		
+	});
+}
+function insertVOD(currentURL) {
 	const segments = new URL(currentURL).pathname.split("/");
 	const VODID = segments.pop() || segments.pop(); // Handle potential trailing slash
 
 	let url = `https://booyah.live/api/v3/playbacks/${VODID}`;
+
+	setTimeout(function(){
+
+		var url = new URL(currentURL);
+
+		var timestamp = url.searchParams.get("timestamp");
+		var clipname = url.searchParams.get("clipname");
+		var nickname = url.searchParams.get("nickname");
+
+		console.log(clipname)
+		
+		if(timestamp){
+			var video = document.getElementById("vjs_video_3_html5_api"); //factorise selectors to consts
+			video.currentTime = timestamp; // set time (in secounds)
+		}
+
+		if(nickname){
+			document.querySelector('.video-date-count').innerHTML ='clipeado por ' + nickname
+		}
+
+		if(clipname){
+			document.querySelector('.video-bottom .video-title').innerHTML = '<span style="color:#4949ff">[CLIP]</span> ' + clipname
+		}
+	},100)
+
+
+	if (!$("#createClip").length) {
+		insertClipBtn($(".video-btns"))
+	}
 
 	console.log(VODID, url);
 
 	fetch(url)
 		.then((response) => response.json())
 		.then((data) => {
-		console.log(data);
+		
 		var resolution = data.playback.endpoint_list[0].resolution; // 1080
 		var downloadurl = data.playback.endpoint_list[0].download_url;
 
-		var downloadbtn = `
+		// todo crear inicio/fin del clip
+		
+
+		var vodHTML = `
 		<a id="downloadVOD" title="Desacargar VOD en ${resolution}p" target="_blank" download="${data.playback.name}.mp4" href="${downloadurl}" class="downloadvod components-button components-button-size-small components-button-type-outlined-dark desktop components-button-inline components-button-has-icon">
 			<span class="button-content">
-				<i class="follow-btn-divider"></i>Descargar VOD
+			<i class="follow-btn-divider"></i>Descargar VOD
 			</span>
-		</a>
-		`;
+		</a>`
+
 		if (!$("#downloadVOD").length) {
-			$(".video-btns").first().append(downloadbtn);
+			
+			$(".video-btns").first().append(vodHTML)
+			
 		}
-		});
+
+	});
 }
 
 var url = window.location.href
@@ -854,94 +1156,41 @@ chrome.runtime.sendMessage({type: "setUID", uid: localStorage.getItem('loggedUID
 function initExtension(){
 	loadAPIs()
 	
-	var currentURL = window.location.href
-
-	setTimeout(function () {
-		if ($(".video-btns").first().length) {
-			if(currentURL.includes('vods')){
-				inserVOD()
-			}
-		}
-	}, 3000);
-
-	// emotes ,chat colors, donations button
-	var chatExist = setInterval(function() {
-		if ($('.scroll-container').first().length) {
-			console.log("[BOOYAH.TV] insert on reload");
-			
-			
-			clearInterval(chatExist);
-			
-			insertDOM()
-			
-			watchChatChanges()
-			
-		}
-	}, 500);
-	
-	// panels 
-	
-	var panelsExist = setInterval(function() {
-		if ($('.gift-container').first().length) {
-			console.log("[BOOYAH.TV] insert panels");
-			
-			clearInterval(panelsExist);
-			
-			// delates the panels
-			var panels = document.getElementsByClassName('default-panel');
-			
-			while (panels[0]) {
-				panels[0].parentNode.removeChild(panels[0]);
-			}
-			
-			
-			// Panels DOM
-			channels.forEach((currentChannel) => {
-				if (!currentURL.includes(currentChannel.booyahID) ) return;
-				
-				// panels title
-				
-				if ( currentChannel.panels  ) {
-					
-					var panelsHTML = ''
-					
-					currentChannel.panels.forEach(panel => {
-						panelsHTML += createPanelHTML(panel)
-					})
-					
-					
-					var panels = `<div class="box">
-						<div class="views-channel-video-list">
-							<div class="list-title">
-								<div class="components-tabs align-start size-big theme-tab desktop">
-								<span class="tab-label tab-current">Panels</span>
-								</div>
-							</div>
-							<div class="components-infinite-view">
-							${panelsHTML}
-							</div>
-						</div>
-					</div>`;
-					
-					
-					
-					$('.channel-top-bar').first().append(panelsHTML);
-				}
-			})
-			
-		}
-	}, 500);
-	
 	
 }
 
-//init estension when the page is first loaded
+function setTextareaValue(message, isAdd) {
+	// https://github.com/facebook/react/issues/10135
+	const textarea = document.getElementsByTagName('textarea')[0]
 
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", initExtension);
-  } else {
-	initExtension();
-  }
+	function setNativeValue(element, value) {
+		const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
+		const prototype = Object.getPrototypeOf(element)
+		const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
+
+		if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+			prototypeValueSetter.call(element, value)
+		} else if (valueSetter) {
+			valueSetter.call(element, value)
+		} else {
+			throw new Error('The given element does not have a value setter')
+		}
+	}
+	if(isAdd){
+		setNativeValue(textarea, textarea.value + message)
+	}else{
+		setNativeValue(textarea, message)
+	}
+
+	textarea.dispatchEvent(new Event('input', { bubbles: true }))
+}
+
+function tagUserByMessage(usernameContainer) {
+	console.log(usernameContainer.textContent);
+
+	setTextareaValue('@'+usernameContainer.textContent, true)
+	
+}  
 
 var messageLog = []
 var messageCursor = 0
@@ -973,36 +1222,17 @@ function saveMessage(){
 	messageLog.unshift(document.getElementsByTagName('textarea')[0].innerHTML);
 
 	messageCursor = 0
-	console.log(messageLog)
+//	console.log(messageLog)
 }
 
 function retriveMessage(){
 
 	if (messageLog.length < 1) return
 
-	// https://github.com/facebook/react/issues/10135
-	const textarea = document.getElementsByTagName('textarea')[0]
-
-	function setNativeValue(element, value) {
-		const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
-		const prototype = Object.getPrototypeOf(element)
-		const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
-
-		if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
-			prototypeValueSetter.call(element, value)
-		} else if (valueSetter) {
-			valueSetter.call(element, value)
-		} else {
-			throw new Error('The given element does not have a value setter')
-		}
-	}
-
-	setNativeValue(textarea, messageLog[messageCursor])
-
-	textarea.dispatchEvent(new Event('input', { bubbles: true }))
+	setTextareaValue(messageLog[messageCursor], false)
 
 	setTimeout(() => {
-		moveTextareCursor(textarea)
+		moveTextareCursor(document.getElementsByTagName('textarea')[0])
 	}, 10);
 
 	if(messageCursor < messageLog.length -1){
@@ -1037,3 +1267,8 @@ document.addEventListener('keydown', (event) => {
 	}
 
 });
+
+//init estension when the page is first loaded
+
+
+initExtension();

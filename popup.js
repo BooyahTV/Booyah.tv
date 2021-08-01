@@ -1,6 +1,9 @@
 chrome.runtime.sendMessage({ type: "getUID" }, function (uid) {
   if (typeof uid == "undefined") {
-    // That's kind of bad
+    let channelsContainer = document.getElementById("channels")
+
+    channelsContainer.innerHTML = '<p>Tienes que abrir el popup desde booyah.live!</p>';
+
   } else {
     console.log(uid);
 
@@ -16,7 +19,7 @@ chrome.runtime.sendMessage({ type: "getUID" }, function (uid) {
         console.log(json);
         channels = json["following_list"];
 
-        var channelsContainer = document.getElementById("channels")
+        let channelsContainer = document.getElementById("channels")
 
         var channelHTML = "";
 
