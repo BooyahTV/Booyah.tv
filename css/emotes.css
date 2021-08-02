@@ -204,7 +204,7 @@ body {
   width: 100%;
   max-height: 300px;
   display: none;
-  top: -72px;
+  top: -56px;
 }
 
 .default-panel {
@@ -313,4 +313,8 @@ body {
   padding: 20px;
   margin-top: 30px;
   background-color: rgb(230, 38, 156) !important;
+}
+
+.components-chatbox-message-list .message-list .message:last-child{
+  padding-bottom: 0px!important;
 }

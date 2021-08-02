@@ -505,11 +505,12 @@ function changeChatOnChange(e){
 		if(nickname){
 			if(messageText.innerHTML.includes('@') && messageText.innerHTML.includes(nickname)){
 				console.log('[BOOYAH.TV] tagged')
-				e.target.style.background = '#c51919'
+				e.target.style.background = 'rgb(197 25 25 / 32%)'
 				username.style.color =  'rgb(255 255 255)'
 
 			}
-		}
+		}   
+
 		// change the message content with its emotes
 
 		addEmotes(messageText);
@@ -951,9 +952,9 @@ function insertDOM(){
 				<div>
   				<div class="title emoteCategory" onclick="fold(this, 'twitch')"><div id="twitchicon"></div><span>Emoticonos de Twitch</span><span class="fold">V</span></div>
   				<div id="twitch">${twitchHTML} </div>
-				${currentChannel.subsEmotes ? `<div class="title emoteCategory"  onclick="fold(this, 'subs')"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold"">V</span></div>` : ''}
+				${channel.subsEmotes ? `<div class="title emoteCategory"  onclick="fold(this, 'subs')"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold"">V</span></div>` : ''}
 				<div id="subs"> ${subHTML} </div>
-				${currentChannel.bttv ? `<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>`: ''}
+				${channel.bttv ? `<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>`: ''}
   				<div id="bttv"> ${bttvHTML} </div>
   				${ channelEmotes || channel.ffz ? `<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emoticonos del canal</span><span class="fold">V</span></div>` : ''}
   				<div id="channelEmotes"> ${channelHTML}
@@ -1048,21 +1049,29 @@ function insertClipBtn(parent){
 	`;
 	
 	parent.first().append(clipBtnHTML).ready(function () {
-		var clipBtn = document.querySelector('#clipBtn');
-		var clipName = document.querySelector('#clipName');
-		var clipMessage = document.querySelector('#clipMessage');
-
 		
-
+		
+		
 		clipBtn.addEventListener('click', function(event) {
-			var nicknameParam = ''
-			if(nickname !== null){
-				nicknameParam = `&nickname=${nickname}`
-			}
+			var clipBtn = document.querySelector('#clipBtn');
+			var clipName = document.querySelector('#clipName');
+			var clipMessage = document.querySelector('#clipMessage');
+
+			console.log('clip '+clipName.value)
 			
+			if(clipName.value == "") return
+
+			var nicknameParam = ''
+
+			
+			if(nickname !== null){
+				nicknameParam = `&nickname=${nickname.replaceAll(' ','+')}`
+			}
+
+
 			var video = document.getElementById("vjs_video_3_html5_api");
 
-			copyTextToClipboard( `${window.location.href.split('?')[0]}?timestamp=${Math.floor(video.currentTime)}&clipname=${clipName.value}${nicknameParam}`);
+			copyTextToClipboard( `${window.location.href.split('?')[0]}?timestamp=${Math.floor(video.currentTime)}&clipname=${clipName.value.replaceAll(' ','+')}${nicknameParam}`);
 			
 			clipMessage.style.display = "block"
 
@@ -1095,11 +1104,12 @@ function insertVOD(currentURL) {
 		}
 
 		if(nickname){
+			nickname = nickname.replaceAll('+',' ')
 			document.querySelector('.video-date-count').innerHTML ='clipeado por ' + nickname
 		}
 
 		if(clipname){
-			document.querySelector('.video-bottom .video-title').innerHTML = '<span style="color:#4949ff">[CLIP]</span> ' + clipname
+			document.querySelector('.video-bottom .video-title').innerHTML = '<span style="color:#4949ff">[CLIP]</span> ' + clipname.replaceAll('+',' ')
 		}
 	},100)
 
@@ -1188,7 +1198,7 @@ function setTextareaValue(message, isAdd) {
 function tagUserByMessage(usernameContainer) {
 	console.log(usernameContainer.textContent);
 
-	setTextareaValue('@'+usernameContainer.textContent, true)
+	setTextareaValue('@'+usernameContainer.textContent +' ', true)
 	
 }  
 

@@ -17,13 +17,13 @@
 			"matches": ["https://booyah.live/*"]
 		}
 	],
-	"browser_action": {
-		"default_icon": "48.png",
-		"default_popup": "popup.html",
-		"default_title": "Booyah.tv"
-	},
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],
 	"background": {
 		"scripts":["background.js"]
-	}
+	},
+	"applications": {
+		"gecko": {
+			"strict_min_version": "48.0"
+		}
+	  }
 }
