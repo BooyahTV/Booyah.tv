@@ -1,0 +1,31 @@
+.message-connection-status{
+  display:none;
+}
+.message-text{
+  color: white;
+ /* filter: drop-shadow(2px 2px 5px #222222) drop-shadow(2px 2px 5px #111111) drop-shadow(2px 2px 5px #111111);*/
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  
+}
+
+.components-chatbox-user-menu{
+/*  text-shadow: 2px 2px 3px black;*/
+
+ /* filter: drop-shadow(2px 2px 5px #222222) drop-shadow(2px 2px 5px #111111) drop-shadow(2px 2px 5px #111111);*/
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+
+body,.scroll-container,.views-standalone-chatroom{
+  background-color: #30529c!important;
+}
+
+
+.emote {
+position: relative;
+vertical-align: middle;
+max-height: 28px;
+width: auto;
+height: auto;
+}

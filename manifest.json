@@ -1,7 +1,7 @@
 {
 	"name": "Booyah.tv",
-	"version": "0.45",
-	"description": "Esta extension incorpora elementos de Twitch.tv a booyah.live, emotes, fuente, etc.",
+	"version": "0.57",
+	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 2,
 
 	"permissions": ["tabs"],
@@ -14,16 +14,18 @@
 		{
 			"css": ["css/emotes.css","css/jquery.modal.min.css"],
 			"js": ["jquery.min.js","jquery.modal.min.js","typeahead.bundle.min.js", "content_scripts/emotes.js"],
-			"matches": ["https://booyah.live/*"]
+			"matches": ["https://booyah.live/*"],
+			"exclude_matches": [
+				"https://booyah.live/standalone/chatroom/chat-list*"
+			]
+		},{
+			"css": ["streamer.css","css/jquery.modal.min.css"],
+			"js": ["jquery.min.js","jquery.modal.min.js","content_scripts/streamer.js"],
+			"matches": ["https://booyah.live/standalone/chatroom/chat-list*"]
 		}
 	],
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],
 	"background": {
 		"scripts":["background.js"]
-	},
-	"applications": {
-		"gecko": {
-			"strict_min_version": "48.0"
-		}
-	  }
+	}
 }

@@ -318,3 +318,21 @@ body {
 .components-chatbox-message-list .message-list .message:last-child{
   padding-bottom: 0px!important;
 }
+
+/*.components-chat-menu-others-popover{
+  height: 138px!important;
+}*/
+.emoteCategory{
+  cursor: pointer;
+}
+
+.chaturl{
+  color: #a970ff!important;
+}
+.chaturl:hover{
+  color: #a970ff;
+  background-color: #6b6b6d;
+  text-decoration: underline;}
+.chaturl:visited{
+  color: #a970ff!important;
+}
