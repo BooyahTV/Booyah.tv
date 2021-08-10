@@ -389,6 +389,26 @@ function escapeRegex(string) {
     return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
+function toggleEmotePanel(visible){
+    var emoteList = document.getElementById('emoteList')
+    var emojis = document.getElementsByClassName('components-chat-menu-emoji')[0]
+
+    if(!document.body.contains(emoteList)) return
+
+    if(visible){
+        emoteList.style.display = 'inline-flex';
+        emojis.style.display = 'none';
+        $( ".components-input-element" ).autocomplete( "disable" );
+    }else {
+        emoteList.style.display = 'none';
+        emojis.style.display = '';
+        $( ".components-input-element" ).autocomplete( "enable" );
+
+    }
+
+
+}
+
 // Clipboard auciliar functions
 
 function fallbackCopyTextToClipboard(text) {
@@ -679,7 +699,7 @@ function watchChatChanges() {
 }
 
 
-function loadAPIs() {
+function initExtension() {
 
     var currentURL = window.location.href
 
@@ -701,7 +721,7 @@ function loadAPIs() {
         // TODO: show loading overlay
     }
 
-    // inser VOD btn
+
     setTimeout(function() {
         if (currentURL.includes('vods')) {
             insertVOD(currentURL)
@@ -792,18 +812,24 @@ function loadAPIs() {
                 console.log("[BOOYAH.TV] bttvChannelEmotes: ", bttvChannelEmotes);
 
 
-                // emotes ,chat colors, donations button
+                // emotes, chat colors, el chat offline...
+
                 var chatExist = setInterval(function() {
                     if ($('.scroll-container').first().length) {
-                        console.log("[BOOYAH.TV] insert on reload");
-
 
                         clearInterval(chatExist);
 
-                        insetEmotePanel(currentChannel)
+                        // el chat offline..
 
+                        setInterval(function() { checkifoffline() }, 5000)
+                        checkifoffline()
+
+                        // emote panel
+                        
+                        insertEmotesPanel(currentChannel)
+
+                        // insert dom mutation ovserver to listener for new messages added in .scroll-container
                         watchChatChanges()
-
                     }
                 }, 500);
 
@@ -811,55 +837,27 @@ function loadAPIs() {
 
                 var panelsExist = setInterval(function() {
                     if ($('.gift-container').first().length) {
-                        console.log("[BOOYAH.TV] insert panels");
-
                         clearInterval(panelsExist);
-
-                        // delates the panels
-                        var panels = document.getElementsByClassName('default-panel');
-
-                        while (panels[0]) {
-                            panels[0].parentNode.removeChild(panels[0]);
-                        }
+                        insertChannelPanels(currentChannel)
+                    }
+                }, 500)
 
 
-                        // Panels DOM
+                // autocomplete
+                var autocompleteExists = setInterval(function() {
+                    if ($('.components-input-element').first().length) {
+                        clearInterval(autocompleteExists);
 
-
-                        if (currentChannel.panels) {
-
-                            var panelsHTML = ''
-
-                            currentChannel.panels.forEach(panel => {
-                                panelsHTML += createPanelHTML(panel)
-                            })
-
-
-                            var panels = `<div class="box">
-                            <div class="views-channel-video-list">
-                                <div class="list-title">
-                                    <div class="components-tabs align-start size-big theme-tab desktop">
-                                    <span class="tab-label tab-current">Panels</span>
-                                    </div>
-                                </div>
-                                <div class="components-infinite-view">
-                                ${panelsHTML}
-                                </div>
-                            </div>
-                        </div>`;
-
-
-
-                            $('.channel-top-bar').first().append(panelsHTML);
-                        }
+                        initAutocomplete()
 
                     }
-                }, 500);
-
+                }, 500)
+                    
             })
-            .catch((err) => {
-                console.log(err);
-            });
+
+        .catch((err) => {
+            console.log(err);
+        });
     });
 }
 
@@ -1047,159 +1045,201 @@ function insertBooyahrino(channelID) {
 
 }
 
-function insetEmotePanel(currentChannel) {
-        console.log("[BOOYAH.TV] Emote panel added");
+function insertEmotesPanel(currentChannel) {
+    console.log("[BOOYAH.TV] inserting emote panel");
 
-        setInterval(function() { checkifoffline() }, 5000)
+    // on send a message, close the emote panel
 
-        checkifoffline()
+    if ($('.send-btn').length) {
 
-        // on send a message, close the emote panel
+        document.querySelector('.send-btn').addEventListener("click", function() {
+            toggleEmotePanel(false)
 
-        if ($('.send-btn').length) {
+            saveMessage()
+        });
+    }
+    
+    // close emote panel by clicking on the default booyah emote panel
 
-            document.querySelector('.send-btn').addEventListener("click", function() {
-                var emoteList = document.getElementById('emoteList')
+    if ($('.toggle-btn').length) {
 
-                emoteList.style.display = 'none';
+        document.querySelector('.toggle-btn').addEventListener("click", function() {
+            toggleEmotePanel(false)
+        });
+    }
 
-                saveMessage()
-            });
-        }
+    var currentURL = window.location.href
+
+
+    /*document.getElementsByClassName('components-chat-menu-others')[0].onclick = function(){
+        insertBooyahrino(currentChannel.booyahID)
+    };*/
+
+
+    // Emote List
+
+    console.log("[BOOYAH.TV] Emote panel added");
+
+
+    var emoteButton = `
+    <div id="emoteButton" class="components-chat-menu-emotes theme-dark">
+        <div class="toggle-btn" title="Emotes">
+            <div class="components-icon components-icon-emotes">
+                <div id="emotes-icon">
+                </div>
+            </div>
+        </div>
+    </div>`
+
+
+
+    if (!document.body.contains(document.getElementById("emoteButton"))) {
+        console.log("[BOOYAH.TV] Creating emote button");
+
+        $('.btns-bar-chat').first().append(emoteButton);  
+
+        console.log("[BOOYAH.TV] Create emote button click listener");
+
+        $('#emotes-icon').click(function() {
+
+            if(document.getElementById('emoteList').style.display == 'inline-flex') {
+                toggleEmotePanel(false)
+            }
+            else {
+                toggleEmotePanel(true)
+            }
+
+        });
+
+    };
+
+    // Emote list DOM
+
+    var twitchHTML = ''
+    var subHTML = ''
+    var bttvHTML = ''
+    var ffzHTML = ''
+    var channelHTML = ''
+
+    /* Emotes globales de Twitch*/ 
+
+    twitchEmotes.forEach(emote => {
+        twitchHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
+    })
+
+    /* Emotes de subs*/ 
+
+    if (channelSubsEmotes) {
+        channelSubsEmotes.forEach(emote => {
+            subHTML += createEmoteHTML(emote.code, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
+        })
+    }
+
+    /* Emotes globales de BTTV*/ 
+
+    if (channel && channel.bttv) {
+        bttvGlobalEmotes.forEach(emote => {
+            bttvHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
+        })
+    }
+
+    /* Emotes globales de FFZ*/
+
+    if (channel && channel.ffz) {
+        frankerFaceZ.forEach(emote => {
+            ffzHTML += createEmoteHTML(emote.name, `https://cdn.frankerfacez.com/emote/${emote.id}/1`, emote.width, emote.height)
+        })
+    }
+
+    /* Emotes de canal de BTTV*/
+
+    if (channel && channel.bttv && bttvChannelEmotes && typeof bttvChannelEmotes[0] != 'undefined') {
+        bttvChannelEmotes.forEach(emote => {
+            channelHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
+        })
+    }
+
+    var emoteCount = bttvGlobalEmotes.length + 1 +  bttvChannelEmotes.length + 1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1
+
+    var emotesHTML =
+        `<div class="
+            components-popover-container components-chat-menu-users-popover
+            theme-dark"
+            id="emoteList" style="min-height: 300px;">
+            <div class="title">
+            <span>Emotes</span
+            ><span class="ccu">${ emoteCount } emotes disponibles</span>
+            </div>
+            <div class="user-list-wrapper" data-infinite-scrollable="true">
+            <div class="components-infinite-view has-data" style="text-align: center;">
+                <div>
+                <div class="title emoteCategory" onclick="fold(this, 'twitch')"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="fold">V</span></div>
+                <div id="twitch">${twitchHTML} </div>
+                ${channelSubsEmotes ? `<div class="title emoteCategory"  onclick="fold(this, 'subs')"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold"">V</span></div>` : ''}
+                <div id="subs"> ${subHTML} </div>
+                ${channel.bttv ? `<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>`: ''}
+                <div id="bttv"> ${bttvHTML} </div>
+                ${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emotes del canal</span><span class="fold">V</span></div>` : ''}
+                <div id="channelEmotes"> ${channelHTML}
+                ${ffzHTML} </div>
+                </div>
+            </div>
+            </div>
+        </div>`
+
+    // insert emote panel to the DOM emote panel
+
+    if (document.body.contains(document.getElementById("emoteList"))){
+        document.getElementById("emoteList").remove();
+    };
+
+    $('.components-chat-menu-users').first().append(emotesHTML);
+
+
+//	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
+
+}
+
+function insertChannelPanels(channel) {
+    console.log("[BOOYAH.TV] inserting panels");
+
+    // delates the panels
+    var panels = document.getElementsByClassName('default-panel');
+
+    while (panels[0]) {
+        panels[0].parentNode.removeChild(panels[0]);
+    }
+
+
+    // Panels DOM
+    channel
+
+    if (channel.panels) {
+
+        var panelsHTML = ''
         
-        // close emote panel by clicking on the default booyah emote panel
-
-        if ($('.toggle-btn').length) {
-
-            document.querySelector('.toggle-btn').addEventListener("click", function() {
-                var emoteList = document.getElementById('emoteList')
-
-                emoteList.style.display = 'none';
-            });
-        }
-
-        var currentURL = window.location.href
-
-
-        /*document.getElementsByClassName('components-chat-menu-others')[0].onclick = function(){
-            insertBooyahrino(currentChannel.booyahID)
-        };*/
-
-
-        // Emote List
-
-        console.log("[BOOYAH.TV] Emote panel added");
-
-        var emoteButtonHTML = `
-		<div id="emoteButton" class="components-chat-menu-emotes theme-dark">
-			<div class="toggle-btn" title="Emotes">
-				<div class="components-icon components-icon-emotes">
-					<div id="emotes-icon" onclick="
-						if(document.getElementById('emoteList').style.display == 'inline-flex') {
-							document.getElementById('emoteList').style.display = 'none';
-							document.getElementsByClassName('components-chat-menu-emoji')[0].style.display = '';
-
-						}
-						else {
-							document.getElementById('emoteList').style.display = 'inline-flex';
-							document.getElementsByClassName('components-chat-menu-emoji')[0].style.display = 'none';
-							
-						}">
-					</div>
-				</div>
-			</div>
-		</div>`;
-
-        if (!document.body.contains(document.getElementById("emoteButton"))) {
-            console.log("[BOOYAH.TV] Emote Button");
-            $('.btns-bar-chat').first().append(emoteButtonHTML);
-        };
-
-        // Emote list DOM
-
-        var twitchHTML = ''
-        var subHTML = ''
-        var bttvHTML = ''
-        var ffzHTML = ''
-        var channelHTML = ''
-
-        /* Emotes globales de Twitch*/ 
-
-        twitchEmotes.forEach(emote => {
-            twitchHTML += createEmoteHTML(emote.name, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
+        channel.panels.forEach(panel => {
+            panelsHTML += createPanelHTML(panel)
         })
 
-        /* Emotes de subs*/ 
 
-        if (channelSubsEmotes) {
-            channelSubsEmotes.forEach(emote => {
-                subHTML += createEmoteHTML(emote.code, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
-            })
-        }
-
-        /* Emotes globales de BTTV*/ 
-
-        if (channel && channel.bttv) {
-            bttvGlobalEmotes.forEach(emote => {
-                bttvHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
-            })
-        }
-
-        /* Emotes globales de FFZ*/
-
-        if (channel && channel.ffz) {
-            frankerFaceZ.forEach(emote => {
-                ffzHTML += createEmoteHTML(emote.name, `https://cdn.frankerfacez.com/emote/${emote.id}/1`, emote.width, emote.height)
-            })
-        }
-
-        /* Emotes de canal de BTTV*/
-
-        if (channel && channel.bttv && bttvChannelEmotes && typeof bttvChannelEmotes[0] != 'undefined') {
-            bttvChannelEmotes.forEach(emote => {
-                channelHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
-            })
-        }
-
-        var emoteCount = bttvGlobalEmotes.length + 1 +  bttvChannelEmotes.length + 1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1
-
-        var emotesHTML =
-            `<div class="
-                components-popover-container components-chat-menu-users-popover
-                theme-dark"
-                id="emoteList" style="min-height: 300px;">
-                <div class="title">
-                <span>Emotes</span
-                ><span class="ccu">${ emoteCount } emotes disponibles</span>
-                </div>
-                <div class="user-list-wrapper" data-infinite-scrollable="true">
-                <div class="components-infinite-view has-data" style="text-align: center;">
-                    <div>
-                    <div class="title emoteCategory" onclick="fold(this, 'twitch')"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="fold">V</span></div>
-                    <div id="twitch">${twitchHTML} </div>
-                    ${channelSubsEmotes ? `<div class="title emoteCategory"  onclick="fold(this, 'subs')"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold"">V</span></div>` : ''}
-                    <div id="subs"> ${subHTML} </div>
-                    ${channel.bttv ? `<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>`: ''}
-                    <div id="bttv"> ${bttvHTML} </div>
-                    ${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emotes del canal</span><span class="fold">V</span></div>` : ''}
-                    <div id="channelEmotes"> ${channelHTML}
-                    ${ffzHTML} </div>
+        var panels = `<div class="box">
+            <div class="views-channel-video-list">
+                <div class="list-title">
+                    <div class="components-tabs align-start size-big theme-tab desktop">
+                    <span class="tab-label tab-current">Panels</span>
                     </div>
                 </div>
+                <div class="components-infinite-view">
+                ${panelsHTML}
                 </div>
-            </div>`
-	
-		// insert emote panel to the DOM emote panel
-
-		if (document.body.contains(document.getElementById("emoteList"))){
-			document.getElementById("emoteList").remove();
-		};
-
-		$('.components-chat-menu-users').first().append(emotesHTML);
+            </div>
+        </div>`;
 
 
-	//	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
 
+        $('.channel-top-bar').first().append(panelsHTML);
+    }
 }
 
 function insertClipBtn(parent){
@@ -1259,6 +1299,7 @@ function insertClipBtn(parent){
 		
 	});
 }
+
 function insertVOD(currentURL) {
 	const segments = new URL(currentURL).pathname.split("/");
 	const VODID = segments.pop() || segments.pop(); // Handle potential trailing slash
@@ -1323,30 +1364,6 @@ function insertVOD(currentURL) {
 	});
 }
 
-var url = window.location.href
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-	if (request.message === 'TabUpdated') {
-		console.log('====================PAGE CHANGED====================')
-        if (url != request.url){
-			
-			initExtension()
-        }
-        
-        url = request.url
-	}
-})
-
-chrome.runtime.sendMessage({type: "setUID", uid: localStorage.getItem('loggedUID')});
-
-
-function initExtension(){
-
-	loadAPIs()
-	
-	
-}
-
 function setTextareaValue(message, isAdd) {
 	// https://github.com/facebook/react/issues/10135
 	const textarea = document.getElementsByTagName('textarea')[0]
@@ -1407,6 +1424,8 @@ function copyMessage(messageContainer) {
     setTextareaValue(userMessage, false)
 }
 
+// keyboard events
+
 var messageLog = []
 var messageCursor = 0
 
@@ -1460,15 +1479,10 @@ document.addEventListener('keydown', (event) => {
 	// dummy element
 	var txtArea =  document.getElementsByTagName('textarea')[0]
 	
-	if ( event.code === 'Escape' || ( event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {
-		var emoteList = document.getElementById('emoteList')
-		
+    var autocomplete = document.getElementsByClassName('ui-autocomplete')[0]
 
-		if(document.body.contains(emoteList)){
-			emoteList.style.display = 'none';
-			document.getElementsByClassName('components-chat-menu-emoji')[0].style.display = '';
-		}
-		
+	if ( event.code === 'Escape' || ( event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {		
+        toggleEmotePanel(false)
 	}
 
 	
@@ -1476,14 +1490,191 @@ document.addEventListener('keydown', (event) => {
 		saveMessage()
 		
 	}
-	if ( event.code === 'ArrowUp' && document.activeElement === txtArea ) {
-		retriveMessage()
+    console.log(autocomplete.style.display)
+	if ( event.code === 'ArrowUp' && document.activeElement === txtArea && autocomplete.style.display == 'none' ) {
+		//TODO: volver a colocarlo
+        //retriveMessage()
 		
 	}
 
 });
 
-//init estension when the page is first loaded
+//  AUTOCOMPLETE
 
+
+(function ($) {
+    // Extend the autocomplete widget, using our own application namespace.
+    $.widget("app.autocomplete", $.ui.autocomplete, {
+      // The _renderItem() method is responsible for rendering each
+      // menu item in the autocomplete menu.
+      _renderItem: function (ul, item) {
+        // We want the rendered menu item generated by the default implementation.
+        var result = this._super(ul, item);
+  
+        // If there is logo data, add our custom CSS class, and the specific
+        // logo URL.
+  
+        if (item.img) {
+          result
+            .find("a")
+            .addClass("ui-menu-item-icon")
+            .css("background-image", "url(" + item.img + ")");
+        }
+  
+        return result;
+      },
+    });
+  })(jQuery);
+  
+
+function formatEmotesToAutocomplete() {
+    let emotes = []
+
+    twitchEmotes.forEach(emote => {
+        emotes.push({
+            label: emote.name,
+            img: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
+        })
+    })
+
+    booyahtvEmotes.forEach(emote => {
+
+        if (emote.url) {
+            url = emote.url
+        } else {
+            url = `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`;
+        }
+
+        emotes.push({
+            label: emote.name,
+            img: url,
+        })
+    })
+
+    channelSubsEmotes.forEach(emote => {
+        emotes.push({
+            label: emote.code,
+            img: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
+        })
+    })
+
+    bttvGlobalEmotes.forEach(emote => {
+        emotes.push({
+            label: emote.code,
+            img: `https://cdn.betterttv.net/emote/${emote.id}/3x`,
+        })
+    })
+
+    bttvChannelEmotes.forEach(emote => {
+        emotes.push({
+            label: emote.code,
+            img: `https://cdn.betterttv.net/emote/${emote.id}/3x`,
+        })
+    })
+
+
+    frankerFaceZ.forEach(emote => {
+        emotes.push({
+            label: emote.name,
+            img: `https://cdn.frankerfacez.com/emote/${emote.id}/2`,
+        })
+    })
+
+    return emotes
+}
+
+function initAutocomplete(){
+    // add twitch, booyahtv, subs, bttv global, bttv channel, ffz emotes
+    // to the autocomplete list
+
+    var emotes = formatEmotesToAutocomplete()
+
+    function split(val) {
+        return val.split(/ \s*/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+
+    // inject results div
+    $(".components-desktop-chatroom").first().after(`<div id="results"></div>`);
+
+    $(".components-input-element")
+    .on("keydown", function (event) {
+        if (
+            event.keyCode === $.ui.keyCode.TAB &&
+            $(this).autocomplete("instance").menu.active
+        ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        appendTo: "#results",
+        minLength: 2,
+        delay: 100,
+        highlightItem: true,
+        position: { my: "left bottom", at: "left top", collision: "flip" },
+
+        open: function () {
+            var position = $("#results").position(),
+                left = position.left
+
+            $("#results > ul").css({
+                left: left + "px",
+
+            });
+
+            toggleEmotePanel(false)
+        },
+        source: function (request, response) {
+           var results = $.ui.autocomplete.filter(emotes, extractLast(request.term))
+ 
+            response(results.slice(0, 10));
+        },
+        focus: function (event, ui) {
+            // prevent value inserted on focus
+            $(".ui-helper-hidden-accessible").hide();
+            event.preventDefault();
+
+            return false;
+        },
+        select: function (event, ui) {
+            var terms = split(this.value);
+            console.log(terms);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push(ui.item.value);
+            // add placeholder to get the space at the end
+            terms.push("");
+            this.value = terms.join(" ");
+
+            setTextareaValue('',true)
+            return false;
+        },
+    });
+
+}
+// run initExtension When the page is changed
 
 initExtension();
+
+
+var url = window.location.href
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	if (request.message === 'TabUpdated') {
+		console.log('====================PAGE CHANGED====================')
+        if (url != request.url){
+			
+			initExtension()
+        }
+        
+        url = request.url
+	}
+})
+
+chrome.runtime.sendMessage({type: "setUID", uid: localStorage.getItem('loggedUID')});
+
+//init estension when the page is first loaded
+

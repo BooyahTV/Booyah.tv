@@ -1,4 +1,4 @@
-# Booyah.tv 0.57
+# Booyah.tv 0.6
   ![app icon](48.png) Esta extención incorpora elementos de twitch.tv a booyah.live ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah ![Wajaja](https://cdn.frankerfacez.com/emoticon/594021/1) Booyah
 
 
