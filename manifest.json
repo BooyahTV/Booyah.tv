@@ -1,6 +1,6 @@
 {
 	"name": "Booyah.tv",
-	"version": "0.65",
+	"version": "0.66",
 	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 2,
 
@@ -29,10 +29,6 @@
 			"exclude_matches": [
 				"https://booyah.live/standalone/chatroom/chat-list*"
 			]
-		},{
-			"css": ["css/streamer.css","css/jquery.modal.min.css"],
-			"js": ["libs/jquery.min.js","libs/jquery.modal.min.js","content_scripts/streamer.js"],
-			"matches": ["https://booyah.live/standalone/chatroom/chat-list*"]
 		}
 	],
 	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg"],

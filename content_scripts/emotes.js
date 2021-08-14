@@ -262,33 +262,31 @@ const channels = [{
         panels: [
             {
                 type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-0"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-674b3aa9-0282-4680-a1cc-6aad358f69e1" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxiKw sc-pscky gzUZnd tw-typeset"><div class="panel-description"><ul><li>No a la XENOFOBIA.</li><li>No SPAM.</li><li>El ":v" (en exceso).</li><li>Los Copy&amp;Paste, estan prohibidos, para no provocar desorden en el chat.</li></ul><p>NO CUMPLIR ESTO SE RECURIRA AL PERMA BAN.</p></div></div></div></div>`,
+                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://discord.gg/QShQVKV"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-0a463264-a391-4424-985d-a1f1b6b977bc" alt="Contenido del panel"></a></div>`,
             },
             {
                 type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-1"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-be39615b-bded-4d8c-bc13-136797db0eb3" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxiKw sc-pscky gzUZnd tw-typeset"><div class="panel-description"><ul><li>Soy Moai, hago videos en Youtube.</li><li>Chileno.</li><li>Me dicen Moai, por mi cara, así de simple.</li><li>No tengo un horario organizado, así que por este momento no hay ninguna información respecto a la hora en que se levantan los streams.</li></ul></div></div></div></div>`,
+                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/user/DylanteroElBronze?sub_confirmation=1"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-130345683-image-6001c25e-2b05-4c72-8982-f774c676f7b0" alt="Contenido del panel"></a></div>`,
             },
             {
                 type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/user/MoaiGr1"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-86dfc490-77d1-435b-8555-d3f2f5c99c26" alt="Contenido del panel"></a></div>`,
+                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://furuishop.cl/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-66f45fd9-c3f3-4d0d-9918-8fe60be60975" alt="Contenido del panel"></a></div>`,
             },
             {
                 type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/moaigr/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-e1849f6f-d16c-4c51-b0ce-4456cf54d29b" alt="Contenido del panel"></a></div>`,
-            },
-            {
-                type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/MoaiGr"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-440f17dc-e714-41fa-a775-7a5f3f31bd20" alt="Contenido del panel"></a></div>`,
-            },
-            {
-                type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-5"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://www.facebook.com/MoaiGr/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-7524e2de-62de-4b97-aa94-dfee843e4a3b" alt="Contenido del panel"></a></div>`,
-            },
-            {
-                type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-21dc940e-8585-405e-8b50-2c5335ca5aae" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxiKw sc-pscky gzUZnd tw-typeset"><div class="panel-description"><p><em>EN PROCESO</em></p></div></div></div></div>`,
-            },
+                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://bit.ly/3nEwTSI"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-bdfc396b-ca69-42ba-b7ed-7b40a5a1db61" alt="Contenido del panel"></a></div>`,
+            }
         ],
+    },
+    {
+        // elmarceloc (test)
+        name: 'elmarceloc',
+        twitchID: 130345683,
+        booyahID: 'elmarceloc',
+        booyahNumericID: 49111087,
+        chatroomID: 78979571,
+        bttv: true,
+        ffz: true,
         panels: [
             {
                 type: "html",
@@ -307,8 +305,7 @@ const channels = [{
                 html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://bit.ly/3nEwTSI"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-bdfc396b-ca69-42ba-b7ed-7b40a5a1db61" alt="Contenido del panel"></a></div>`,
             }
         ],
-    },
-
+    }
 ];
 
 var twitchEmotes = [
@@ -352,12 +349,13 @@ var twitchEmotes = [
 // forsenE, etc
 var booyahtvEmotes = [
     { url: 'https://zzls.xyz/booyah.tv/1x.png', name: 'YEAHBUTBOOYAHTV' },
+    { url: 'https://cdn.betterttv.net/emote/604f8eac306b602acc59d6d2/1x', name: 'forsenBased' },
 
     { id: '521050', name: 'forsenE' },
     { id: '116051', name: 'forsen1' },
     { id: '116052', name: 'forsen2' },
     { id: 'emotesv2_2f9a36844b054423833c817b5f8d4225', name: 'forsenPls' },
-
+     
 ];
 
 var channelSubsEmotes = []
@@ -645,10 +643,10 @@ function changeChatOnChange(e) {
         };
 
         // change channel badges
-
-        if (components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge') {
+        // TODO:, cambiar los iconos
+       /* if (components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge') {
             components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
-        }
+        }*/
 
         
         // change the username color
@@ -674,7 +672,7 @@ function changeChatOnChange(e) {
 
         // check tag
 
-        if (nickname) {
+        if (nickname ) {
             if (messageText.innerHTML.includes('@') && messageText.innerHTML.toLowerCase().includes(nickname.toLowerCase())) {
                 console.log('[BOOYAH.TV] tagged')
                 e.target.style.background = 'rgb(197 25 25 / 32%)'
@@ -727,6 +725,15 @@ function initExtension() {
             insertVOD(currentURL)
         }
     }, 3000);
+
+
+    // delates the panels
+    var panels = document.getElementsByClassName('default-panel');
+
+    while (panels[0]) {
+        panels[0].parentNode.removeChild(panels[0]);
+    }
+
 
     console.log("[BOOYAH.TV] CURRENT URL: " + currentURL)
 
@@ -836,7 +843,7 @@ function initExtension() {
                 // panels 
 
                 var panelsExist = setInterval(function() {
-                    if ($('.gift-container').first().length) {
+                    if ($('.channel-box').first().length) {
                         clearInterval(panelsExist);
                         insertChannelPanels(currentChannel)
                     }
@@ -1203,16 +1210,7 @@ function insertEmotesPanel(currentChannel) {
 function insertChannelPanels(channel) {
     console.log("[BOOYAH.TV] inserting panels");
 
-    // delates the panels
-    var panels = document.getElementsByClassName('default-panel');
-
-    while (panels[0]) {
-        panels[0].parentNode.removeChild(panels[0]);
-    }
-
-
     // Panels DOM
-    channel
 
     if (channel.panels) {
 
@@ -1238,7 +1236,7 @@ function insertChannelPanels(channel) {
 
 
 
-        $('.channel-top-bar').first().append(panelsHTML);
+        $('.channel-box').first().append(panelsHTML);
     }
 }
 
@@ -1422,6 +1420,9 @@ function copyMessage(messageContainer) {
     console.log('parsed message',userMessage)
 
     setTextareaValue(userMessage, false)
+
+    $( ".components-input-element" ).autocomplete( "disable" );
+
 }
 
 // keyboard events
