@@ -298,6 +298,24 @@ const channels = [{
                 html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/late_cod"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-134037766-image-e2e904433759c602-320-320.jpeg" alt="Contenido del panel"></a></div>`,
             },
         ],
+    },
+    { // "elamrcelc" test channel
+        name: 'latesitoo',
+        twitchID: 134037766,
+        booyahNumericID: 77452717,
+        chatroomID: 77103915,
+        bttv: true,
+        ffz: true,
+        panels: [
+            {
+                type: "html",
+                html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/channel/UC73AugPHBoFmdt3Dwz50iZw"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-134037766-image-bf1450ff9dc06b68-320-320.jpeg" alt="Contenido del panel"></a></div>`,
+            },
+            {
+                type: "html",
+                html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/late_cod"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-134037766-image-e2e904433759c602-320-320.jpeg" alt="Contenido del panel"></a></div>`,
+            },
+        ],
     }
 ];
 
@@ -444,24 +462,55 @@ function replaceAll(str, find, replace) {
 
 // crea el <a href="url"> url </a>
 
-function createAnchor(msg, urlparam, prefixSize) {
+function createAnchor(msg, urlparam, domain, prefixSize, hasWarning) {
     let url =  urlparam.substring(prefixSize)
+    let warningMessage = `onclick="alert('¡Cuidado con este link, puede llegar a tener contenido baneable, cambia la Escena si eres streamer!')"`
 
-    return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="https://youtu.be/${url}">https://youtu.be/${url}</a>`)
+    return replaceAll(msg,urlparam, `<a ${hasWarning ? warningMessage: ''} class="chaturl" target="__blank" href="${domain}/${url}">${domain}/${url}</a>`)
 }
 
 function replaceURLSinTextarea() {
     let msg = document.getElementsByClassName('components-input-element')[0].value;
-    let ytregex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
 
-    if(msg.match(ytregex) !== null){
-        msg.match(ytregex).forEach((youtubeURL) => {
+    let youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
+    let twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
+    let tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
+    let imgurRegex = /(http|https):\/\/?(.)imgur.com(.)([^\s]+)/g;
 
-            msg = msg.replace(youtubeURL, 'yt='+youtubeURL.slice(-11) )
+    // youtube clips
+
+    if(msg.match(youtubeRegex) !== null){
+        msg.match(youtubeRegex).forEach((youtubeURL) => {
+            msg = msg.replace(youtubeURL, `yt=${youtubeURL.slice(-11)} ` )
         });
-
-        setTextareaValue(msg,false)
     }
+    
+    // twitch clips
+
+    if(msg.match(twitchClipsRegex) !== null){
+        msg.match(twitchClipsRegex).forEach((clipURL) => {
+            msg = msg.replace(clipURL, `twclip=${clipURL.slice(24)} `  )
+        });
+    }
+
+    // twiter
+
+    if(msg.match(tweetRegex) !== null){
+        msg.match(tweetRegex).forEach((twitURL) => {
+            msg = msg.replace(twitURL, `tweet=${twitURL.slice(20)} `  )
+        });
+    }
+    
+    // imgur
+
+    if(msg.match(imgurRegex) !== null){
+        msg.match(imgurRegex).forEach((imgurURL) => {
+            msg = msg.replace(imgurURL, `imgur=${imgurURL.slice(18)} `  )
+        });
+    }
+        
+    
+    setTextareaValue(msg,false)
 }
 
 // Replaces all the urls in the chat using some prefixes, the [\/] parts is
@@ -470,38 +519,47 @@ function replaceURLSinTextarea() {
 function replaceURLS(msg) {
 
     let youtubeRegex = /yt=(.){11}/g
-    
+    let twitchClipsRegex = /twclip=(.)([^\s]+)/g
+    let tweetRegex = /tweet=(.)([^\s]+)/g
+    let imgurRegex = /imgur=(.)([^\s]+)/g
+
     // youtube
     if (msg.match(youtubeRegex) !== null){ 
-        msg.match(youtubeRegex).forEach((urlparam) => {
-            // Do something with each element
-            
-            msg = createAnchor(msg, urlparam, 3)
+        msg.match(youtubeRegex).forEach((youtubeURL) => {
+            msg = createAnchor(msg, youtubeURL, 'https://youtu.be' ,3, false)
         });
     }
 
+    // twitch clips
 
-   /* msg = parseURLsToLinks(msg, /v=/g, 'https://www.youtube.com/watch?v=')
-    msg = parseURLsToLinks(msg, /yt=v=/g, 'https://www.youtube.com/watch?v=')
-    msg = parseURLsToLinks(msg, /yt=watch\\?v=/g, 'https://www.youtube.com/watch?v=')
-    msg = parseURLsToLinks(msg, /yt=[\/]watch\\?v=/g, 'https://www.youtube.com/watch?v=')*/
-/*
+    if (msg.match(twitchClipsRegex) !== null){ 
+        msg.match(twitchClipsRegex).forEach((clipURL) => {
+            msg = createAnchor(msg, clipURL, 'https://clips.twitch.tv' ,7, false)
+        });
+    }
 
-    msg = msg.replace(/v=/g, parseURLsToLinks('https://www.youtube.com/watch?v='));
-    msg = msg.replace(/yt=v=/g, parseURLsToLinks('https://www.youtube.com/watch?'));
-    msg = msg.replace(/yt=watch\\?v=/g, parseURLsToLinks('https://www.youtube.com/'));
-    msg = msg.replace(/yt=[\/]watch\\?v=/g, parseURLsToLinks('https://www.youtube.com'));
+    // tweet
 
-    // youtube.com  (ex: gallery=[id])
-    msg = msg.replace(/imgur=/g, parseURLsToLinks('https://imgur.com/'));
-    msg = msg.replace(/imgur=[\/]/g, parseURLsToLinks('https://imgur.com'));
-    
-    // reddit.com (ex: reddit=)
-    msg = msg.replace(/reddit=/g, parseURLsToLinks('https://www.reddit.com/'));
-    msg = msg.replace(/reddit=[\/]/g, parseURLsToLinks('https://www.reddit.com'));
-*/
+    if (msg.match(tweetRegex) !== null){ 
+        msg.match(tweetRegex).forEach((tweetURL) => {
+            msg = createAnchor(msg, tweetURL, 'https://twitter.com' ,6, true)
+        });
+    }
+
+    // imgur
+
+    if (msg.match(imgurRegex) !== null){ 
+        msg.match(imgurRegex).forEach((imgurURL) => {
+            msg = createAnchor(msg, imgurURL, 'https://imgur.com' ,6, true)
+        });
+    }
     
     return msg
+}
+
+function updateEmotes(){
+    console.log('[BOOYAH.TV] titulo actualisado')
+    addEmotes($('.channel-top-bar .channel-name'))
 }
 
 // find and replace all instances of an emote given the message and a regex rule.
@@ -521,9 +579,8 @@ function replaceEmotes(msg) {
 
     for (let i = 0; i < twitchEmotes.length; i++) {
         let regex = ''
-            // TODO: refactor
-        if (twitchEmotes[i].scaped) {
 
+        if (twitchEmotes[i].scaped) {
             regex = escapeRegex(twitchEmotes[i].name)
         } else {
             regex = "\\b" + twitchEmotes[i].name + "\\b"
@@ -607,7 +664,6 @@ function addEmotes(objective) {
     // reemplace the emote code with his corresponding code
 
     $(objective)
-        //.slice(-50)
         .not(":has(img)")
         .each(function() {
             var msg = $(this).html();
@@ -843,10 +899,11 @@ function initExtension() {
                 var titleExist = setInterval(function() {
                     if ($('.channel-top-bar .channel-name').first().length) {
                         clearInterval(titleExist);
+
+                        setTimeout(updateEmotes, 1000)
+
                         setInterval(() => {
-                            // FIXME:
-                            addEmotes($('.channel-top-bar .channel-name'))
-                            console.log('emotes acrtualisados en el titulo.')
+                            updateEmotes()
                         }, 1000 * 5);
                         
                         // chat de twitch
