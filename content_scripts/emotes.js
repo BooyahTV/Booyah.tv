@@ -5,13 +5,16 @@ const globalBetterttvURL = "https://api.betterttv.net/3/cached/emotes/global";
 const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch/";
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
+const twitchClientID = 'k4j3nkws4mwx90yqfa3mlpn0i0udom'
 
-// twitch id grabed in https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
+// twitch id grabed at https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
 
 var channel;
 var donations;
 
 var nickname;
+
+const blip = new Audio(chrome.runtime.getURL("sounds/blip.wav"));
 
 const channels = [{
         //puvloo
@@ -279,31 +282,21 @@ const channels = [{
         ],
     },
     {
-        // elmarceloc (test)
-        name: 'elmarceloc',
-        twitchID: 130345683,
-        booyahID: 'elmarceloc',
-        booyahNumericID: 49111087,
-        chatroomID: 78979571,
+        name: 'latesitoo',
+        twitchID: 134037766,
+        booyahNumericID: 79458266,
+        chatroomID: 79107365,
         bttv: true,
         ffz: true,
         panels: [
             {
                 type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://discord.gg/QShQVKV"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-0a463264-a391-4424-985d-a1f1b6b977bc" alt="Contenido del panel"></a></div>`,
+                html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/channel/UC73AugPHBoFmdt3Dwz50iZw"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-134037766-image-bf1450ff9dc06b68-320-320.jpeg" alt="Contenido del panel"></a></div>`,
             },
             {
                 type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/user/DylanteroElBronze?sub_confirmation=1"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-130345683-image-6001c25e-2b05-4c72-8982-f774c676f7b0" alt="Contenido del panel"></a></div>`,
+                html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-4"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/late_cod"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-134037766-image-e2e904433759c602-320-320.jpeg" alt="Contenido del panel"></a></div>`,
             },
-            {
-                type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://furuishop.cl/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-66f45fd9-c3f3-4d0d-9918-8fe60be60975" alt="Contenido del panel"></a></div>`,
-            },
-            {
-                type: "html",
-                html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><a data-test-selector="link_url_test_selector" class="sc-fznMAR iOxnOz tw-link" rel="noopener noreferrer" target="_blank" href="https://bit.ly/3nEwTSI"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-130345683-image-bdfc396b-ca69-42ba-b7ed-7b40a5a1db61" alt="Contenido del panel"></a></div>`,
-            }
         ],
     }
 ];
@@ -451,9 +444,32 @@ function replaceAll(str, find, replace) {
 
 
 function createAnchor(msg, urlparam) {
-    let url =  urlparam.substring(2)
+    let url =  urlparam.substring(3)
 
     return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="https://youtu.be/${url}">https://youtu.be/${url}</a>`)
+}
+
+function replaceURLSinTextarea() {
+    let msg = document.getElementsByClassName('components-input-element')[0].value;
+    let ytregex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
+
+ //   let idregex = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/g
+
+  //  ​var match = regex.exec(text);
+    
+  //  msg = parseURLsToLinks(msg, /v=/g, 'https://www.youtube.com/watch?v=')
+    
+ //   console.log(match[1]); // abc
+
+    if(msg.match(ytregex) !== null){
+        msg.match(ytregex).forEach((youtubeURL) => {
+            // Do something with each element
+
+            msg = msg.replace(youtubeURL, 'yt='+youtubeURL.slice(-11) )
+        });
+
+        document.getElementsByClassName('components-input-element')[0].value = msg;
+    }
 }
 
 // Replaces all the urls in the chat using some prefixes, the [\/] parts is
@@ -461,16 +477,16 @@ function createAnchor(msg, urlparam) {
 
 function replaceURLS(msg) {
 
-    //let youtubeRegex = /v=(.){11}/g
-    /*
-    if (!new RegExp(youtubeRegex).test(msg) ){        
+    let youtubeRegex = /yt=(.){11}/g
+    
+    if (msg.match(youtubeRegex) !== null){        //!new RegExp(youtubeRegex).test(msg) 
         msg.match(youtubeRegex).forEach((urlparam) => {
             // Do something with each element
             
             msg = createAnchor(msg, urlparam)
         });
     }
-*/
+
 
    /* msg = parseURLsToLinks(msg, /v=/g, 'https://www.youtube.com/watch?v=')
     msg = parseURLsToLinks(msg, /yt=v=/g, 'https://www.youtube.com/watch?v=')
@@ -598,7 +614,7 @@ function addEmotes(objective) {
     // reemplace the emote code with his corresponding code
 
     $(objective)
-        .slice(-50)
+        //.slice(-50)
         .not(":has(img)")
         .each(function() {
             var msg = $(this).html();
@@ -616,7 +632,6 @@ function addEmotes(objective) {
 }
 
 function changeChatOnChange(e) {
-
     // modify the message and username if the message is from an user
 
     for (var j = 0; j < e.target.childNodes.length; j++) {
@@ -672,12 +687,13 @@ function changeChatOnChange(e) {
 
         // check tag
 
-        if (nickname ) {
+        if (nickname) { //&& !messageText.innerHTML.includes(channel.name)
             if (messageText.innerHTML.includes('@') && messageText.innerHTML.toLowerCase().includes(nickname.toLowerCase())) {
                 console.log('[BOOYAH.TV] tagged')
                 e.target.style.background = 'rgb(197 25 25 / 32%)'
                 username.style.color = 'rgb(255 255 255)'
 
+                // blip.play();
             }
         }
 
@@ -819,6 +835,35 @@ function initExtension() {
                 console.log("[BOOYAH.TV] bttvChannelEmotes: ", bttvChannelEmotes);
 
 
+    
+                setInterval(() => {
+                    replaceURLSinTextarea()
+                }, 200);
+                
+                //   fetch `https://api.twitch.tv/helix/streams?client_id=${twitchClientID}&channel=${channel.name}`
+            
+                
+              
+                                    
+                // emotes en el titulo
+
+                var titleExist = setInterval(function() {
+                    if ($('.channel-top-bar .channel-name').first().length) {
+                        clearInterval(titleExist);
+                        setInterval(() => {
+                            // FIXME:
+                            addEmotes($('.channel-top-bar .channel-name'))
+                            console.log('emotes acrtualisados en el titulo.')
+                        }, 1000 * 5);
+                        
+                        // chat de twitch
+
+                        if (!$('#twitchchat').length) {
+                            twitchChat()
+                        }
+                    }
+                }, 5000)
+            
                 // emotes, chat colors, el chat offline...
 
                 var chatExist = setInterval(function() {
@@ -851,14 +896,14 @@ function initExtension() {
 
 
                 // autocomplete
-                var autocompleteExists = setInterval(function() {
+                var autocompleteExist = setInterval(function() {
                     if ($('.components-input-element').first().length) {
-                        clearInterval(autocompleteExists);
+                        clearInterval(autocompleteExist);
 
                         initAutocomplete()
 
                     }
-                }, 500)
+                }, 500)                
                     
             })
 
@@ -1207,6 +1252,20 @@ function insertEmotesPanel(currentChannel) {
 
 }
 
+
+function twitchChat(){
+
+    twitchChatHTML = 
+    `<div id="twitchchat" class="btn-ellipsis">
+        <div  onclick="window.open('https://www.twitch.tv/popout/${channel.name}/chat?popout=','popup','width=400,height=660');" class="components-icon components-icon-channel-more">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#adadba" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+        </div>
+    </div>`
+
+    $('.channel-profile-btns').append(twitchChatHTML)
+
+}
+
 function insertChannelPanels(channel) {
     console.log("[BOOYAH.TV] inserting panels");
 
@@ -1403,19 +1462,13 @@ function copyMessage(messageContainer) {
     // parse images like emotes
     userMessage = userMessage.replace(/<img.*?title="(.*?)"[^\>]+>/g, '$1');
 
-    /*
-    // parse links
+    
+    // check linkds
 
     var youtubeRegex = /<a.*?href="https:\/\/youtu.be\/(.*?)"[^]+>/g
 
-    var match;
-
-    while (match = youtubeRegex.exec(userMessage)) {
-        // match is now the next match, in array form.
-        userMessage = replaceAll(userMessage, match[0], 'v='+match[1])
-
-    }
-    */
+    if (youtubeRegex.test(userMessage))
+        return
         
     console.log('parsed message',userMessage)
 
@@ -1629,8 +1682,17 @@ function initAutocomplete(){
         },
         source: function (request, response) {
            var results = $.ui.autocomplete.filter(emotes, extractLast(request.term))
- 
-            response(results.slice(0, 10));
+
+           /*var results = $.map(emotes, function (emote) {
+                if (emote.label.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+                    return emote;
+                }
+            });
+            */
+            results = results.slice(0, 10)
+
+            response(results);
+
         },
         focus: function (event, ui) {
             // prevent value inserted on focus
@@ -1656,7 +1718,8 @@ function initAutocomplete(){
     });
 
 }
-// run initExtension When the page is changed
+
+// //init estension when the page is first loaded
 
 initExtension();
 
@@ -1676,6 +1739,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 })
 
 chrome.runtime.sendMessage({type: "setUID", uid: localStorage.getItem('loggedUID')});
-
-//init estension when the page is first loaded
-
