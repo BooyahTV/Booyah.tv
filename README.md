@@ -59,8 +59,7 @@ Emotes que estan incorporados:
 
 ## Falta por implementar...
 
-
-* Autocompletador de emotes de Franker Face Z (**:OMEGA..** y se despliega un panel de emotes)
-* Popup
-* Tooltip para los emotes (eso que sale al pasar por encima de un emote en el panel, sale el nombre del emote, canal,etc)
-* Crear una version para Firefox, Safari,etc
+- [x] Autocompletador de emotes de Franker Face Z (**:OMEGA..** y se despliega un panel de emotes)
+- [x] Popup
+- [ ] Tooltip para los emotes (eso que sale al pasar por encima de un emote en el panel, sale el nombre del emote, canal,etc)
+- [ ] Crear una version para Firefox, Safari,etc
