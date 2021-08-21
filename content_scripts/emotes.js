@@ -442,9 +442,10 @@ function replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
 }
 
+// crea el <a href="url"> url </a>
 
-function createAnchor(msg, urlparam) {
-    let url =  urlparam.substring(3)
+function createAnchor(msg, urlparam, prefixSize) {
+    let url =  urlparam.substring(prefixSize)
 
     return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="https://youtu.be/${url}">https://youtu.be/${url}</a>`)
 }
@@ -453,22 +454,13 @@ function replaceURLSinTextarea() {
     let msg = document.getElementsByClassName('components-input-element')[0].value;
     let ytregex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
 
- //   let idregex = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/g
-
-  //  ​var match = regex.exec(text);
-    
-  //  msg = parseURLsToLinks(msg, /v=/g, 'https://www.youtube.com/watch?v=')
-    
- //   console.log(match[1]); // abc
-
     if(msg.match(ytregex) !== null){
         msg.match(ytregex).forEach((youtubeURL) => {
-            // Do something with each element
 
             msg = msg.replace(youtubeURL, 'yt='+youtubeURL.slice(-11) )
         });
 
-        document.getElementsByClassName('components-input-element')[0].value = msg;
+        setTextareaValue(msg,false)
     }
 }
 
@@ -479,11 +471,12 @@ function replaceURLS(msg) {
 
     let youtubeRegex = /yt=(.){11}/g
     
-    if (msg.match(youtubeRegex) !== null){        //!new RegExp(youtubeRegex).test(msg) 
+    // youtube
+    if (msg.match(youtubeRegex) !== null){ 
         msg.match(youtubeRegex).forEach((urlparam) => {
             // Do something with each element
             
-            msg = createAnchor(msg, urlparam)
+            msg = createAnchor(msg, urlparam, 3)
         });
     }
 
