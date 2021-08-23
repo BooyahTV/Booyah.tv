@@ -390,6 +390,24 @@ const colors = [
 	"#ff0000",
 ];
 
+const censoredWords = [
+	['PUTA', 'PUTΑ'],
+	['PUT4', 'PUTΑ'],
+	['COCK', 'CΟCK']
+]
+
+const streamVipWords = [
+	['você possui', 'tiene'],
+	['pontos', 'puntos'],
+	['assistiu', 'ha visto a'],
+	['A live está offline', 'El directo está offline'],
+	['comandos da live', 'comandos del stream'],
+	['o usuário', 'el usuario'],
+	['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
+	['foi criado há','fue creado hace'],
+	['está ativo no canal há','esta activo en el canal hace'],
+]
+
 const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
 const twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
 const tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
@@ -473,8 +491,8 @@ function replaceAll(str, find, replace) {
 
 function createAnchor(msg, urlparam, domain, prefixSize) {
 	let url =  urlparam.substring(prefixSize)
-
-	return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="${domain}/${url}">${domain}/${url}</a>`)
+	
+	return replaceAll(msg,urlparam, popup+`<a class="chaturl" target="__blank" href="${domain}/${url}">${domain}/${url}</a>`)
 }
 
 // Reemplaces the urls in the chatbox with a non-censurated version of it.
@@ -520,7 +538,12 @@ function replaceURLSinTextarea() {
 			msg = msg.replace(instagramURL, `ig=${instagramURL.slice(26)} `  )
 		});
 	}  
-	setTextareaValue(msg,false)
+
+	censoredWords.forEach(word => {
+		msg = msg.replace(word[0], word[1])
+	})
+
+	setTextareaValue(msg, false)
 }
 
 // Replaces all the prefixed-urls in the chat 
@@ -708,6 +731,18 @@ function copyMessage(message, messageValue){
 	};
 }
 
+function translateStreamVip(username, messageElement){
+	console.log(username.innerHTML)
+
+	if (username.innerHTML !== 'StreamVip') return
+
+	streamVipWords.forEach(word => {
+		messageElement.innerHTML = messageElement.innerHTML.replace(word[0], word[1])
+	})
+
+
+}
+
 function changeBadges() {
 	// TODO:, cambiar los iconos
 
@@ -736,33 +771,32 @@ function changeUsernameColor(username) {
 
 // checks if the user is tagged by another user and adds the event to tag another user
 
-function checkTag(event, messageContent, usernameContainer, messageContainer) {
+function checkTag(event, messageContent, usernameContainer,usernameElement, messageContainer) {
 
 	if (selfUsername) { //&& !messageText.innerHTML.includes(channel.name)
 
-		var taggedUsers = messageContent.match(tagRegex);
+		var taggedUsers = []
 
-		//console.log('tags:',taggedUsers)
+		// checks if the message is sent by the bot, if it is, the user
+		// will be taged by their name, otherwise will be tagged with @
 
-		// if there are not tags in the message, return
-		if (taggedUsers) {
+		taggedUsers = messageContent.match(tagRegex) != null ? messageContent.match(tagRegex) : [];
 
-			taggedUsers.forEach(username =>{
-				username = username.replace('@','')
+		if (usernameElement.innerHTML == 'StreamVip' && messageContent.includes(selfUsername)){
+			taggedUsers.push(selfUsername)
+		}
 
-				//console.log('user taged parsed',username)
-				console.log(username)
-				console.log(channel.name)
+		taggedUsers.forEach(username =>{
+			username = username.replace('@','')
 
-				if (username.toLowerCase() == selfUsername.toLowerCase() && username.toLowerCase() != channel.name.toLowerCase()) {
-				
-					event.target.style.background = 'rgb(197 25 25 / 32%)' // makes the message red
-					messageContainer.style.color = 'rgb(255 255 255)' // makes the username white for more readeability
-		
-					//blip.play();
-				}
-			})
-		} 
+			if (username.toLowerCase() == selfUsername.toLowerCase() && username.toLowerCase() != channel.name.toLowerCase()) {
+			
+				event.target.style.background = 'rgb(197 25 25 / 32%)' // makes the message red
+				messageContainer.style.color = 'rgb(255 255 255)' // makes the username white for more readeability
+	
+				//blip.play();
+			}
+		})
 	}
 
 	// Put tag in chatbox if a username is doble clicked
@@ -823,9 +857,10 @@ function modifyMessage(event) {
 		console.log('messageText:',messageText)*/
 
 		copyMessage(message, messageText.innerHTML)
-
+		
+		translateStreamVip(usernameElement, messageText)
 		changeBadges(usernameContainer)
-		checkTag(event, messageText.innerHTML,usernameContainer, messageContainer)
+		checkTag(event, messageText.innerHTML,usernameContainer,usernameElement, messageContainer)
 
 		changeUsernameColor(usernameElement)
 		addEmotes(messageText);
@@ -1022,6 +1057,11 @@ function initExtension() {
 						clearInterval(autocompleteExist);
 
 						initAutocomplete()
+
+						$('textarea').focus(function() {
+							$( ".components-input-element" ).autocomplete( "enable" );
+						})
+						
 
 					}
 				}, 500)                
@@ -1368,10 +1408,23 @@ function insertEmotesPanel(currentChannel) {
 			foldEmoteGroup($(this).find('.foldArrow')[0], title)
 		})    
 
-
-		
 	});
+	
+	// closes the emote panel when his outside is clicked
 
+	$(document).click(function(event) { 
+		var $target = $(event.target);
+
+		if($target.attr('id') == 'emotes-icon') return
+		
+		if($target.attr('id') != 'emotes-icon' &&
+		 !$target.closest('#emoteList').length && 
+		$('#emoteList').is(":visible")) {
+			console.log('hide')
+		  $('#emoteList').hide();
+		}   
+
+	});
 	
 //	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
 
