@@ -843,7 +843,7 @@ function initExtension() {
 		fetch(`https://booyah.live/api/v3/users/${uid}`)
 			.then(response => response.json())
 			.then(data => {
-				selfUsername = 'elmarceloc'//data.user.nickname
+				selfUsername = data.user.nickname
 				console.log('[BOOYAH.TV] self username: ' + selfUsername)
 
 			});
@@ -942,7 +942,7 @@ function initExtension() {
 					})
 
 				}
-				console.log(subsEmotes)
+
 				if(subsEmotes.length > 0){
 					channelSubsEmotes = subsEmotes.subEmotes[0].emotes
 				}
