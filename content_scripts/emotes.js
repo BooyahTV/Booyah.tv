@@ -299,8 +299,8 @@ const channels = [{
 			},
 		],
 	},
-	{ // "elamrcelc" test channel
-		name: 'latesitoo',
+	{ // test channel
+		name: 'elmarceloc',
 		twitchID: 134037766,
 		booyahNumericID: 77452717,
 		chatroomID: 77103915,
@@ -742,7 +742,7 @@ function checkTag(event, messageContent, usernameContainer, messageContainer) {
 
 		var taggedUsers = messageContent.match(tagRegex);
 
-		console.log('tags:',taggedUsers)
+		//console.log('tags:',taggedUsers)
 
 		// if there are not tags in the message, return
 		if (taggedUsers) {
@@ -750,9 +750,11 @@ function checkTag(event, messageContent, usernameContainer, messageContainer) {
 			taggedUsers.forEach(username =>{
 				username = username.replace('@','')
 
-				console.log('user taged parsed',username)
+				//console.log('user taged parsed',username)
+				console.log(username)
+				console.log(channel.name)
 
-				if (username.toLowerCase() == selfUsername.toLowerCase()) {
+				if (username.toLowerCase() == selfUsername.toLowerCase() && username.toLowerCase() != channel.name.toLowerCase()) {
 				
 					event.target.style.background = 'rgb(197 25 25 / 32%)' // makes the message red
 					messageContainer.style.color = 'rgb(255 255 255)' // makes the username white for more readeability
@@ -814,11 +816,11 @@ function modifyMessage(event) {
 
 		var messageText = messageContainer.childNodes[messageContainer.childNodes.length - 1] // EX: <span> hola </span>
 
-		console.log('messageContainer:',messageContainer)
+		/*console.log('messageContainer:',messageContainer)
 
 		console.log('usernameContainer:',usernameContainer)
 		console.log('usernameElement:',usernameElement)
-		console.log('messageText:',messageText)
+		console.log('messageText:',messageText)*/
 
 		copyMessage(message, messageText.innerHTML)
 
@@ -841,7 +843,7 @@ function initExtension() {
 		fetch(`https://booyah.live/api/v3/users/${uid}`)
 			.then(response => response.json())
 			.then(data => {
-				selfUsername = data.user.nickname
+				selfUsername = 'elmarceloc'//data.user.nickname
 				console.log('[BOOYAH.TV] self username: ' + selfUsername)
 
 			});
@@ -940,8 +942,8 @@ function initExtension() {
 					})
 
 				}
-
-				if(subsEmotes){
+				console.log(subsEmotes)
+				if(subsEmotes.length > 0){
 					channelSubsEmotes = subsEmotes.subEmotes[0].emotes
 				}
 
@@ -1036,23 +1038,24 @@ function initExtension() {
 // donations payload
 
 var toggleDonoPayload = `
-var donations = document.getElementsByClassName('components-gifter-rank')[0];
-if(donations.style.display =='none'){
-	donations.style.display = ''
-	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
-	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
+	var donations = document.getElementsByClassName('components-gifter-rank')[0];
+	if(donations.style.display =='none'){
+		donations.style.display = ''
+		document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = '';
+		document.querySelector('.views-channel .channel-content .gift-container .row').style.display = '';
 
-	document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
-}
+		document.getElementById('hidebutton').innerHTML = 'Ocultar donaciones';
+	}
 
 
-else{
-	donations.style.display = 'none';
-	document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
-	document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
-	
-	document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
-}`
+	else{
+		donations.style.display = 'none';
+		document.querySelector('.views-channel .channel-content .gift-container .balance').style.display = 'none';
+		document.querySelector('.views-channel .channel-content .gift-container .row').style.display = 'none';
+		
+		document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
+	}
+`
 
 // fold emote group in the emote menu
 
@@ -1294,7 +1297,7 @@ function insertEmotesPanel(currentChannel) {
 
 	/* Emotes de subs*/ 
 
-	if (channelSubsEmotes) {
+	if (channelSubsEmotes && channelSubsEmotes.length > 0) {
 		channelSubsEmotes.forEach(emote => {
 			subHTML += createEmoteHTML(emote.code, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
 		})
@@ -1302,7 +1305,7 @@ function insertEmotesPanel(currentChannel) {
 
 	/* Emotes globales de BTTV*/ 
 
-	if (channel && channel.bttv) {
+	if (bttvGlobalEmotes && bttvGlobalEmotes.length > 0) {
 		bttvGlobalEmotes.forEach(emote => {
 			bttvHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
 		})
@@ -1310,7 +1313,7 @@ function insertEmotesPanel(currentChannel) {
 
 	/* Emotes globales de FFZ*/
 
-	if (channel && channel.ffz) {
+	if (frankerFaceZ && frankerFaceZ.length > 0) {
 		frankerFaceZ.forEach(emote => {
 			ffzHTML += createEmoteHTML(emote.name, `https://cdn.frankerfacez.com/emote/${emote.id}/1`, emote.width, emote.height)
 		})
@@ -1318,7 +1321,7 @@ function insertEmotesPanel(currentChannel) {
 
 	/* Emotes de canal de BTTV*/
 
-	if (channel && channel.bttv && bttvChannelEmotes && typeof bttvChannelEmotes[0] != 'undefined') {
+	if (bttvChannelEmotes && bttvChannelEmotes.length > 0) {
 		bttvChannelEmotes.forEach(emote => {
 			channelHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
 		})
@@ -1340,7 +1343,7 @@ function insertEmotesPanel(currentChannel) {
 				<div>
 				<div class="title emoteCategory" title="twitch"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="foldArrow">▼</span></div>
 				<div id="twitch">${twitchHTML} </div>
-				${channelSubsEmotes ? `<div class="title emoteCategory" title="subs"><div id="twitchicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
+				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="twitchicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
 				<div id="subs"> ${subHTML} </div>
 				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>BetterTTV</span><span class="foldArrow">▼</span></div>`: ''}
 				<div id="bttv"> ${bttvHTML} </div>
@@ -1351,7 +1354,6 @@ function insertEmotesPanel(currentChannel) {
 			</div>
 		</div>
 	</div>`
-
 
 	// insert emote panel to the DOM emote panel
 
@@ -1450,8 +1452,6 @@ function insertClipBtn(parent){
 	`;
 	
 	parent.first().append(clipBtnHTML).ready(function () {
-		
-		
 		
 		clipBtn.addEventListener('click', function(event) {
 			var clipBtn = document.querySelector('#clipBtn');
@@ -1647,7 +1647,7 @@ document.addEventListener('keydown', (event) => {
 		saveMessage()
 		
 	}
-	console.log(autocomplete.style.display)
+
 	if ( event.code === 'ArrowUp' && document.activeElement === txtArea && autocomplete.style.display == 'none' ) {
 		//TODO: volver a colocarlo
 		//retriveMessage()
