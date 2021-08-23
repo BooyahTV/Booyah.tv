@@ -1,8 +1,8 @@
 {
 	"name": "Booyah.tv",
-	"version": "0.7",
+	"version": "0.71",
 	"description": "Mejora la experiencia de Booyah.live",
-	"manifest_version": 2,
+	"manifest_version": 3,
 
 	"permissions": ["tabs"],
 	"icons": {
@@ -32,8 +32,12 @@
 			]
 		}
 	],
-	"web_accessible_resources": ["icons/emote-icon.png","icons/twitch.svg", "sounds/blip.wav"],
+	"web_accessible_resources": [
+		{  "resources":["icons/emote-icon.png","icons/twitch.svg", "sounds/blip.wav"],
+		    "matches": ["https://booyah.live/*"]
+		}
+	],
 	"background": {
-		"scripts":["background.js"]
+		"service_worker": "background.js"
 	}
 }

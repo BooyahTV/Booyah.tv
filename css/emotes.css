@@ -229,7 +229,7 @@ body {
   color: red !important;
 }
 
-.fold {
+.foldArrow {
   position: relative !important;
   left: 10px !important;
   color: rgb(255, 176, 0);

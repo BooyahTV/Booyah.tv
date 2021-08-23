@@ -12,7 +12,7 @@ const twitchClientID = 'k4j3nkws4mwx90yqfa3mlpn0i0udom'
 var channel;
 var donations;
 
-var nickname;
+var selfUsername;
 
 const blip = new Audio(chrome.runtime.getURL("sounds/blip.wav"));
 
@@ -390,11 +390,14 @@ const colors = [
     "#ff0000",
 ];
 
-var youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
-var twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
-var tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
-var imgurRegex = /(http|https):\/\/?(.)imgur.com(.)([^\s]+)/g;
-var instagramRegex = /(https?:\/\/(?:www\.)?instagram\.com\/([^/?#&]+))(.)([^\s]+)/g;
+const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
+const twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
+const tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
+const imgurRegex = /(http|https):\/\/?(.)imgur.com(.)([^\s]+)/g;
+const instagramRegex = /(https?:\/\/(?:www\.)?instagram\.com\/([^/?#&]+))(.)([^\s]+)/g;
+const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
+
+var checkEmotesInterval;
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
 
@@ -478,7 +481,6 @@ function createAnchor(msg, urlparam, domain, prefixSize) {
 
 function replaceURLSinTextarea() {
     let msg = document.getElementsByClassName('components-input-element')[0].value;
-
     // youtube clips
 
     if(msg.match(youtubeRegex) !== null){
@@ -527,47 +529,47 @@ function replaceURLSinTextarea() {
 
 function replaceURLS(msg) {
 
-    let youtubeRegex = /yt=(.){11}/g
-    let twitchClipsRegex = /twclip=(.)([^\s]+)/g
-    let tweetRegex = /tweet=(.)([^\s]+)/g
-    let imgurRegex = /imgur=(.)([^\s]+)/g
-    let instagramRegex = /ig=(.)([^\s]+)/g
+    let youtubePrefixRegex = /yt=(.){11}/g
+    let twitchPrefixClipsRegex = /twclip=(.)([^\s]+)/g
+    let tweetPrefixRegex = /tweet=(.)([^\s]+)/g
+    let imgurPrefixRegex = /imgur=(.)([^\s]+)/g
+    let instagramPrefixRegex = /ig=(.)([^\s]+)/g
 
     // youtube
-    if (msg.match(youtubeRegex) !== null){ 
-        msg.match(youtubeRegex).forEach((youtubeURL) => {
+    if (msg.match(youtubePrefixRegex) !== null){ 
+        msg.match(youtubePrefixRegex).forEach((youtubeURL) => {
             msg = createAnchor(msg, youtubeURL, 'https://youtu.be' ,3)
         });
     }
 
     // twitch clips
 
-    if (msg.match(twitchClipsRegex) !== null){ 
-        msg.match(twitchClipsRegex).forEach((clipURL) => {
+    if (msg.match(twitchPrefixClipsRegex) !== null){ 
+        msg.match(twitchPrefixClipsRegex).forEach((clipURL) => {
             msg = createAnchor(msg, clipURL, 'https://clips.twitch.tv' ,7)
         });
     }
 
     // tweet
 
-    if (msg.match(tweetRegex) !== null){ 
-        msg.match(tweetRegex).forEach((tweetURL) => {
+    if (msg.match(tweetPrefixRegex) !== null){ 
+        msg.match(tweetPrefixRegex).forEach((tweetURL) => {
             msg = createAnchor(msg, tweetURL, 'https://twitter.com' ,6)
         });
     }
 
     // imgur
 
-    if (msg.match(imgurRegex) !== null){ 
-        msg.match(imgurRegex).forEach((imgurURL) => {
+    if (msg.match(imgurPrefixRegex) !== null){ 
+        msg.match(imgurPrefixRegex).forEach((imgurURL) => {
             msg = createAnchor(msg, imgurURL, 'https://imgur.com' ,6)
         });
     }
 
     // instagram
 
-    if (msg.match(instagramRegex) !== null){ 
-        msg.match(instagramRegex).forEach((instagramURL) => {
+    if (msg.match(instagramPrefixRegex) !== null){ 
+        msg.match(instagramPrefixRegex).forEach((instagramURL) => {
             msg = createAnchor(msg, instagramURL, 'https://www.instagram.com' ,3)
         });
     }
@@ -675,6 +677,106 @@ function replaceEmotes(msg) {
 
     return msg;
 }
+
+// copy a another user messages to chatbox
+
+function copyMessage(message, messageValue){
+    message.onclick = event => {
+        if (event.shiftKey) {
+
+            // check if there are any links and return; in the future, their will be parsed aswell
+            if (youtubeRegex.test(messageValue) ||
+                twitchClipsRegex.test(messageValue) ||
+                tweetRegex.test(messageValue) ||
+                imgurRegex.test(messageValue) ||
+                instagramRegex.test(messageValue)
+            ) return
+
+            
+            // remplaces the emotes with their corresponding title, ex : OMEGALUL
+            console.log('original message',messageValue)
+            messageValue = messageValue.replace(/<img.*?title="(.*?)"[^\>]+>/g, '$1'); 
+            console.log('emote parsed message',messageValue)
+
+            // sets the value in the textarea
+            setTextareaValue(messageValue, false)
+
+            // disable emote autocomplete, this can produce bugs
+            $( ".components-input-element" ).autocomplete( "disable" );
+
+        }
+    };
+}
+
+function changeBadges() {
+    // TODO:, cambiar los iconos
+
+    // change channel badges
+    /* if (components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge') {
+    components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
+    }*/
+
+        
+}
+
+function changeUsernameColor(username) {
+
+    var hash = username.innerText.charCodeAt(0);
+
+    var color = "#6525a1";
+    
+    for (let i = 0; i < colors.length; i++) {
+        if (hash % i === 0) {
+            color = colors[i];
+        }
+    }
+
+    username.style.color = color;
+}
+
+// checks if the user is tagged by another user and adds the event to tag another user
+
+function checkTag(event, messageContent, usernameContainer, messageContainer) {
+
+    if (selfUsername) { //&& !messageText.innerHTML.includes(channel.name)
+
+        var taggedUsers = messageContent.match(tagRegex);
+
+        console.log('tags:',taggedUsers)
+
+        // if there are not tags in the message, return
+        if (taggedUsers) {
+
+            taggedUsers.forEach(username =>{
+                username = username.replace('@','')
+
+                console.log('user taged parsed',username)
+
+                if (username.toLowerCase() == selfUsername.toLowerCase()) {
+                
+                    event.target.style.background = 'rgb(197 25 25 / 32%)' // makes the message red
+                    messageContainer.style.color = 'rgb(255 255 255)' // makes the username white for more readeability
+        
+                    //blip.play();
+                }
+            })
+        } 
+    }
+
+    // Put tag in chatbox if a username is doble clicked
+
+    usernameContainer.onclick = e => {
+        if (e.detail === 2) {
+
+            tagUserByMessage(e.target)
+
+            document.getElementsByTagName('textarea')[0].focus(); // focus textarea
+
+        }
+    };
+
+}
+
 // remplace all emotes in message (bttv, ffz, D:,etc) with an image
 
 function addEmotes(objective) {
@@ -698,90 +800,37 @@ function addEmotes(objective) {
         });
 }
 
-function changeChatOnChange(e) {
+function modifyMessage(event) {
     // modify the message and username if the message is from an user
+    for (var j = 0; j < event.target.childNodes.length; j++) {
+        var message = event.target.childNodes[j];
 
-    for (var j = 0; j < e.target.childNodes.length; j++) {
-        var components = e.target.childNodes[j];
+        if(!message.childNodes[0]) return
 
-        if(!components.childNodes[0]) return
+        var messageContainer = message.childNodes[0] // Marcelo: hola
 
-        // put message to chatbox
-        components.onclick = event => {
-            if (event.shiftKey) {
-                copyMessage(components)
-            }
-        };
+        var usernameContainer = messageContainer.childNodes[0]; // username container, includes badges
+        var usernameElement = usernameContainer.childNodes[usernameContainer.childNodes.length - 1]; // EX: <span> elmarceloc: </span>
 
-        var usernameContainer = components.childNodes[0].childNodes[0];
-                    
-        // Put tag in chatbox if a username is doble clicked
+        var messageText = messageContainer.childNodes[messageContainer.childNodes.length - 1] // EX: <span> hola </span>
 
-        usernameContainer.onclick = event => {
-            if (event.detail === 2) {
+        console.log('messageContainer:',messageContainer)
 
-                tagUserByMessage(event.target)
-            }
-        };
+        console.log('usernameContainer:',usernameContainer)
+        console.log('usernameElement:',usernameElement)
+        console.log('messageText:',messageText)
 
-        // change channel badges
-        // TODO:, cambiar los iconos
-       /* if (components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge') {
-            components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
-        }*/
+        copyMessage(message, messageText.innerHTML)
 
-        
-        // change the username color
+        changeBadges(usernameContainer)
+        checkTag(event, messageText.innerHTML,usernameContainer, messageContainer)
 
-        var username = usernameContainer.childNodes[usernameContainer.childNodes.length - 1];
-
-        var hash = username.innerText.charCodeAt(0);
-
-        var color = "#ffffff";
-        
-        for (let i = 0; i < colors.length; i++) {
-            if (hash % i === 0) {
-                color = colors[i];
-            }
-        }
-        
-        username.style.color = color;
-        
-
-        var messageContainer = components.childNodes[0].childNodes // Marcelo : sdfsdf
-
-        var messageText = messageContainer[messageContainer.length - 1] //sdfsdf
-
-        // check tag
-
-        if (nickname) { //&& !messageText.innerHTML.includes(channel.name)
-            if (messageText.innerHTML.includes('@') && messageText.innerHTML.toLowerCase().includes(nickname.toLowerCase())) {
-                console.log('[BOOYAH.TV] tagged')
-                e.target.style.background = 'rgb(197 25 25 / 32%)'
-                username.style.color = 'rgb(255 255 255)'
-
-                // blip.play();
-            }
-        }
-
-        // change the message content with its emotes
-
+        changeUsernameColor(usernameElement)
         addEmotes(messageText);
-
     }
 }
 
-function watchChatChanges() {
-    console.log('[BOOYAH.TV] Watching Chat Changes')
-
-    document.getElementsByClassName("scroll-container")[0].removeEventListener('DOMNodeInserted', changeChatOnChange, true);
-
-    document.getElementsByClassName("scroll-container")[0].addEventListener("DOMNodeInserted", changeChatOnChange, true);
-}
-
-
 function initExtension() {
-
     var currentURL = window.location.href
 
     // save nickname
@@ -792,8 +841,8 @@ function initExtension() {
         fetch(`https://booyah.live/api/v3/users/${uid}`)
             .then(response => response.json())
             .then(data => {
-                nickname = data.user.nickname
-                console.log('[BOOYAH.TV] nickname: ' + nickname)
+                selfUsername = data.user.nickname
+                console.log('[BOOYAH.TV] self username: ' + selfUsername)
 
             });
     }
@@ -902,11 +951,12 @@ function initExtension() {
                 console.log("[BOOYAH.TV] bttvChannelEmotes: ", bttvChannelEmotes);
 
 
-    
-                setInterval(() => {
-                    replaceURLSinTextarea()
-                }, 200);
-                
+                if($('.components-input-element').length){
+                    setInterval(() => {
+                        
+                        replaceURLSinTextarea()
+                    }, 200);
+                }
                 //   fetch `https://api.twitch.tv/helix/streams?client_id=${twitchClientID}&channel=${channel.name}`
             
                 
@@ -918,17 +968,16 @@ function initExtension() {
                     if ($('.channel-top-bar .channel-name').first().length) {
                         clearInterval(titleExist);
 
-                        setTimeout(updateEmotes, 1000)
-
-                        setInterval(() => {
+                        clearTimeout(checkEmotesInterval)
+                         
+                        checkEmotesInterval = setInterval(() => {
                             updateEmotes()
                         }, 1000 * 5);
                         
                         // chat de twitch
 
-                        if (!$('#twitchchat').length) {
-                            twitchChat()
-                        }
+                        twitchChat()
+                        
                     }
                 }, 5000)
             
@@ -948,8 +997,10 @@ function initExtension() {
                         
                         insertEmotesPanel(currentChannel)
 
-                        // insert dom mutation ovserver to listener for new messages added in .scroll-container
-                        watchChatChanges()
+                        // insert dom mutation observer to listener for new messages added in .scroll-container
+                        document.getElementsByClassName("scroll-container")[0].removeEventListener('DOMNodeInserted', modifyMessage, true);
+
+                        document.getElementsByClassName("scroll-container")[0].addEventListener("DOMNodeInserted", modifyMessage, true);
                     }
                 }, 500);
 
@@ -1003,24 +1054,23 @@ else{
 	document.getElementById('hidebutton').innerHTML = 'Ver donaciones';
 }`
 
-// fold emote list payload
+// fold emote group in the emote menu
 
-var foldPayload = `function fold(emoteList, list){
-	var listElement = document.getElementById(list)
-	console.log(emoteList)
-	console.log(emoteList.children)
-	console.log(emoteList.children[emoteList.children.lenght -1] )
-	var foldElement = emoteList.children[2] 
+function foldEmoteGroup(arrowElement, list){
+    var listElement = document.getElementById(list)
+
+    console.log(arrowElement)
+
 	if(listElement.style.display =='none'){
 		listElement.style.display = ''
-		foldElement.innerHTML = 'V'
+		arrowElement.innerHTML = '▼';
 
 	}else{
 		listElement.style.display = 'none'
-		foldElement.innerHTML = '<'
+		arrowElement.innerHTML = '◄';
 
 	}
-}`;
+}
 
 function sendEmotePayload(emoteName) {
 
@@ -1100,11 +1150,6 @@ function createPanelHTML(panel) {
             break;
     }
 }
-
-var script = document.createElement('script');
-script.textContent = foldPayload;
-(document.head || document.documentElement).appendChild(script);
-script.remove();
 
 function checkifoffline() {
     if ($('.viewer-count span').length) {
@@ -1280,32 +1325,33 @@ function insertEmotesPanel(currentChannel) {
     }
 
     var emoteCount = bttvGlobalEmotes.length + 1 +  bttvChannelEmotes.length + 1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1
-
+    
     var emotesHTML =
-        `<div class="
-            components-popover-container components-chat-menu-users-popover
-            theme-dark"
-            id="emoteList" style="min-height: 300px;">
-            <div class="title">
-            <span>Emotes</span
-            ><span class="ccu">${ emoteCount } emotes disponibles</span>
-            </div>
-            <div class="user-list-wrapper" data-infinite-scrollable="true">
-            <div class="components-infinite-view has-data" style="text-align: center;">
+    `<div class="
+        components-popover-container components-chat-menu-users-popover
+        theme-dark"
+        id="emoteList" style="min-height: 300px;">
+        <div class="title">
+        <span>Emotes</span
+        ><span class="ccu">${ emoteCount } emotes disponibles</span>
+        </div>
+        <div class="user-list-wrapper" data-infinite-scrollable="true">
+            <div id="emoteGroups" class="components-infinite-view has-data" style="text-align: center;">
                 <div>
-                <div class="title emoteCategory" onclick="fold(this, 'twitch')"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="fold">V</span></div>
+                <div class="title emoteCategory" title="twitch"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="foldArrow">▼</span></div>
                 <div id="twitch">${twitchHTML} </div>
-                ${channelSubsEmotes ? `<div class="title emoteCategory"  onclick="fold(this, 'subs')"><div id="twitchicon"></div><span>Emotes de subs</span><span class="fold"">V</span></div>` : ''}
+                ${channelSubsEmotes ? `<div class="title emoteCategory" title="subs"><div id="twitchicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
                 <div id="subs"> ${subHTML} </div>
-                ${channel.bttv ? `<div class="title emoteCategory" onclick="fold(this, 'bttv')"><div id="bttvicon"></div><span>BetterTTV</span><span class="fold">V</span></div>`: ''}
+                ${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>BetterTTV</span><span class="foldArrow">▼</span></div>`: ''}
                 <div id="bttv"> ${bttvHTML} </div>
-                ${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" onclick="fold(this, 'channelEmotes')"><div id="ffzicon"></div><span>Emotes del canal</span><span class="fold">V</span></div>` : ''}
+                ${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"></div><span>Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}
                 <div id="channelEmotes"> ${channelHTML}
                 ${ffzHTML} </div>
                 </div>
             </div>
-            </div>
-        </div>`
+        </div>
+    </div>`
+
 
     // insert emote panel to the DOM emote panel
 
@@ -1313,9 +1359,18 @@ function insertEmotesPanel(currentChannel) {
         document.getElementById("emoteList").remove();
     };
 
-    $('.components-chat-menu-users').first().append(emotesHTML);
+    $('.components-chat-menu-users').first().append(emotesHTML).ready(function () {
+        $('#emoteGroups .title').click(function () {
+            let title = $( this ).attr( "title" )
+
+            foldEmoteGroup($(this).find('.foldArrow')[0], title)
+        })    
 
 
+        
+    });
+
+    
 //	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
 
 }
@@ -1329,6 +1384,10 @@ function twitchChat(){
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#adadba" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
         </div>
     </div>`
+
+    if (document.body.contains(document.getElementById("twitchchat"))){
+        document.getElementById("twitchchat").remove();
+    };
 
     $('.channel-profile-btns').append(twitchChatHTML)
 
@@ -1406,8 +1465,8 @@ function insertClipBtn(parent){
 			var nicknameParam = ''
 
 			
-			if(nickname !== null){
-				nicknameParam = `&nickname=${nickname.replaceAll(' ','+')}`
+			if(selfUsername !== null){
+				nicknameParam = `&nickname=${selfUsername.replaceAll(' ','+')}`
 			}
 
 
@@ -1521,33 +1580,6 @@ function tagUserByMessage(usernameContainer) {
 	setTextareaValue('@'+usernameContainer.textContent +' ', true)
 	
 }  
-
-function copyMessage(messageContainer) {
-    var userMessage = messageContainer.querySelector('.message-text').innerHTML
-
-    console.log('original message',userMessage)
-
-    // parse images like emotes
-    userMessage = userMessage.replace(/<img.*?title="(.*?)"[^\>]+>/g, '$1');
-
-    
-    // check linkds
-
-
-    if (youtubeRegex.test(userMessage) ||
-        twitchClipsRegex.test(userMessage) ||
-        tweetRegex.test(userMessage) ||
-        imgurRegex.test(userMessage) ||
-        instagramRegex.test(userMessage)
-    ) return
-        
-    console.log('parsed message',userMessage)
-
-    setTextareaValue(userMessage, false)
-
-    $( ".components-input-element" ).autocomplete( "disable" );
-
-}
 
 // keyboard events
 
