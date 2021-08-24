@@ -5,6 +5,8 @@ const globalBetterttvURL = "https://api.betterttv.net/3/cached/emotes/global";
 const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch/";
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
+const pointsBaseURL = "http://localhost:3000/api/points/"
+
 const twitchClientID = 'k4j3nkws4mwx90yqfa3mlpn0i0udom'
 
 // twitch id grabed at https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
@@ -131,6 +133,7 @@ const channels = [{
 		chatroomID: 79543340,
 		bttv: true,
 		ffz: true,
+		leaderboard: true,
 		panels: [{
 				// cuenta rut dono
 				type: "image",
@@ -156,6 +159,13 @@ const channels = [{
 				url: "https://www.instagram.com/cristianghostnzalez/",
 			},
 			{
+				type: 'html',
+				html: `			
+				<div id="leaderboard-container" class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-1">
+					<div id="table-container"></div>
+				</div>`,
+			},
+			{
 				// twiter
 				type: "image",
 				img: "https://panels-images.twitch.tv/panel-149287198-image-810ac60c-6e19-4e2c-b0b3-e21a01db912c",
@@ -171,7 +181,6 @@ const channels = [{
 				type: "html",
 				html: `<div class="sc-AxjAm dGeTii default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-9"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-149287198-image-92d1e342-5384-496e-81a9-f669cdbf042d" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxjAm ScTypeset-xkayed-0 AhGCy tw-typeset"><div class="panel-description"><p><em>cristianghost@rift-agency.com</em>, <strong>intentaré responder lo más rápido posible!</strong></p></div></div></div></div>`,
 			},
-
 			{
 				// spects
 				type: "html",
@@ -211,7 +220,7 @@ const channels = [{
 					</div>
 					</div>
 					`,
-			},
+			}
 		],
 	},
 	{
@@ -400,14 +409,18 @@ const streamVipWords = [
 	['você possui', 'tiene'],
 	['pontos', 'puntos'],
 	['assistiu', 'ha visto a'],
-	['A live está offline', 'El directo está offline'],
-	['comandos da live', 'comandos del stream'],
+	['A live está offline. 😐', 'El directo está offline Sadge'],
+	['A live está aberta há','HYPERS El directo esta online hace'],
+	['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
 	['o usuário', 'el usuario'],
 	['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
 	['foi criado há','fue creado hace'],
 	['está ativo no canal há','esta activo en el canal hace'],
+	['💰','BASED'],
+	['💬',''],
+	['⏱️','KirbDance']
 ]
-
+ 
 const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
 const twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
 const tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
@@ -492,7 +505,7 @@ function replaceAll(str, find, replace) {
 function createAnchor(msg, urlparam, domain, prefixSize) {
 	let url =  urlparam.substring(prefixSize)
 	
-	return replaceAll(msg,urlparam, popup+`<a class="chaturl" target="__blank" href="${domain}/${url}">${domain}/${url}</a>`)
+	return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="${domain}/${url}">${domain}/${url}</a>`)
 }
 
 // Reemplaces the urls in the chatbox with a non-censurated version of it.
@@ -732,7 +745,7 @@ function copyMessage(message, messageValue){
 }
 
 function translateStreamVip(username, messageElement){
-	console.log(username.innerHTML)
+	//console.log(username.innerHTML)
 
 	if (username.innerHTML !== 'StreamVip') return
 
@@ -878,9 +891,8 @@ function initExtension() {
 		fetch(`https://booyah.live/api/v3/users/${uid}`)
 			.then(response => response.json())
 			.then(data => {
-				selfUsername = data.user.nickname
+				selfUsername = 'Niel'//data.user.nickname
 				console.log('[BOOYAH.TV] self username: ' + selfUsername)
-
 			});
 	}
 
@@ -1461,23 +1473,43 @@ function insertChannelPanels(channel) {
 			panelsHTML += createPanelHTML(panel)
 		})
 
+		if(channel.leaderboard){
+			var table = $('<table class="rank-table" id="leaderboard">');
+			
+			fetch(pointsBaseURL + channel.name)
+				.then(response => response.json())
+				.then(userPoints => {
+					userPoints.forEach((user,index) =>{
+						//if(index > 14) return
 
-		var panels = `<div class="box">
-			<div class="views-channel-video-list">
-				<div class="list-title">
-					<div class="components-tabs align-start size-big theme-tab desktop">
-					<span class="tab-label tab-current">Panels</span>
-					</div>
-				</div>
-				<div class="components-infinite-view">
-				${panelsHTML}
-				</div>
-			</div>
-		</div>`;
+						var row = $(`
+						<tr class="rank-tr">
+							<td class="rank-td rank"><span>#</span>${user[0].replace('#','')}</td>
+							<td class="rank-td rank-color">
+								${ index == 0 ? "<img class='rank-emote' src='https://cdn.betterttv.net/emote/6044e31b306b602acc598811/3x'/> " : ""}
+								${ index == 1 ? "<img class='rank-emote-secound' src='https://cdn.frankerfacez.com/emote/318914/4'/> " : ""}
+								 ${ user[1] }${ index == 497 ? "<img class='rank-emote' src='https://cdn.frankerfacez.com/emote/590273/1'/> " : ""}</td>
+							<td class="rank-td rank-points">${user[3]}</td>
+						</tr>
+						`)
+						
+						table.append(row)
 
+					})
 
+					$('#table-container').append(table)
+				}).catch(function(err) {
+				
+					
+					$('#leaderboard-container').remove()
+
+				});
+				
+				
+		}
 
 		$('.channel-box').first().append(panelsHTML);
+
 	}
 }
 
