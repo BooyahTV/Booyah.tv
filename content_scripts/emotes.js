@@ -5,7 +5,7 @@ const globalBetterttvURL = "https://api.betterttv.net/3/cached/emotes/global";
 const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch/";
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
-const pointsBaseURL = "http://localhost:3000/api/points/"
+const pointsBaseURL = "https://bapi.zzls.xyz/api/points/"
 
 const twitchClientID = 'k4j3nkws4mwx90yqfa3mlpn0i0udom'
 
@@ -398,29 +398,42 @@ const colors = [
 	"#ff4500",
 	"#ff0000",
 ];
-
+// chars: ո, р, с
 const censoredWords = [
+	['puta','рuta'],
+	['puto','рuto'],
 	['PUTA', 'PUTΑ'],
 	['PUT4', 'PUTΑ'],
-	['COCK', 'CΟCK']
+	['COCK', 'CΟCK'],
+	['PUS', 'РUS'],
+	['pus', 'рus'],
+	['VAGINA', 'VΑGINA'],
+	['vagina', 'ꮩagina'],
+	['FORNICAR', 'FORNICΑR'],
+	['fornicar', 'forոicar'],
+	['fuck', 'forոicar'],
+	['penis', 'рenis'],
+	['dick', 'diсk']
 ]
 
 const streamVipWords = [
 	['você possui', 'tiene'],
 	['pontos', 'puntos'],
-	['assistiu', 'ha visto a'],
+	['assistiu a live', 'ha visto el live'],
 	['A live está offline. 😐', 'El directo está offline Sadge'],
 	['A live está aberta há','HYPERS El directo esta online hace'],
 	['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
 	['o usuário', 'el usuario'],
 	['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
-	['foi criado há','fue creado hace'],
+	['foi criado há','creó su cuenta hace'],
 	['está ativo no canal há','esta activo en el canal hace'],
 	['💰','BASED'],
 	['💬',''],
-	['⏱️','KirbDance']
+	['♥',''],
+	['⏱️','KirbDance'],
+	['👍','cristianParty']
 ]
- 
+
 const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
 const twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
 const tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
@@ -1114,8 +1127,6 @@ var toggleDonoPayload = `
 function foldEmoteGroup(arrowElement, list){
 	var listElement = document.getElementById(list)
 
-	console.log(arrowElement)
-
 	if(listElement.style.display =='none'){
 		listElement.style.display = ''
 		arrowElement.innerHTML = '▼';
@@ -1480,14 +1491,13 @@ function insertChannelPanels(channel) {
 				.then(response => response.json())
 				.then(userPoints => {
 					userPoints.forEach((user,index) =>{
-						//if(index > 14) return
 
 						var row = $(`
 						<tr class="rank-tr">
 							<td class="rank-td rank"><span>#</span>${user[0].replace('#','')}</td>
 							<td class="rank-td rank-color">
-								${ index == 0 ? "<img class='rank-emote' src='https://cdn.betterttv.net/emote/6044e31b306b602acc598811/3x'/> " : ""}
-								${ index == 1 ? "<img class='rank-emote-secound' src='https://cdn.frankerfacez.com/emote/318914/4'/> " : ""}
+								${ index == 0 ? "<img title='BASED' class='rank-emote' src='https://cdn.betterttv.net/emote/6044e31b306b602acc598811/3x'/> " : ""}
+								${ index == 1 ? "<img title='peepoClown' class='rank-emote-secound' src='https://cdn.frankerfacez.com/emote/318914/4'/> " : ""}
 								 ${ user[1] }${ index == 497 ? "<img class='rank-emote' src='https://cdn.frankerfacez.com/emote/590273/1'/> " : ""}</td>
 							<td class="rank-td rank-points">${user[3]}</td>
 						</tr>
