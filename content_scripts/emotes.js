@@ -434,11 +434,24 @@ const streamVipWords = [
 	['👍','cristianParty']
 ]
 
+// original url regex
+
 const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
 const twitchClipsRegex = /(?:https:\/\/)?clips\.twitch\.tv\/(\S+)/g;
 const tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/g;
 const imgurRegex = /(http|https):\/\/?(.)imgur.com(.)([^\s]+)/g;
 const instagramRegex = /(https?:\/\/(?:www\.)?instagram\.com\/([^/?#&]+))(.)([^\s]+)/g;
+const lighshootRegex = /(http|https):\/\/?(.)prnt.sc(.)([^\s]+)/g;
+
+// prefix regex
+
+const youtubePrefixRegex = /yt=(.){11}/g
+const twitchPrefixClipsRegex = /twclip=(.)([^\s]+)/g
+const tweetPrefixRegex = /tweet=(.)([^\s]+)/g
+const imgurPrefixRegex = /imgur=(.)([^\s]+)/g
+const instagramPrefixRegex = /ig=(.)([^\s]+)/g
+const lighshootPrefixRegex = /ls=(.)([^\s]+)/g
+
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
 var checkEmotesInterval;
@@ -564,6 +577,16 @@ function replaceURLSinTextarea() {
 			msg = msg.replace(instagramURL, `ig=${instagramURL.slice(26)} `  )
 		});
 	}  
+		
+	// lighshoot images
+
+	if(msg.match(lighshootRegex) !== null){
+		msg.match(lighshootRegex).forEach((lighshootURL) => {
+			msg = msg.replace(lighshootURL, `ls=${lighshootURL.slice(16)} `)
+		});
+	}  
+
+	// censored words
 
 	censoredWords.forEach(word => {
 		msg = msg.replace(word[0], word[1])
@@ -578,13 +601,8 @@ function replaceURLSinTextarea() {
 
 function replaceURLS(msg) {
 
-	let youtubePrefixRegex = /yt=(.){11}/g
-	let twitchPrefixClipsRegex = /twclip=(.)([^\s]+)/g
-	let tweetPrefixRegex = /tweet=(.)([^\s]+)/g
-	let imgurPrefixRegex = /imgur=(.)([^\s]+)/g
-	let instagramPrefixRegex = /ig=(.)([^\s]+)/g
-
 	// youtube
+
 	if (msg.match(youtubePrefixRegex) !== null){ 
 		msg.match(youtubePrefixRegex).forEach((youtubeURL) => {
 			msg = createAnchor(msg, youtubeURL, 'https://youtu.be' ,3)
@@ -620,6 +638,14 @@ function replaceURLS(msg) {
 	if (msg.match(instagramPrefixRegex) !== null){ 
 		msg.match(instagramPrefixRegex).forEach((instagramURL) => {
 			msg = createAnchor(msg, instagramURL, 'https://www.instagram.com' ,3)
+		});
+	}
+
+	// lightshoot
+
+	if (msg.match(lighshootPrefixRegex) !== null){ 
+		msg.match(lighshootPrefixRegex).forEach((lighshootURL) => {
+			msg = createAnchor(msg, lighshootURL, 'https://prnt.sc' ,3)
 		});
 	}
 
