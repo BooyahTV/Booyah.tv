@@ -442,6 +442,8 @@ const tweetRegex = /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/
 const imgurRegex = /(http|https):\/\/?(.)imgur.com(.)([^\s]+)/g;
 const instagramRegex = /(https?:\/\/(?:www\.)?instagram\.com\/([^/?#&]+))(.)([^\s]+)/g;
 const lighshootRegex = /(http|https):\/\/?(.)prnt.sc(.)([^\s]+)/g;
+const mercadolibrechileRegex = /(http|https):\/\/?(.)(?:www\.)?articulo.mercadolibre.cl(.)([^\s]+)/g;
+const amazonRegex = /(http|https):\/\/?(.)www.amazon.com(.)([^\s]+)/g;
 
 // prefix regex
 
@@ -451,6 +453,8 @@ const tweetPrefixRegex = /tweet=(.)([^\s]+)/g
 const imgurPrefixRegex = /imgur=(.)([^\s]+)/g
 const instagramPrefixRegex = /ig=(.)([^\s]+)/g
 const lighshootPrefixRegex = /ls=(.)([^\s]+)/g
+const mercadolibrechilePrefixRegex = /ml=(.)([^\s]+)/g
+const amazonPrefixRegex = /az=(.)([^\s]+)/g
 
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
@@ -586,6 +590,22 @@ function replaceURLSinTextarea() {
 		});
 	}  
 
+	// mercado libre chile
+
+	if(msg.match(mercadolibrechileRegex) !== null){
+		msg.match(mercadolibrechileRegex).forEach((mercadolibrechileURL) => {
+			msg = msg.replace(mercadolibrechileURL, `ml=${mercadolibrechileURL.slice(33)} `)
+		});
+	}  
+
+	// Amazon
+
+	if(msg.match(amazonRegex) !== null){
+		msg.match(amazonRegex).forEach((amazonURL) => {
+			msg = msg.replace(amazonURL, `az=${amazonURL.slice(23)} `)
+		});
+	}  
+
 	// censored words
 
 	censoredWords.forEach(word => {
@@ -646,6 +666,22 @@ function replaceURLS(msg) {
 	if (msg.match(lighshootPrefixRegex) !== null){ 
 		msg.match(lighshootPrefixRegex).forEach((lighshootURL) => {
 			msg = createAnchor(msg, lighshootURL, 'https://prnt.sc' ,3)
+		});
+	}
+
+	// mercado libre chile
+
+	if (msg.match(mercadolibrechilePrefixRegex) !== null){ 
+		msg.match(mercadolibrechilePrefixRegex).forEach((mercadolibrechileURL) => {
+			msg = createAnchor(msg, mercadolibrechileURL, 'https://articulo.mercadolibre.cl' ,3)
+		});
+	}
+
+	// amazon
+
+	if (msg.match(amazonPrefixRegex) !== null){ 
+		msg.match(amazonPrefixRegex).forEach((amazonURL) => {
+			msg = createAnchor(msg, amazonURL, 'https://www.amazon.com' ,3)
 		});
 	}
 
