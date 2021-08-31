@@ -444,6 +444,7 @@ const instagramRegex = /(https?:\/\/(?:www\.)?instagram\.com\/([^/?#&]+))(.)([^\
 const lighshootRegex = /(http|https):\/\/?(.)prnt.sc(.)([^\s]+)/g;
 const mercadolibrechileRegex = /(http|https):\/\/?(.)(?:www\.)?articulo.mercadolibre.cl(.)([^\s]+)/g;
 const amazonRegex = /(http|https):\/\/?(.)www.amazon.com(.)([^\s]+)/g;
+const aliexpressRegex = /(?:https:\/\/)?(es|cl)\.aliexpress\.com\/(\S+)/g;
 
 // prefix regex
 
@@ -455,6 +456,7 @@ const instagramPrefixRegex = /ig=(.)([^\s]+)/g
 const lighshootPrefixRegex = /ls=(.)([^\s]+)/g
 const mercadolibrechilePrefixRegex = /ml=(.)([^\s]+)/g
 const amazonPrefixRegex = /az=(.)([^\s]+)/g
+const aliexpressPrefixRegex = /ae=(.)([^\s]+)/g
 
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
@@ -532,16 +534,19 @@ function replaceAll(str, find, replace) {
 
 // crea el <a href="url"> url </a>
 
-function createAnchor(msg, urlparam, domain, prefixSize) {
+function createAnchor(msg, urlparam, domain, prefixSize,posturl = '') {
 	let url =  urlparam.substring(prefixSize)
 	
-	return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="${domain}/${url}">${domain}/${url}</a>`)
+	return replaceAll(msg,urlparam, `<a class="chaturl" target="__blank" href="${domain}/${url}${posturl}">${domain}/${url}${posturl}</a>`)
 }
 
 // Reemplaces the urls in the chatbox with a non-censurated version of it.
 
 function replaceURLSinTextarea() {
 	let msg = document.getElementsByClassName('components-input-element')[0].value;
+
+	if(msg == '') return
+
 	// youtube clips
 
 	if(msg.match(youtubeRegex) !== null){
@@ -594,7 +599,7 @@ function replaceURLSinTextarea() {
 
 	if(msg.match(mercadolibrechileRegex) !== null){
 		msg.match(mercadolibrechileRegex).forEach((mercadolibrechileURL) => {
-			msg = msg.replace(mercadolibrechileURL, `ml=${mercadolibrechileURL.slice(33)} `)
+			msg = msg.replace(mercadolibrechileURL, `ml=${mercadolibrechileURL.split('#')[0].slice(33)} `)
 		});
 	}  
 
@@ -602,10 +607,24 @@ function replaceURLSinTextarea() {
 
 	if(msg.match(amazonRegex) !== null){
 		msg.match(amazonRegex).forEach((amazonURL) => {
-			msg = msg.replace(amazonURL, `az=${amazonURL.slice(23)} `)
+			msg = msg.replace(amazonURL, `az=${amazonURL.slice(23).split('/ref=')[0].replace('/es/','')} `)
 		});
 	}  
 
+	// Aliexpress
+
+	if(msg.match(aliexpressRegex) !== null){
+		msg.match(aliexpressRegex).forEach((aliexpressURL) => {
+			var urlprefixed = aliexpressURL
+			var prefix = 'https://';
+			if (msg.substr(0, prefix.length) !== prefix)
+			{
+				urlprefixed = prefix + msg;
+			}
+
+			msg = msg.replace(aliexpressURL, `ae=${urlprefixed.slice(26).split('?')[0].replace('.html','')} `)
+		});
+	}  
 	// censored words
 
 	censoredWords.forEach(word => {
@@ -685,6 +704,13 @@ function replaceURLS(msg) {
 		});
 	}
 
+	// aliexpress es/cl
+
+	if (msg.match(aliexpressPrefixRegex) !== null){ 
+		msg.match(aliexpressPrefixRegex).forEach((aliexpressURL) => {
+			msg = createAnchor(msg, aliexpressURL, 'https://cl.aliexpress.com' ,3,'.html')
+		});
+	}
 	return msg
 }
 
