@@ -308,6 +308,24 @@ const channels = [{
 			},
 		],
 	},
+	{
+		name: 'jaidefinichon',
+		twitchID: 30610294,
+		booyahNumericID: 84242197,
+		chatroomID: 83906105,
+		bttv: true,
+		ffz: true,
+		panels: [
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-2"><img data-test-selector="image_test_selector" src="https://static-cdn.jtvnw.net/jtv_user_pictures/panel-30610294-image-61aca2b16cb8c992-320-320.png" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="Layout-sc-nxg1ff-0 ScTypeset-sc-xkayed-0 fMjjNz tw-typeset"><div class="panel-description"><p>Estas son las reglas del chat, respetemos y no seremos baneados :D</p><ul><li><strong>No escribir en mayúsculas.</strong></li><li><strong>No poner links en el chat.</strong></li><li><strong>No Hacer Spam (repetir el mismo mensaje mas de 2 veces)</strong></li><li><strong>No insultar ni poner información privada de otras personas.</strong></li></ul><p>Pórtense bien y disfruten del Chat! ♥</p></div></div></div></div>`,
+			},
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://www.eneba.com/latam/?af_id=jaidefinichon "><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-30610294-image-674900cb-c908-4d67-b55b-f1b7fd57d7f3" alt="Contenido del panel"></a></div>`,
+			},
+		],
+	},
 	{ // test channel
 		name: 'elmarceloc',
 		twitchID: 134037766,
@@ -327,7 +345,7 @@ const channels = [{
 		],
 	}
 ];
-
+84242197
 var twitchEmotes = [
 	// https://twitchemotes.com
 
@@ -1091,7 +1109,7 @@ function initExtension() {
 
 				}
 
-				if(subsEmotes.length > 0){
+				if(subsEmotes){
 					channelSubsEmotes = subsEmotes.subEmotes[0].emotes
 				}
 
