@@ -1,3 +1,4 @@
+const badgesBaseURL = 'https://badges.twitch.tv/v1/badges/channels/'
 const subsEmotesBaseURL = 'https://api.ivr.fi/twitch/allemotes/'
 
 const globalBetterttvURL = "https://api.betterttv.net/3/cached/emotes/global";
@@ -15,6 +16,7 @@ var channel;
 var donations;
 
 var selfUsername;
+var userPoints;
 
 const blip = new Audio(chrome.runtime.getURL("sounds/blip.wav"));
 
@@ -326,6 +328,33 @@ const channels = [{
 			},
 		],
 	},
+	,
+	{
+		name: 'maau',
+		twitchID: 47594707,
+		booyahNumericID: 78330214,
+		chatroomID: 77982405,
+		bttv: false,
+		ffz: false,
+		panels: [
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-5"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/subscription_center?add_user=maauguerrero"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-47594707-image-2dcd1b5e76dc93d7-320-320.png" alt="Contenido del panel"></a></div>`,
+			},
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-9"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/MaauGuerrero"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-47594707-image-27480e7888e7adf6-320-320.png" alt="Contenido del panel"></a></div>`,
+			},
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-8"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://www.facebook.com/MaauFeis/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-47594707-image-4fa8cb47fac1f0d6-320-320.png" alt="Contenido del panel"></a></div>`,
+			},
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 ljMhJH default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-11"><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 jxwNWA tw-link" rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/maauguerrero/"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-47594707-image-c677e05d99db6074-320-320.png" alt="Contenido del panel"></a></div>`,
+			},
+		],
+	},
 	{ // test channel
 		name: 'elmarceloc',
 		twitchID: 134037766,
@@ -345,7 +374,7 @@ const channels = [{
 		],
 	}
 ];
-84242197
+
 var twitchEmotes = [
 	// https://twitchemotes.com
 
@@ -397,6 +426,7 @@ var booyahtvEmotes = [
 ];
 
 var channelSubsEmotes = []
+var channelBadges = []
 var bttvGlobalEmotes = [];
 var bttvChannelEmotes = [];
 
@@ -477,6 +507,9 @@ const amazonPrefixRegex = /az=(.)([^\s]+)/g
 const aliexpressPrefixRegex = /ae=(.)([^\s]+)/g
 
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
+
+const botName = 'StreamVip'
+const botNewName = 'Aweonaso'
 
 var checkEmotesInterval;
 
@@ -866,7 +899,9 @@ function copyMessage(message, messageValue){
 function translateStreamVip(username, messageElement){
 	//console.log(username.innerHTML)
 
-	if (username.innerHTML !== 'StreamVip') return
+	if (username.innerHTML !== botName) return
+
+	username.innerHTML = botNewName
 
 	streamVipWords.forEach(word => {
 		messageElement.innerHTML = messageElement.innerHTML.replace(word[0], word[1])
@@ -875,18 +910,78 @@ function translateStreamVip(username, messageElement){
 
 }
 
-function changeBadges() {
-	// TODO:, cambiar los iconos
+function addPointsBadges(usernameContainer, username) {
 
 	// change channel badges
 	/* if (components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge') {
 	components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
 	}*/
 
+
+	var badge = null;
+
+	userPoints.forEach(user =>{
+
+		if (username.innerText == user[1]){
+			var rank = user[0].replace('#','')
+
+			if(rank > 0 && rank <= 3){
+				badge = 0
+			}else if(rank > 3 && rank <= 5){
+				badge = 1
+			}else if(rank > 5 && rank <= 15){
+				badge = 2
+			}else if(rank > 15 && rank <= 20){
+				badge = 3
+			}else if(rank > 20 && rank <= 25){
+				badge = 4
+			}else if(rank > 25 && rank <= 30){
+				badge = 5
+			}else if(rank > 30 && rank <= 35){
+				badge = 6
+			}else if(rank > 35 && rank <= 40){
+				badge = 7
+			}else if(rank > 40 && rank <= 45){
+				badge = 8
+			}else if(rank > 45 && rank <= 50){
+				badge = 9
+			}else if(rank > 50 && rank <= 55){
+				badge = 10
+			}else if(rank > 55 && rank <= 60){
+				badge = 11
+			}else if(rank > 60 && rank <= 65){
+				badge = 12
+			}else if(rank > 65 && rank <= 80){
+				badge = 13
+			}else if(rank > 80 && rank <= 100){
+				badge = 14
+			}else if(rank > 100 && rank <= 150){
+				badge = 15
+			}else if(rank > 150 && rank <= 200){
+				badge = 16
+			}else if(rank > 200 && rank <= 300){
+				badge = 17
+			}
+
+			if(badge !== null){
+
+				var badgeHTML = `<img title="Top #${rank}" src="${channelBadges[badge]}" class="btv-badge">`
+				
+				$(usernameContainer).prepend(badgeHTML);  
+			}
+		}
+
+	})
+
+
+
+
 		
 }
 
 function changeUsernameColor(username) {
+
+	if (username === null) return
 
 	var hash = username.innerText.charCodeAt(0);
 
@@ -914,7 +1009,7 @@ function checkTag(event, messageContent, usernameContainer,usernameElement, mess
 
 		taggedUsers = messageContent.match(tagRegex) != null ? messageContent.match(tagRegex) : [];
 
-		if (usernameElement.innerHTML == 'StreamVip' && messageContent.includes(selfUsername)){
+		if (usernameElement.innerHTML == botNewName && messageContent.includes(selfUsername)){
 			taggedUsers.push(selfUsername)
 		}
 
@@ -991,10 +1086,15 @@ function modifyMessage(event) {
 		copyMessage(message, messageText.innerHTML)
 		
 		translateStreamVip(usernameElement, messageText)
-		changeBadges(usernameContainer)
+
+		if(channel.leaderboard && userPoints && userPoints.length > 0){
+			addPointsBadges(usernameContainer, usernameElement)
+		}
+
 		checkTag(event, messageText.innerHTML,usernameContainer,usernameElement, messageContainer)
 
 		changeUsernameColor(usernameElement)
+
 		addEmotes(messageText);
 	}
 }
@@ -1010,8 +1110,9 @@ function initExtension() {
 		fetch(`https://booyah.live/api/v3/users/${uid}`)
 			.then(response => response.json())
 			.then(data => {
-				selfUsername = 'Niel'//data.user.nickname
+				selfUsername = data.user.nickname
 				console.log('[BOOYAH.TV] self username: ' + selfUsername)
+
 			});
 	}
 
@@ -1055,14 +1156,16 @@ function initExtension() {
 				fetch(betterTTVChannelBaseURL + currentChannel.twitchID).then((value) => value.json()),
 				fetch(frankerfaceZChannelBaseURL + currentChannel.twitchID).then((value) => value.json()),
 				fetch(subsEmotesBaseURL + currentChannel.name).then((value) => value.json() ),
+				fetch(badgesBaseURL + currentChannel.twitchID + '/display').then((value) => value.json() ),
 			])
-			.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ, subsEmotes]) => {
+			.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ, subsEmotes, badges]) => {
 				// limiamos los emotes para que no se junten con los de otro streamer
 
 				bttvGlobalEmotes = []
 				frankerFaceZ = []
 				bttvChannelEmotes = []
 				channelSubsEmotes = []
+				channelBadges = []
 
 				// guardamos los emotes globales
 				bttvGlobalEmotes = globalBetterttv
@@ -1112,8 +1215,23 @@ function initExtension() {
 				if(subsEmotes){
 					channelSubsEmotes = subsEmotes.subEmotes[0].emotes
 				}
+				
+				if(badges && badges.badge_sets){
+					// iterates trow every badge object and adds it to the channelBadges array
+					for (var id in  badges.badge_sets.subscriber.versions) {
+						if (badges.badge_sets.subscriber.versions .hasOwnProperty(id)) {
+							
+							channelBadges.push(badges.badge_sets.subscriber.versions[id].image_url_1x)
+						}
+					}
+
+					// inverts the array for a rank-like style
+					channelBadges = channelBadges.reverse()
+
+				}
 
 				console.log("[BOOYAH.TV] subsEmotes: ", channelSubsEmotes);
+				console.log("[BOOYAH.TV] channelBadges: ", channelBadges);
 				console.log("[BOOYAH.TV] frankerFaceZ: ", frankerFaceZ);
 				console.log("[BOOYAH.TV] bttvGlobalEmotes: ", bttvGlobalEmotes);
 				console.log("[BOOYAH.TV] bttvChannelEmotes: ", bttvChannelEmotes);
@@ -1145,10 +1263,13 @@ function initExtension() {
 						// chat de twitch
 
 						twitchChat()
+
+						delay()
 						
 					}
 				}, 5000)
 			
+
 				// emotes, chat colors, el chat offline...
 
 				var chatExist = setInterval(function() {
@@ -1172,15 +1293,6 @@ function initExtension() {
 					}
 				}, 500);
 
-				// panels 
-
-				var panelsExist = setInterval(function() {
-					if ($('.channel-box').first().length) {
-						clearInterval(panelsExist);
-						insertChannelPanels(currentChannel)
-					}
-				}, 500)
-
 
 				// autocomplete
 				var autocompleteExist = setInterval(function() {
@@ -1197,6 +1309,55 @@ function initExtension() {
 					}
 				}, 500)                
 					
+				var panelsExist = setInterval(function() {
+					if ($('.channel-box').first().length) {
+						clearInterval(panelsExist);
+						insertChannelPanels(currentChannel)
+					}
+				}, 500)
+
+				if(channel.leaderboard){
+					fetch(pointsBaseURL + channel.name)
+						.then(value => value.json())
+						.then(points => {
+							
+							userPoints = points
+
+						var rankingExist = setInterval(function() {
+							
+						if ($('#table-container').length) {
+
+
+							clearInterval(rankingExist);
+
+
+						
+								var table = $('<table class="rank-table" id="leaderboard">');
+							
+								userPoints.forEach((user,index) =>{
+				
+									var row = $(`
+									<tr class="rank-tr">
+										<td class="rank-td rank"><span>#</span>${user[0].replace('#','')}</td>
+										<td class="rank-td rank-color">
+											${ index == 0 ? "<img title='BASED' class='rank-emote' src='https://cdn.betterttv.net/emote/6044e31b306b602acc598811/3x'/> " : ""}
+											${ index == 1 ? "<img title='peepoClown' class='rank-emote-secound' src='https://cdn.frankerfacez.com/emote/318914/4'/> " : ""}
+											 ${ user[1] }${ index == 497 ? "<img class='rank-emote' src='https://cdn.frankerfacez.com/emote/590273/1'/> " : ""}</td>
+										<td class="rank-td rank-points">${user[3]}</td>
+									</tr>
+									`)
+									
+									table.append(row)
+				
+								})
+				
+								$('#table-container').append(table)
+					
+							
+							}
+						}, 500)
+					})
+				}
 			})
 
 		.catch((err) => {
@@ -1515,7 +1676,7 @@ function insertEmotesPanel(currentChannel) {
 				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="twitchicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
 				<div id="subs"> ${subHTML} </div>
 				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>BetterTTV</span><span class="foldArrow">▼</span></div>`: ''}
-				<div id="bttv"> ${bttvHTML} </div>
+				<div id="bttv">${channel.bttv ? bttvHTML : ''}</div>
 				${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"></div><span>Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}
 				<div id="channelEmotes"> ${channelHTML}
 				${ffzHTML} </div>
@@ -1577,6 +1738,52 @@ function twitchChat(){
 
 }
 
+
+function delay(){
+	var delayHTML = `<div id="delay" class="btn-ellipsis">
+	<div
+		onclick="vid = document.querySelector('video');
+		videoTime = vid.duration;
+		vid.currentTime = videoTime;"
+		class="components-icon components-icon-channel-more"
+	>
+		<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		fill="#adadba"
+		>
+		<path
+			d="M5.782 0c-6.059 11.831 4.489 22.204 16.18 16.211l-16.18-16.211zm-.832 24h-2.95l6.5-6 6.5 6h-2.949c-1-.923-2.004-2-3.55-2-1.548 0-2.551 1.077-3.551 2zm17.05-22.493c-.004.829-.679 1.497-1.507 1.493-.226-.001-.437-.056-.629-.146l-3.266 5.144-2.549-2.554 5.12-3.268c-.106-.206-.17-.436-.169-.684.005-.828.68-1.497 1.508-1.492.828.004 1.497.679 1.492 1.507z"
+			style="/* color: #adadba; */"
+		></path>
+		</svg>
+	</div>
+	</div>
+	`
+
+	if (document.body.contains(document.getElementById("delay"))){
+		document.getElementById("delay").remove();
+	};
+
+	$('.channel-profile-btns').append(delayHTML)
+
+	setInterval(() => {
+		var btnplay = document.querySelector('.controller-btn.controller-btn-play')
+		if(btnplay){
+			document.querySelector('.controller-btn.controller-btn-play').onclick = function(){
+				vid = document.querySelector('video');
+				videoTime = vid.duration;
+				vid.currentTime = videoTime;
+			}
+		}
+
+	}, 2000);
+
+}
+
+
 function insertChannelPanels(channel) {
 	console.log("[BOOYAH.TV] inserting panels");
 
@@ -1589,40 +1796,6 @@ function insertChannelPanels(channel) {
 		channel.panels.forEach(panel => {
 			panelsHTML += createPanelHTML(panel)
 		})
-
-		if(channel.leaderboard){
-			var table = $('<table class="rank-table" id="leaderboard">');
-			
-			fetch(pointsBaseURL + channel.name)
-				.then(response => response.json())
-				.then(userPoints => {
-					userPoints.forEach((user,index) =>{
-
-						var row = $(`
-						<tr class="rank-tr">
-							<td class="rank-td rank"><span>#</span>${user[0].replace('#','')}</td>
-							<td class="rank-td rank-color">
-								${ index == 0 ? "<img title='BASED' class='rank-emote' src='https://cdn.betterttv.net/emote/6044e31b306b602acc598811/3x'/> " : ""}
-								${ index == 1 ? "<img title='peepoClown' class='rank-emote-secound' src='https://cdn.frankerfacez.com/emote/318914/4'/> " : ""}
-								 ${ user[1] }${ index == 497 ? "<img class='rank-emote' src='https://cdn.frankerfacez.com/emote/590273/1'/> " : ""}</td>
-							<td class="rank-td rank-points">${user[3]}</td>
-						</tr>
-						`)
-						
-						table.append(row)
-
-					})
-
-					$('#table-container').append(table)
-				}).catch(function(err) {
-				
-					
-					$('#leaderboard-container').remove()
-
-				});
-				
-				
-		}
 
 		$('.channel-box').first().append(panelsHTML);
 
@@ -1853,6 +2026,11 @@ document.addEventListener('keydown', (event) => {
 		//TODO: volver a colocarlo
 		//retriveMessage()
 		
+	}
+	if ( event.code === 'Space' && document.activeElement !== txtArea ) {
+		vid = document.querySelector('video');
+		videoTime = vid.duration;
+		vid.currentTime = videoTime;
 	}
 
 });
