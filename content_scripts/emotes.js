@@ -224,6 +224,24 @@ const channels = [{
 					`,
 			}
 		],
+		botName: 'AweonasoBot',
+		streamVipWords: [
+			['você possui', 'tiene'],
+			['pontos', 'puntos'],
+			['assistiu a live', 'ha visto el live'],
+			['A live está offline. 😐', 'El directo está offline Sadge'],
+			['A live está aberta há','HYPERS El directo esta online hace'],
+			['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
+			['o usuário', 'el usuario'],
+			['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
+			['foi criado há','creó su cuenta hace'],
+			['está ativo no canal há','esta activo en el canal hace'],
+			['💰','BASED'],
+			['💬',''],
+			['♥',''],
+			['⏱️','KirbDance'],
+			['👍','cristianParty']
+		]
 	},
 	{
 		// moai
@@ -263,6 +281,24 @@ const channels = [{
 				html: `<div class="sc-AxiKw QcRNp default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-6"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-68111739-image-21dc940e-8585-405e-8b50-2c5335ca5aae" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="sc-AxiKw sc-pscky gzUZnd tw-typeset"><div class="panel-description"><p><em>EN PROCESO</em></p></div></div></div></div>`,
 			},
 		],
+		botName: 'Moaicito',
+		streamVipWords: [
+			['você possui', 'tiene'],
+			['pontos', 'puntos'],
+			['assistiu a live', 'ha visto el live'],
+			['A live está offline. 😐', 'El directo está offline Sadge'],
+			['A live está aberta há','HYPERS El directo esta online hace'],
+			['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
+			['o usuário', 'el usuario'],
+			['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
+			['foi criado há','creó su cuenta hace'],
+			['está ativo no canal há','esta activo en el canal hace'],
+			['💰','CHAD'],
+			['💬',''],
+			['♥',''],
+			['⏱️','clubPls'],
+			['👍','POGGERS']
+		]
 	},
 	{
 		// dylantero
@@ -355,6 +391,23 @@ const channels = [{
 			},
 		],
 	},
+	/*{
+		name: 'markilokurasy',
+		twitchID: 0,
+		booyahNumericID: 81868670,
+		chatroomID: 81522979,
+		bttv: true,
+		ffz: true,
+		customBTTV: [
+			{ code: "Monouwu", id: "5ae0347b0af0ce6122a11663" }
+		],
+		customFFZ: [
+			{ name: 'monkaW', id: 214681 }
+		],
+		customSubsEmotes: [
+			{ id: '303892010', code: 'cristianSerotonina', url: '' }
+		]
+	},*/
 	{ // test channel
 		name: 'elmarceloc',
 		twitchID: 134037766,
@@ -464,24 +517,6 @@ const censoredWords = [
 	['dick', 'diсk']
 ]
 
-const streamVipWords = [
-	['você possui', 'tiene'],
-	['pontos', 'puntos'],
-	['assistiu a live', 'ha visto el live'],
-	['A live está offline. 😐', 'El directo está offline Sadge'],
-	['A live está aberta há','HYPERS El directo esta online hace'],
-	['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
-	['o usuário', 'el usuario'],
-	['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
-	['foi criado há','creó su cuenta hace'],
-	['está ativo no canal há','esta activo en el canal hace'],
-	['💰','BASED'],
-	['💬',''],
-	['♥',''],
-	['⏱️','KirbDance'],
-	['👍','cristianParty']
-]
-
 // original url regex
 
 const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/g
@@ -509,7 +544,6 @@ const aliexpressPrefixRegex = /ae=(.)([^\s]+)/g
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
 const botName = 'StreamVip'
-const botNewName = 'Aweonaso'
 
 var checkEmotesInterval;
 
@@ -821,7 +855,13 @@ function replaceEmotes(msg) {
 	if (channelSubsEmotes) {
 		for (let i = 0; i < channelSubsEmotes.length; i++) {
 			let regex = new RegExp("\\b" + channelSubsEmotes[i].code + "\\b", "g");
-			let url = `https://static-cdn.jtvnw.net/emoticons/v2/${channelSubsEmotes[i].id}/default/dark/1.0`;
+			let url = ''
+
+			if (channelSubsEmotes[i].url) {
+				url = channelSubsEmotes[i].url
+			} else {
+				url = `https://static-cdn.jtvnw.net/emoticons/v2/${channelSubsEmotes[i].id}/default/dark/1.0`;
+			}
 
 			msg = replaceEmote(msg, regex, url, channelSubsEmotes[i].code);
 		}
@@ -901,9 +941,9 @@ function translateStreamVip(username, messageElement){
 
 	if (username.innerHTML !== botName) return
 
-	username.innerHTML = botNewName
+	username.innerHTML = channel.botName
 
-	streamVipWords.forEach(word => {
+	channel.streamVipWords.forEach(word => {
 		messageElement.innerHTML = messageElement.innerHTML.replace(word[0], word[1])
 	})
 
@@ -911,11 +951,18 @@ function translateStreamVip(username, messageElement){
 }
 
 function addPointsBadges(usernameContainer, username) {
-
+	
 	// change channel badges
-	/* if (components.childNodes[0].childNodes[0].childNodes[0].className == 'message-badge') {
-	components.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
-	}*/
+
+	/*var badges = usernameContainer
+	
+	badges.forEach(badge => {
+		if (badge.className == 'message-badge' ) {
+			if(badge[0].childNodes[0].src == 'https://cdnmambet-a.akamaihd.net/booyah/build/pc/static/media/medal.85ed3418.png'){
+				badge[0].childNodes[0].src = 'https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1'
+			}
+		}
+	})*/
 
 
 	var badge = null;
@@ -925,43 +972,7 @@ function addPointsBadges(usernameContainer, username) {
 		if (username.innerText == user[1]){
 			var rank = user[0].replace('#','')
 
-			if(rank > 0 && rank <= 3){
-				badge = 0
-			}else if(rank > 3 && rank <= 5){
-				badge = 1
-			}else if(rank > 5 && rank <= 15){
-				badge = 2
-			}else if(rank > 15 && rank <= 20){
-				badge = 3
-			}else if(rank > 20 && rank <= 25){
-				badge = 4
-			}else if(rank > 25 && rank <= 30){
-				badge = 5
-			}else if(rank > 30 && rank <= 35){
-				badge = 6
-			}else if(rank > 35 && rank <= 40){
-				badge = 7
-			}else if(rank > 40 && rank <= 45){
-				badge = 8
-			}else if(rank > 45 && rank <= 50){
-				badge = 9
-			}else if(rank > 50 && rank <= 55){
-				badge = 10
-			}else if(rank > 55 && rank <= 60){
-				badge = 11
-			}else if(rank > 60 && rank <= 65){
-				badge = 12
-			}else if(rank > 65 && rank <= 80){
-				badge = 13
-			}else if(rank > 80 && rank <= 100){
-				badge = 14
-			}else if(rank > 100 && rank <= 150){
-				badge = 15
-			}else if(rank > 150 && rank <= 200){
-				badge = 16
-			}else if(rank > 200 && rank <= 300){
-				badge = 17
-			}
+			badge = Math.floor(rank * channelBadges.length / 498)
 
 			if(badge !== null){
 
@@ -1009,7 +1020,7 @@ function checkTag(event, messageContent, usernameContainer,usernameElement, mess
 
 		taggedUsers = messageContent.match(tagRegex) != null ? messageContent.match(tagRegex) : [];
 
-		if (usernameElement.innerHTML == botNewName && messageContent.includes(selfUsername)){
+		if (usernameElement.innerHTML == channel.botName && messageContent.includes(selfUsername)){
 			taggedUsers.push(selfUsername)
 		}
 
@@ -1085,9 +1096,11 @@ function modifyMessage(event) {
 
 		copyMessage(message, messageText.innerHTML)
 		
-		translateStreamVip(usernameElement, messageText)
-
-		if(channel.leaderboard && userPoints && userPoints.length > 0){
+		if (channel.streamVipWords){
+			translateStreamVip(usernameElement, messageText)
+		}
+		
+		if (channel.leaderboard && userPoints && userPoints.length > 0) {
 			addPointsBadges(usernameContainer, usernameElement)
 		}
 
@@ -1098,6 +1111,16 @@ function modifyMessage(event) {
 		addEmotes(messageText);
 	}
 }
+
+function isEmpty(obj) {
+	for(var prop in obj) {
+	  if(obj.hasOwnProperty(prop)) {
+		return false;
+	  }
+	}
+  
+	return JSON.stringify(obj) === JSON.stringify({});
+  }
 
 function initExtension() {
 	var currentURL = window.location.href
@@ -1212,22 +1235,38 @@ function initExtension() {
 
 				}
 
-				if(subsEmotes){
+				if(subsEmotes.subEmotes.length > 0 ){
 					channelSubsEmotes = subsEmotes.subEmotes[0].emotes
 				}
 				
 				if(badges && badges.badge_sets){
-					// iterates trow every badge object and adds it to the channelBadges array
-					for (var id in  badges.badge_sets.subscriber.versions) {
-						if (badges.badge_sets.subscriber.versions .hasOwnProperty(id)) {
-							
-							channelBadges.push(badges.badge_sets.subscriber.versions[id].image_url_1x)
+					if(!isEmpty(badges.badge_sets)){
+
+						// iterates trow every badge object and adds it to the channelBadges array
+						for (var id in badges.badge_sets.subscriber.versions) {
+							if (badges.badge_sets.subscriber.versions .hasOwnProperty(id)) {
+								
+								channelBadges.push(badges.badge_sets.subscriber.versions[id].image_url_1x)
+							}
 						}
+
+						// inverts the array for a rank-like style
+						channelBadges = channelBadges.reverse()
 					}
+				}
 
-					// inverts the array for a rank-like style
-					channelBadges = channelBadges.reverse()
+				// custom emotes
 
+				if(channel.customBTTV){
+					bttvChannelEmotes = bttvChannelEmotes.concat(channel.customBTTV);
+				}
+
+				if(channel.customFFZ){
+					frankerFaceZ = frankerFaceZ.concat(channel.customFFZ);
+				}
+
+				if(channel.customSubsEmotes){
+					channelSubsEmotes = channelSubsEmotes.concat(channel.customSubsEmotes);
 				}
 
 				console.log("[BOOYAH.TV] subsEmotes: ", channelSubsEmotes);
@@ -1242,11 +1281,7 @@ function initExtension() {
 						
 						replaceURLSinTextarea()
 					}, 200);
-				}
-				//   fetch `https://api.twitch.tv/helix/streams?client_id=${twitchClientID}&channel=${channel.name}`
-			
-				
-			  
+				}			  
 									
 				// emotes en el titulo
 
@@ -1342,7 +1377,7 @@ function initExtension() {
 										<td class="rank-td rank-color">
 											${ index == 0 ? "<img title='BASED' class='rank-emote' src='https://cdn.betterttv.net/emote/6044e31b306b602acc598811/3x'/> " : ""}
 											${ index == 1 ? "<img title='peepoClown' class='rank-emote-secound' src='https://cdn.frankerfacez.com/emote/318914/4'/> " : ""}
-											 ${ user[1] }${ index == 497 ? "<img class='rank-emote' src='https://cdn.frankerfacez.com/emote/590273/1'/> " : ""}</td>
+											 ${ user[1] }</td>
 										<td class="rank-td rank-points">${user[3]}</td>
 									</tr>
 									`)
@@ -1629,7 +1664,11 @@ function insertEmotesPanel(currentChannel) {
 
 	if (channelSubsEmotes && channelSubsEmotes.length > 0) {
 		channelSubsEmotes.forEach(emote => {
-			subHTML += createEmoteHTML(emote.code, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
+			if(emote.url){
+				subHTML += createEmoteHTML(emote.code, emote.url)
+			}else{
+				subHTML += createEmoteHTML(emote.code, `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`)
+			}
 		})
 	}
 
@@ -2029,8 +2068,11 @@ document.addEventListener('keydown', (event) => {
 	}
 	if ( event.code === 'Space' && document.activeElement !== txtArea ) {
 		vid = document.querySelector('video');
-		videoTime = vid.duration;
-		vid.currentTime = videoTime;
+
+		if (vid) {
+			videoTime = vid.duration;
+			vid.currentTime = videoTime;
+		}
 	}
 
 });
