@@ -937,8 +937,6 @@ function copyMessage(message, messageValue){
 }
 
 function translateStreamVip(username, messageElement){
-	//console.log(username.innerHTML)
-
 	if (username.innerHTML !== botName) return
 
 	username.innerHTML = channel.botName
@@ -973,6 +971,8 @@ function addPointsBadges(usernameContainer, username) {
 			var rank = user[0].replace('#','')
 
 			badge = Math.floor(rank * channelBadges.length / 498)
+
+			if(badge >= channelBadges.length-1) badge = channelBadges.length-1
 
 			if(badge !== null){
 
