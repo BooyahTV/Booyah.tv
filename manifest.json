@@ -1,6 +1,6 @@
 {
 	"name": "Booyah.tv",
-	"version": "0.85",
+	"version": "0.94",
 	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 3,
 
@@ -23,6 +23,7 @@
 				"libs/jquery-ui.min.js",
 				"libs/jquery.modal.min.js",
 				"libs/tmi.min.js",
+				"libs/tabcomplete.min.js",
 				
 				"content_scripts/emotes.js"
 			],
@@ -30,10 +31,31 @@
 			"exclude_matches": [
 				"https://booyah.live/standalone/chatroom/chat-list*"
 			]
+		},
+		{
+			"js": [
+				"libs/jquery.min.js",
+				"content_scripts/bttv.js"
+			],
+			"matches": ["https://betterttv.com/emotes/*"]
+		},
+		{
+			"js": [
+				"libs/jquery.min.js",
+				"content_scripts/ffz.js"
+			],
+			"matches": ["https://www.frankerfacez.com/emoticon/*"]
+		},
+		{
+			"js": [
+				"libs/jquery.min.js",
+				"content_scripts/7tv.js"
+			],
+			"matches": ["https://7tv.app/*"]
 		}
 	],
 	"web_accessible_resources": [
-		{  "resources":["icons/emote-icon.png","icons/twitch.svg", "sounds/blip.wav"],
+		{  "resources":["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav"],
 		    "matches": ["https://booyah.live/*"]
 		}
 	],

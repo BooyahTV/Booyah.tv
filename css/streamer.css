@@ -89,9 +89,9 @@ body,.scroll-container,.views-standalone-chatroom{
 
 
 .emote {
-position: relative;
-vertical-align: middle;
-max-height: 28px;
-width: auto;
-height: auto;
+  position: relative;
+  vertical-align: middle;
+  max-height: 28px;
+  width: auto;
+  height: auto;
 }

@@ -127,7 +127,7 @@ body {
 }
 
 #emotes-icon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/icons/emote-icon.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/resources/icons/emote-menu.png");
   background-position: 0px 0px;
   width: 26px;
   height: 28px;
@@ -177,7 +177,7 @@ body {
 }
 
 #twitchicon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/icons/twitch.svg");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/resources/icons/twitch.svg");
   width: 24px;
   height: 24px;
 }
@@ -401,4 +401,16 @@ body {
   padding-right: 4px;
   vertical-align: middle;
   margin-bottom: 0.25em;
+}
+
+.components-chatbox-user-menu-popover-overlay{
+  border-radius: 3px!important;
+ }   
+.emote-preview{
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }

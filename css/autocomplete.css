@@ -42,3 +42,31 @@
   color: white!important;
 
 }
+
+/* tooltip */
+
+.ui-tooltip{
+  border: none!important;
+  box-shadow: none!important;
+  padding: 6px!important;
+}
+
+.tooltip-text{
+  text-align: center;
+  font-size: 12px;
+  margin-top: 9px!important;
+}
+
+.emote-preview{
+  max-width: 100px;
+  width: auto;
+  display:block;
+  margin:auto;
+}
+
+.youtube-preview{
+  width: 280px;
+  height: auto;
+  display:block;
+  margin:auto;
+}
