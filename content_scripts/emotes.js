@@ -2,6 +2,7 @@ const badgesBaseURL = 'https://badges.twitch.tv/v1/badges/channels/'
 const subsEmotesBaseURL = 'https://api.ivr.fi/twitch/allemotes/'
 
 const globalBetterttvURL = "https://api.betterttv.net/3/cached/emotes/global";
+const globalBooyahtvURL = "https://api.betterttv.net/3/cached/users/twitch/730866851";
 
 const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch/";
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
@@ -17,6 +18,8 @@ var donations;
 
 var selfUsername;
 var userPoints;
+
+const maxLenghtUsername = 25
 
 const blip = new Audio(chrome.runtime.getURL("resources/sounds/blip.wav"));
 
@@ -136,6 +139,10 @@ const channels = [{
 		bttv: true,
 		ffz: true,
 		leaderboard: true,
+		offlineEmote: {
+			url: 'https://static-cdn.jtvnw.net/emoticons/v2/302211115/default/dark/3.0',
+			name: 'cristianEpico',
+		},
 		panels: [{
 				// cuenta rut dono
 				type: "image",
@@ -226,6 +233,7 @@ const channels = [{
 		],
 		botName: 'AweonasoBot',
 		streamVipWords: [
+			['você ainda não possui', 'Aún no tienes puntos'],
 			['você possui', 'tiene'],
 			['pontos', 'puntos'],
 			['assistiu a live', 'ha visto el live'],
@@ -298,6 +306,7 @@ const channels = [{
 		],
 		botName: 'Moaicito',
 		streamVipWords: [
+			['você ainda não possui', 'Aún no tienes puntos'],
 			['você possui', 'tiene'],
 			['pontos', 'puntos'],
 			['assistiu a live', 'ha visto el live'],
@@ -325,6 +334,10 @@ const channels = [{
 		bttv: true,
 		ffz: true,
 		leaderboard: true,
+		offlineEmote: {
+			url: 'https://static-cdn.jtvnw.net/emoticons/v2/301852035/default/dark/1.0',
+			name: 'dylanteroZZZ'
+		},
 		panels: [
 			{
 				type: "html",
@@ -352,6 +365,7 @@ const channels = [{
 		],
 		botName: 'doñasBot',
 		streamVipWords: [
+			['você ainda não possui', 'Aún no tienes puntos'],
 			['você possui', 'tiene'],
 			['pontos', 'puntos'],
 			['assistiu a live', 'ha visto el live'],
@@ -383,6 +397,10 @@ const channels = [{
 		chatroomID: 79107365,
 		bttv: true,
 		ffz: true,
+		offlineEmote: {
+			url: 'https://static-cdn.jtvnw.net/emoticons/v2/307065645/default/dark/1.0',
+			name: 'latePatata'
+		},
 		panels: [
 			{
 				type: "html",
@@ -475,7 +493,7 @@ const channels = [{
 		],
 	},
 	{
-		name: 'markilokurasy',
+		name: 'elmarceloc',
 		twitchID: 0,
 		booyahID: 'MarkiLokuras',
 		booyahNumericID: 81868670,
@@ -493,6 +511,7 @@ const channels = [{
 		],
 		botName: 'markiBot',
 		streamVipWords: [
+			['você ainda não possui', 'Aún no tienes puntos'],
 			['você possui', 'tiene'],
 			['pontos', 'puntos'],
 			['assistiu a live', 'ha visto el live'],
@@ -579,8 +598,16 @@ var twitchEmotes = [
 	{ id: '461298', name: 'DarkMode' },
 	{ id: '245', name: 'ResidentSleeper' },
 	{ id: '114856', name: 'UncleNox' },
-	
 
+	{ id: '46', name: "SSSsss", scaped: true },
+	{ id: '47', name: "PunchTrees", scaped: true },
+	{ id: '28', name: "MrDestructoid ", scaped: true },
+	{ id: '191762', name: "Squid1", scaped: true },
+	{ id: '191763', name: "Squid2", scaped: true },
+	{ id: '191764', name: "Squid3", scaped: true },
+	{ id: '191767', name: "Squid4", scaped: true },
+
+	
 	{ id: '555555579', name: '8-)', scaped: true },
 	{ id: '2', name: ':(', scaped: true },
 	{ id: '1', name: ':)', scaped: true },
@@ -593,6 +620,8 @@ var twitchEmotes = [
 	{ id: '555555568', name: ':-Z', scaped: true },
 	{ id: '555555588', name: ":-\\", scaped: true },
 	{ id: '555555583', name: ":-o", scaped: true },
+
+
 ];
 
 // forsenE, etc
@@ -721,6 +750,10 @@ const aliexpressPrefixRegex = /ae=(.)([^\s]+)/g
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
 const botName = 'StreamVip'
+
+const emoteBanList = ['DatSauce', 'TaxiBro', 'FireSpeed', 'KaRappa', 'sosGame','ariW',
+					  'VapeNation','WatChuSay','TwaT','tehPoleCat','RonSmug', 'FishMoley',
+					  'Hhhehehe','CruW','notsquishY','BroBalt', 'HailHelix','M&Mjc']
 
 var checkEmotesInterval;
 
@@ -1149,7 +1182,6 @@ function addBadges(usernameContainer, username) {
 	// change channel badges
 	
 	$(usernameContainer).find('.badge-icon').each(function( index ) {
-		console.log($( this ))
 
 		imageBadges.forEach(badge => {
 			if($( this )[0].src.includes(badge.original)){
@@ -1178,10 +1210,9 @@ function addBadges(usernameContainer, username) {
 		$(usernameContainer).prepend(staffBadge); 
 	}
 
-	
+	if (username == null) return
 
-
-	var booyahtvUser = channelBooyahtvBadges[username.innerText.toLowerCase()]
+	var booyahtvUser = channelBooyahtvBadges[username.innerText]
 
 	if (booyahtvUser != null) {
 		// adds the badge
@@ -1189,14 +1220,16 @@ function addBadges(usernameContainer, username) {
 		$(usernameContainer).prepend(badgeHTML); 
 	}	
 
+	if (typeof hashedPoints !== 'undefined'){
 
-	var user = hashedPoints[username.innerText.toLowerCase()]
-
-	if (user != null) {
-		// adds the badge
-		const badgeHTML = `<img title="Top #${user[1]}" src="${channelBadges[user[0]].image_url_1x}" class="btv-badge" data-subtitle="${user[2]} Puntos." data-fullimage="${channelBadges[user[0]].image_url_4x}" rel="badge">`
-		$(usernameContainer).prepend(badgeHTML); 
-	}	
+		var user = hashedPoints[username.innerText.toLowerCase()]
+		
+		if (user != null) {
+			// adds the badge
+			const badgeHTML = `<img title="Top #${user[1]}" src="${channelBadges[user[0]].image_url_1x}" class="btv-badge" data-subtitle="${user[2]} Puntos." data-fullimage="${channelBadges[user[0]].image_url_4x}" rel="badge">`
+			$(usernameContainer).prepend(badgeHTML); 
+		}	
+	}
 
 }
 
@@ -1216,6 +1249,19 @@ function changeUsernameColor(username) {
 
 	username.style.color = color;
 }
+
+// Acorta los nombres de usuario muy largo
+function shortenUsernames(username) {
+
+	if (username === null) return
+
+
+	if(username.textContent.length > maxLenghtUsername) {
+		username.textContent = username.textContent.substr(0,maxLenghtUsername)
+	}
+
+}
+
 
 // checks if the user is tagged by another user and adds the event to tag another user
 
@@ -1315,6 +1361,9 @@ function modifyMessage(event) {
 		checkTag(event, messageText.innerHTML,usernameContainer,usernameElement, messageContainer)
 
 		changeUsernameColor(usernameElement)
+
+		shortenUsernames(usernameElement)
+
 
 		addEmotes(messageText);
 	}
@@ -1445,12 +1494,15 @@ function initExtension() {
 
 		Promise.all([
 				fetch(globalBetterttvURL).then((value) => value.json()),
+				fetch(globalBooyahtvURL).then((value) => value.json()),
+		
 				fetch(betterTTVChannelBaseURL + currentChannel.twitchID).then((value) => value.json()),
 				fetch(frankerfaceZChannelBaseURL + currentChannel.twitchID).then((value) => value.json()),
 				fetch(subsEmotesBaseURL + currentChannel.name).then((value) => value.json() ),
 				fetch(badgesBaseURL + currentChannel.twitchID + '/display').then((value) => value.json() ),
+				fetch(booyahApiBaseURL + 'emotes/' + channel.name).then((value) => value.json() ),
 			])
-			.then(([globalBetterttv, channelBetterttv, channelFrankerfaceZ, subsEmotes, badges]) => {
+			.then(([globalBetterttv, globalBooyahtv, channelBetterttv, channelFrankerfaceZ, subsEmotes, badges, apiEmotes]) => {
 				// limiamos los emotes para que no se junten con los de otro streamer
 
 				bttvGlobalEmotes = []
@@ -1461,9 +1513,18 @@ function initExtension() {
 				channelBadges = []
 				channelBooyahtvBadges = []
 
-
-				// guardamos los emotes globales
+				
+				// guardamos los emotes globales de bttv
 				bttvGlobalEmotes = globalBetterttv
+
+				// agregamos los emotes del canal "booyah__tv"
+				bttvGlobalEmotes = bttvGlobalEmotes.concat(globalBooyahtv.sharedEmotes)
+				bttvGlobalEmotes = bttvGlobalEmotes.concat(globalBooyahtv.channelEmotes)
+
+				bttvGlobalEmotes = bttvGlobalEmotes.filter(emote => {
+					return !emoteBanList.includes(emote.code)
+				})
+				
 
 				// cargamos los emotes del canal (bttv)
 				if (channelBetterttv.channelEmotes) {
@@ -1541,33 +1602,37 @@ function initExtension() {
 					channelSubsEmotes = channelSubsEmotes.concat(channel.customSubsEmotes);
 				}
 
-				fetch(booyahApiBaseURL + 'emotes/' + channel.name)
-					.then(value => value.json())
-					.then(response => {
-						console.log('[Bootah.TV] API EMOTES', response)
-						response.emotes.forEach(emote =>{
-							switch (emote.source) {
-								case 'bttv':
 
-									delete Object.assign(emote, {['code']: emote['name'] })[name];
+				if(apiEmotes){
 
-									bttvChannelEmotes.push(emote);
+					apiEmotes.emotes.forEach(emote =>{
+						switch (emote.source) {
+							case 'bttv':
 
-									break;
-							
-								case 'ffz':
-									frankerFaceZ.push(emote);
-	
-									break;
-								case '7tv':
-									sevenTvChannelEmotes.push(emote);
+								delete Object.assign(emote, {['code']: emote['name'] })[name];
+
+								bttvChannelEmotes.push(emote);
 
 								break;
-							}
-						})
-						console.log("[BOOYAH.TV] bttvChannelEmotes with api emotes: ", bttvChannelEmotes);
+							case 'sub':
+								delete Object.assign(emote, {['code']: emote['name'] })[name];
+								emote.url = `https://cdn.betterttv.net/emote/`+emote.id+`/1x`
+								
+								channelSubsEmotes.push(emote);
 
+								break;						
+							case 'ffz':
+								frankerFaceZ.push(emote);
+
+								break;
+							case '7tv':
+								sevenTvChannelEmotes.push(emote);
+
+							break;
+						}
 					})
+				}
+
 
 				fetch(booyahApiBaseURL + 'badges/' + channel.name)
 					.then(value => value.json())
@@ -1660,7 +1725,15 @@ function initExtension() {
 					}
 				}, 500)
 
+				// si el usuario tiene activa la tabla de posisiones (streamVip)
 				if(channel.leaderboard){
+					// fogatas
+				/*	fetch(booyahApiBaseURL + 'bonfires/' + channel.name)
+						.then(value => value.json())
+						.then(bonfires => {
+							userBonfires = bonfires
+						})	*/
+					// puntos
 					fetch(booyahApiBaseURL + 'points/' + channel.name)
 						.then(value => value.json())
 						.then(points => {
@@ -1691,11 +1764,14 @@ function initExtension() {
 								clearInterval(rankingExist);
 
 
-							
-									var table = $('<table class="rank-table" id="leaderboard">');
+								// TODO: poner tab pora las fogatas
+									var table = $(`<table class="rank-table" id="leaderboard">
+									`);
+
 								
+
+
 									userPoints.forEach((user,index) =>{
-										console.log(user[4])
 										var row = $(`
 										<tr class="rank-tr">
 											<td class="rank-td rank"><span>#</span>${user[0].replace('#','')}</td>
@@ -1847,7 +1923,12 @@ function checkifoffline() {
 	if ($('.viewer-count span').length) {
 
 		if ($('.viewer-count span')[0].innerText == "0") {
-			$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="emote" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
+			// si tiene disponible el emote de chat offline
+			if(channel.offlineEmote){
+				$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="${channel.offlineEmote.name}" class="emote" src="${channel.offlineEmote.url}">`
+			}else{ // de lo contrario, usar el default (trihard)
+				$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="emote" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
+			}
 		} else {
 			$('.chatroom-head')[0].innerHTML = `El Chat`
 		}
@@ -1913,6 +1994,10 @@ function insertEmotesPanel(currentChannel) {
 			toggleEmotePanel(false)
 
 			saveMessage()
+
+			if(document.getElementsByTagName('textarea')[0].innerHTML == '!snake'){	
+				playMinigame('snake')
+			}
 		});
 	}
 	
@@ -1948,7 +2033,16 @@ function insertEmotesPanel(currentChannel) {
 		</div>
 	</div>`
 
+	$('#emotes-icon').click(function() {
 
+		if(document.getElementById('emoteList').style.display == 'inline-flex') {
+			toggleEmotePanel(false)
+		}
+		else {
+			toggleEmotePanel(true)
+		}
+
+	});
 
 	if (!document.body.contains(document.getElementById("emoteButton"))) {
 		console.log("[BOOYAH.TV] Creating emote button");
@@ -2045,7 +2139,7 @@ function insertEmotesPanel(currentChannel) {
 				<div id="twitch">${twitchHTML} </div>
 				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="twitchicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
 				<div id="subs"> ${subHTML} </div>
-				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>BetterTTV</span><span class="foldArrow">▼</span></div>`: ''}
+				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>Emotes Globales</span><span class="foldArrow">▼</span></div>`: ''}
 				<div id="bttv">${channel.bttv ? bttvHTML : ''}</div>
 				${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"></div><span>Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}
 				<div id="channelEmotes"> ${channelHTML}
@@ -2080,8 +2174,8 @@ function insertEmotesPanel(currentChannel) {
 		if($target.attr('id') != 'emotes-icon' &&
 		 !$target.closest('#emoteList').length && 
 		$('#emoteList').is(":visible")) {
-			console.log('hide')
-		  $('#emoteList').hide();
+			$('#emoteList').hide();
+			//toggleEmotePanel(false)
 		}   
 
 	});
@@ -2092,11 +2186,11 @@ function insertEmotesPanel(currentChannel) {
 
 
 function twitchChat(){
-
+	// original color: adadba
 	twitchChatHTML = 
 	`<div id="twitchchat" class="btn-ellipsis">
 		<div  onclick="window.open('https://www.twitch.tv/popout/${channel.name}/chat?popout=','popup','width=400,height=660');" class="components-icon components-icon-channel-more">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#adadba" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#f80107" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
 		</div>
 	</div>`
 
@@ -2110,6 +2204,7 @@ function twitchChat(){
 
 
 function delay(){
+	// original color: adadba
 	var delayHTML = `<div id="delay" class="btn-ellipsis">
 	<div
 		onclick="vid = document.querySelector('video');
@@ -2122,11 +2217,11 @@ function delay(){
 		width="24"
 		height="24"
 		viewBox="0 0 24 24"
-		fill="#adadba"
+		fill="#ff0600"
 		>
 		<path
 			d="M5.782 0c-6.059 11.831 4.489 22.204 16.18 16.211l-16.18-16.211zm-.832 24h-2.95l6.5-6 6.5 6h-2.949c-1-.923-2.004-2-3.55-2-1.548 0-2.551 1.077-3.551 2zm17.05-22.493c-.004.829-.679 1.497-1.507 1.493-.226-.001-.437-.056-.629-.146l-3.266 5.144-2.549-2.554 5.12-3.268c-.106-.206-.17-.436-.169-.684.005-.828.68-1.497 1.508-1.492.828.004 1.497.679 1.492 1.507z"
-			style="/* color: #adadba; */"
+			
 		></path>
 		</svg>
 	</div>
@@ -2384,6 +2479,10 @@ document.addEventListener('keydown', (event) => {
 
 	if ( event.code === 'Escape' || ( event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {		
 		toggleEmotePanel(false)
+
+		if(document.getElementsByTagName('textarea')[0].innerHTML == '!snake'){	
+			playMinigame('snake')
+		}
 	}
 
 	
@@ -2397,7 +2496,8 @@ document.addEventListener('keydown', (event) => {
 		//retriveMessage()
 		
 	}
-	if ( event.code === 'Space' && document.activeElement !== txtArea && channel && !channel.includes('vods')) {
+
+	if ( event.code === 'Space' && document.activeElement !== txtArea && !window.location.href.includes('vods')) {
 		vid = document.querySelector('video');
 
 		if (vid) {
@@ -2409,6 +2509,17 @@ document.addEventListener('keydown', (event) => {
 
 	
 });
+
+function playMinigame() {
+	if(!selfUsername) return // si no tiene nombre de usuario (no a cargado o no esta logueado) salir de la funcion
+	
+	const left = (screen.width/2)-(675/2);
+	const top = (screen.height/2)-(735/2);
+
+	var minigameWindow = window.open('https://bapi.zzls.xyz/minigames/snake/'+selfUsername,'snake', 'width=675,height=735, top='+top+', left='+left);
+
+
+}
 
 // delay fixer
 

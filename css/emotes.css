@@ -127,7 +127,7 @@ body {
 }
 
 #emotes-icon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/resources/icons/emote-menu.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/halloween/emote-menu.png");
   background-position: 0px 0px;
   width: 26px;
   height: 28px;
@@ -413,4 +413,9 @@ body {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+
+.sticker-image,.sticker-image img{
+  width: 28px !important;
+  height: 28px !important;
 }

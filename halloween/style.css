@@ -1,0 +1,24 @@
+.message-list{
+    background: url("https://i.imgur.com/8zPt3Uq.png") no-repeat 240px 0px;
+    background-color:rgba(0, 0, 0, 0.5);
+}
+
+
+.chatroom-head{
+   /* background: url("chrome-extension://__MSG_@@extension_id__/chile/flag.png");*/
+}
+
+.chatroom-head{
+    /*background-color: #ad0014!important;*/
+}
+
+.brand{
+    content: url("https://i.imgur.com/Jo7LDJ7.png")
+}
+/* todos los iconos menos el de harth*/
+.components-icon:not(.components-icon-heart-checked):not(.components-icon-sidebar-right):not(.components-icon-search){
+    color: #f80107!important;
+}
+.components-button{
+    background-color: #f80107!important;
+}

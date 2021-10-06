@@ -1,6 +1,6 @@
 {
 	"name": "Booyah.tv",
-	"version": "0.94",
+	"version": "0.943",
 	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 3,
 
@@ -16,7 +16,9 @@
 				"css/jquery.modal.min.css",
 				"css/jquery-ui.css",
 				"css/emotes.css",
-				"css/autocomplete.css"
+				"css/autocomplete.css",
+
+				"halloween/style.css"
 			],
 			"js": [
 				"libs/jquery.min.js",
@@ -25,7 +27,9 @@
 				"libs/tmi.min.js",
 				"libs/tabcomplete.min.js",
 				
-				"content_scripts/emotes.js"
+				"content_scripts/emotes.js",
+
+				"halloween/logo.js"
 			],
 			"matches": ["https://booyah.live/*"],
 			"exclude_matches": [
@@ -37,7 +41,10 @@
 				"libs/jquery.min.js",
 				"content_scripts/bttv.js"
 			],
-			"matches": ["https://betterttv.com/emotes/*"]
+			"matches": ["https://betterttv.com/emotes/*"],
+			"exclude_matches": [
+				"https://betterttv.com/dashboard/emotes/upload"
+			]
 		},
 		{
 			"js": [
@@ -55,7 +62,7 @@
 		}
 	],
 	"web_accessible_resources": [
-		{  "resources":["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav"],
+		{  "resources":["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav","halloween/emote-menu.png"],
 		    "matches": ["https://booyah.live/*"]
 		}
 	],
