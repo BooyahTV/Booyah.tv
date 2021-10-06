@@ -1,4 +1,3 @@
-setInterval(addLogo,3000)
 
 function addLogo() {
     console.log('logo added')
@@ -24,20 +23,26 @@ function addLogo() {
     " id="grattings">¡Feliz Halloween! <img style="width:16px" src="https://cdn.frankerfacez.com/emote/525473/1"></img></h1>
     `
 
-    while(esqueleto.firstChild) {
+    if(!document.getElementById('logo_esqueleto')){
+        while(esqueleto.firstChild) {
         
-        if(!document.querySelector('#logo_esqueleto')){
             logo.appendChild(esqueleto.firstChild);
+            
         }
-
     }
     
-    while(gratings.firstChild) {
-        if(!document.querySelector('#grattings')){                
+    if(!document.getElementById('grattings')){                
+        while(gratings.firstChild) {
             logo.appendChild(gratings.firstChild);
         }
     }
         
 }
-    
-addLogo()
+    setTimeout(function(){
+
+        addLogo()
+    },1000)
+
+setInterval(function() {
+    addLogo()
+},3000)
