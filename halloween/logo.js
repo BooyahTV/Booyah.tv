@@ -2,7 +2,7 @@
 function addLogo() {
     console.log('logo added')
     
-    var logo = document.querySelector('.logo');
+    var logo = document.querySelector('.logo'); // esto busca el logo en la pagina
 
     var gratings = document.createElement('div');
     var esqueleto = document.createElement('div');
@@ -10,6 +10,7 @@ function addLogo() {
     esqueleto.innerHTML = `
     <img id="logo_esqueleto" src="https://cdn.betterttv.net/emote/5df2af0691129e77b47cd3d3/1x" alt="site logo" style="
     padding-left: 10px!important;">`
+
     
     
     gratings.innerHTML = `
@@ -24,15 +25,14 @@ function addLogo() {
     `
 
     if(!document.getElementById('logo_esqueleto')){
-        while(esqueleto.firstChild) {
+    while(esqueleto.firstChild) {
         
             logo.appendChild(esqueleto.firstChild);
-            
         }
-    }
+    }   
     
     if(!document.getElementById('grattings')){                
-        while(gratings.firstChild) {
+    while(gratings.firstChild) {
             logo.appendChild(gratings.firstChild);
         }
     }

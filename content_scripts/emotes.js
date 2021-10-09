@@ -8,7 +8,6 @@ const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
 const booyahApiBaseURL = "https://bapi.zzls.xyz/api/" // "https://bapi.zzls.xyz/api/"
-
 const twitchClientID = 'k4j3nkws4mwx90yqfa3mlpn0i0udom'
 
 // twitch id grabed at https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
@@ -2130,7 +2129,7 @@ function insertEmotesPanel(currentChannel) {
 		id="emoteList" style="min-height: 300px;">
 		<div class="title">
 		<span>Emotes</span
-		><span class="ccu">${ emoteCount } emotes disponibles</span>
+		><span class="ccu">${ emoteCount } emotes disponibles  <a target="__blank" href="https://bit.ly/3mvUYM0" title="Nuevo: Emblema de donador"><img class="supporter-info" src="https://cdn.betterttv.net/emote/616162ffb63cc97ee6d57add/1x"></img></a> </span>
 		</div>
 		<div class="user-list-wrapper" data-infinite-scrollable="true">
 			<div id="emoteGroups" class="components-infinite-view has-data" style="text-align: center;">

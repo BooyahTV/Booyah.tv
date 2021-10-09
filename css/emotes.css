@@ -419,3 +419,10 @@ body {
   width: 28px !important;
   height: 28px !important;
 }
+
+.supporter-info{
+  height: 28px;
+  width: 28px;
+  vertical-align: middle;
+  padding-left: 10px;
+}
