@@ -5,6 +5,17 @@
   width: auto;
   height: auto;
 }
+
+.zero-width{
+  transform: translate(-120%);
+  position: absolute;
+}
+
+.zero-width-hat{
+  transform: translate(-120%, -24%);
+  position: absolute;
+}
+
 /* .highlighted {
 	background-color: rgba(255, 0, 0, 0.3);
 } */
@@ -180,6 +191,13 @@ body {
   background-image: url("chrome-extension://__MSG_@@extension_id__/resources/icons/twitch.svg");
   width: 24px;
   height: 24px;
+}
+#subsicon {
+  background-image: url("https://i.imgur.com/86lodev.png");
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  border-radius: 2px;
 }
 
 #channelIcon {

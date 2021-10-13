@@ -493,12 +493,13 @@ const channels = [{
 	},
 	{
 		name: 'elmarceloc',
-		twitchID: 0,
+		twitchFakeName: 'markilokurasy',
+		twitchID: 75802639,
 		booyahID: 'MarkiLokuras',
 		booyahNumericID: 81868670,
 		chatroomID: 81522979,
 		bttv: true,
-		ffz: true,
+		ffz: false,
 		customBTTV: [
 			//{ code: "Monouwu", id: "5ae0347b0af0ce6122a11663" }
 		],
@@ -600,7 +601,7 @@ var twitchEmotes = [
 
 	{ id: '46', name: "SSSsss", scaped: true },
 	{ id: '47', name: "PunchTrees", scaped: true },
-	{ id: '28', name: "MrDestructoid ", scaped: true },
+	{ id: '28', name: "MrDestructoid", scaped: true },
 	{ id: '191762', name: "Squid1", scaped: true },
 	{ id: '191763', name: "Squid2", scaped: true },
 	{ id: '191764', name: "Squid3", scaped: true },
@@ -681,6 +682,16 @@ var imageBadges = [
 		alternative: 'https://cdn.betterttv.net/emote/61542fccb63cc97ee6d3df7e/3x'
 	}
 ]
+
+var zerowidthEmotes = [
+	"SoSnowy",  "IceCold",   "SantaHat", "TopHat",
+    "ReinDeer", "CandyCane", "cvMask",   "cvHazmat",
+]
+
+var zerowidthHatEmotes = [
+	'Chupalla','Gorro'
+]
+
 
 
 var channelSubsEmotes = []
@@ -1016,9 +1027,14 @@ function updateEmotes(){
 
 function replaceEmote(msg, regex, url, fullurl, title, from) {
 
+	let zerowidth = ''
+
+	if (zerowidthEmotes.includes(title)) zerowidth = 'zero-width'
+	if (zerowidthHatEmotes.includes(title)) zerowidth = 'zero-width-hat'
+	 
 	return msg.replace(
 		regex,
-		`<img title="${title}" class='emote in-chat-emote' rel="emote" src='${url}' data-fullemote="${fullurl}" data-from="${from}">`
+		`<img title="${title}" class='emote in-chat-emote ${zerowidth}' rel="emote" src='${url}' data-fullemote="${fullurl}" data-from="${from}">`
 	);
 }
 
@@ -1145,7 +1161,8 @@ function copyMessage(message, messageValue){
 				twitchClipsRegex.test(messageValue) ||
 				tweetRegex.test(messageValue) ||
 				imgurRegex.test(messageValue) ||
-				instagramRegex.test(messageValue)
+				instagramRegex.test(messageValue) ||
+				messageValue.includes('sticker-image')
 			) return
 
 			
@@ -1218,7 +1235,8 @@ function addBadges(usernameContainer, username) {
 		const badgeHTML = `<img title="${booyahtvUser.title}" src="${booyahtvUser.url}" class="btv-badge" data-subtitle="${booyahtvUser.subtitle}" data-fullimage="${booyahtvUser.fullurl}" rel="badge">`
 		$(usernameContainer).prepend(badgeHTML); 
 	}	
-
+	console.log( username)
+	// fix
 	if (typeof hashedPoints !== 'undefined'){
 
 		var user = hashedPoints[username.innerText.toLowerCase()]
@@ -1376,7 +1394,32 @@ function isEmpty(obj) {
 	}
   
 	return JSON.stringify(obj) === JSON.stringify({});
-  }
+}
+
+function autoclickNewMessage(){
+  
+
+	var interval;
+
+	// Cuando salimos del chat, activamos el auto clicker
+	$(document).mouseleave(function () {
+
+		interval = setInterval(function () {
+				// si esta visible el boton de "nuevo mensaje"....
+				if($('.btn-new-message').hasClass( "show" )){
+					$('.btn-new-message').click() // lo clickeamos
+				}
+
+		},500)
+
+	});
+
+	// al entrar al chat, lo desactivamos
+	$(document).mouseenter(function () {
+		clearInterval(interval)
+	});
+	
+}
 
 function initExtension() {
 	var currentURL = window.location.href
@@ -1694,6 +1737,11 @@ function initExtension() {
 						
 						insertEmotesPanel(currentChannel)
 
+						// autoclicks new message icon
+						if(currentURL.includes(currentChannel.chatroomID)){
+							autoclickNewMessage()
+						}
+
 						// insert dom mutation observer to listener for new messages added in .scroll-container
 						document.getElementsByClassName("scroll-container")[0].removeEventListener('DOMNodeInserted', modifyMessage, true);
 
@@ -1928,6 +1976,9 @@ function checkifoffline() {
 			}else{ // de lo contrario, usar el default (trihard)
 				$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="emote" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
 			}
+			
+			// $('.viewer-count').attr('style','color: #9a9a9a !important'); halloween
+
 		} else {
 			$('.chatroom-head')[0].innerHTML = `El Chat`
 		}
@@ -2136,7 +2187,7 @@ function insertEmotesPanel(currentChannel) {
 				<div>
 				<div class="title emoteCategory" title="twitch"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="foldArrow">▼</span></div>
 				<div id="twitch">${twitchHTML} </div>
-				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="twitchicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
+				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="subsicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
 				<div id="subs"> ${subHTML} </div>
 				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>Emotes Globales</span><span class="foldArrow">▼</span></div>`: ''}
 				<div id="bttv">${channel.bttv ? bttvHTML : ''}</div>
@@ -2186,9 +2237,14 @@ function insertEmotesPanel(currentChannel) {
 
 function twitchChat(){
 	// original color: adadba
+
+	var channelName = channel.name
+
+	if (channel.twitchFakeName) channelName = channel.twitchFakeName
+
 	twitchChatHTML = 
 	`<div id="twitchchat" class="btn-ellipsis">
-		<div  onclick="window.open('https://www.twitch.tv/popout/${channel.name}/chat?popout=','popup','width=400,height=660');" class="components-icon components-icon-channel-more">
+		<div  onclick="window.open('https://www.twitch.tv/popout/${channelName}/chat?popout=','popup','width=400,height=660');" class="components-icon components-icon-channel-more">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#f80107" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
 		</div>
 	</div>`
