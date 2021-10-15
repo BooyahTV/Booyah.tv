@@ -744,6 +744,7 @@ const lighshootRegex = /(http|https):\/\/?(.)prnt.sc(.)([^\s]+)/g;
 const mercadolibrechileRegex = /(http|https):\/\/?(.)(?:www\.)?articulo.mercadolibre.cl(.)([^\s]+)/g;
 const amazonRegex = /(http|https):\/\/?(.)www.amazon.com(.)([^\s]+)/g;
 const aliexpressRegex = /(?:https:\/\/)?(es|cl)\.aliexpress\.com\/(\S+)/g;
+const clipsRegex = /(?:https:\/\/)?streamvip\.app\/clips\/(\S+)/g;
 
 // prefix regex
 
@@ -756,6 +757,7 @@ const lighshootPrefixRegex = /ls=(.)([^\s]+)/g
 const mercadolibrechilePrefixRegex = /ml=(.)([^\s]+)/g
 const amazonPrefixRegex = /az=(.)([^\s]+)/g
 const aliexpressPrefixRegex = /ae=(.)([^\s]+)/g
+const clipsPrefixRegex = /sv=(.)([^\s]+)/g
 
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
@@ -930,6 +932,15 @@ function replaceURLSinTextarea() {
 			msg = msg.replace(aliexpressURL, `ae=${urlprefixed.slice(26).split('?')[0].replace('.html','')} `)
 		});
 	}  
+
+	// clips
+
+	if(msg.match(clipsRegex) !== null){
+		msg.match(clipsRegex).forEach((clipURL) => {
+			msg = msg.replace(clipURL, `sv=${clipURL.slice(28)} `)
+		});
+	}  
+
 	// censored words
 
 	censoredWords.forEach(word => {
@@ -1016,6 +1027,15 @@ function replaceURLS(msg) {
 			msg = createAnchor(msg, aliexpressURL, 'https://cl.aliexpress.com' ,3,'.html')
 		});
 	}
+
+	// streamvip clips
+
+	if (msg.match(clipsPrefixRegex) !== null){ 
+		msg.match(clipsPrefixRegex).forEach((clipURL) => {
+			msg = createAnchor(msg, clipURL, 'https://streamvip.app/clips' ,3)
+		});
+	}
+
 	return msg
 }
 
