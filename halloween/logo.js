@@ -1,7 +1,5 @@
 
-function addLogo() {
-    console.log('logo added')
-    
+function addLogo() {    
     var logo = document.querySelector('.logo'); // esto busca el logo en la pagina
 
     var gratings = document.createElement('div');
