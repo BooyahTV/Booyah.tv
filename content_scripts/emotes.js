@@ -1461,12 +1461,6 @@ function initExtension() {
 		}
 	}, 3000);
 
-	setTimeout(function() {
-		if (currentURL.includes('accounts')) {
-			insertAccount()
-		}
-	})
-
 
 	// delates the panels
 	var panels = document.getElementsByClassName('default-panel');
@@ -2472,62 +2466,6 @@ function insertVOD(currentURL) {
 		}
 
 	});
-}
-
-function insertAccount() {
-	/*var usernameColorHTML = `<div id="usernamecolor" class="row">
-		<div class="label empty"><span>Color del nombre</span></div>
-		<div class="value empty">
-			<input
-				type="color"
-				id="colorpicker"
-				onchange="clickColor()"
-				value="#ff0000"
-				style="width: 50%; border: none;background-color: transparent;"
-			/>
-		</div>
-		<button
-			id="changecolor"
-			class="
-				components-button
-				components-button-size-mini
-				components-button-type-orange
-				desktop
-				components-button-inline
-			"
-		>
-			<span class="button-content">Cambiar</span>
-		</button>
-	</div>`
-
-	if (!$("#usernamecolor").first().length) {
-			
-		$('.views-settings-accounts-profile-info .row:eq(3)').after(usernameColorHTML).on("click", "button", function(){
-			alert('aa')
-		});
-		
-	}*/
-
-
-}
-
-async function changeVipUsernameColor() {
-	/*const data = {
-		nickname: $('.nickname-row .value').text(),
-		color: 'Textual content'
-	}
-
-	const rawResponse = await fetch(booyahApiBaseURL + 'color', {
-		method: 'POST',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify()
-	});
-	const content = await rawResponse.json();
-	
-	console.log(content);*/
 }
 
 function setTextareaValue(message, isAdd) {
