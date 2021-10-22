@@ -2,7 +2,7 @@
 	"name": "Booyah.tv",
 	"version": "1.20",
 	"description": "Mejora la experiencia de Booyah.live",
-	"manifest_version": 3,
+	"manifest_version": 2,
 
 	"permissions": ["tabs"],
 	"icons": {
@@ -61,12 +61,9 @@
 			"matches": ["https://7tv.app/*"]
 		}
 	],
-	"web_accessible_resources": [
-		{  "resources":["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav","halloween/emote-menu.png"],
-		    "matches": ["https://booyah.live/*"]
-		}
-	],
+	"web_accessible_resources": ["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav","halloween/emote-menu.png"],
+
 	"background": {
-		"service_worker": "background.js"
+		"scripts": ["background.js"]
 	}
 }
