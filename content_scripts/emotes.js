@@ -266,6 +266,8 @@ const channels = [{
 		bttv: true,
 		ffz: true,
 		leaderboard: true,
+		customBonfire: 'Tomate',
+		customBonfireImage: 'https://cdn.frankerfacez.com/emoticon/531565/4',
 		panels: [
 			{
 				type: "html",
@@ -745,6 +747,7 @@ const mercadolibrechileRegex = /(http|https):\/\/?(.)(?:www\.)?articulo.mercadol
 const amazonRegex = /(http|https):\/\/?(.)www.amazon.com(.)([^\s]+)/g;
 const aliexpressRegex = /(?:https:\/\/)?(es|cl)\.aliexpress\.com\/(\S+)/g;
 const clipsRegex = /(?:https:\/\/)?streamvip\.app\/clips\/(\S+)/g;
+const garticphoneRegex = /(?:https:\/\/)?garticphone\.com(\S+)/g;
 
 // prefix regex
 
@@ -758,6 +761,7 @@ const mercadolibrechilePrefixRegex = /ml=(.)([^\s]+)/g
 const amazonPrefixRegex = /az=(.)([^\s]+)/g
 const aliexpressPrefixRegex = /ae=(.)([^\s]+)/g
 const clipsPrefixRegex = /sv=(.)([^\s]+)/g
+const garticphonePrefixRegex = /gp=(.)([^\s]+)/g
 
 const tagRegex = /(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/g;
 
@@ -941,6 +945,14 @@ function replaceURLSinTextarea() {
 		});
 	}  
 
+	// gartic phone
+
+	if(msg.match(garticphoneRegex) !== null){
+		msg.match(garticphoneRegex).forEach((garticURL) => {
+			msg = msg.replace(garticURL, `gp=${garticURL.slice(28)} `)
+		});
+	}  
+
 	// censored words
 
 	censoredWords.forEach(word => {
@@ -1033,6 +1045,14 @@ function replaceURLS(msg) {
 	if (msg.match(clipsPrefixRegex) !== null){ 
 		msg.match(clipsPrefixRegex).forEach((clipURL) => {
 			msg = createAnchor(msg, clipURL, 'https://streamvip.app/clips' ,3)
+		});
+	}
+
+	// gartic phone
+
+	if (msg.match(garticphonePrefixRegex) !== null){ 
+		msg.match(garticphonePrefixRegex).forEach((garticURL) => {
+			msg = createAnchor(msg, garticURL, 'https://garticphone.com' ,3)
 		});
 	}
 
@@ -1305,6 +1325,18 @@ function shortenUsernames(username) {
 
 }
 
+function replaceBonfires(message) {
+	if(channel.customBonfire){	
+		if(message.innerText.includes('Fogata')){
+			message.innerHTML = message.innerHTML.replace('Fogata', channel.customBonfire);
+
+			if (channel.customBonfireImage) {
+				var image = message.getElementsByClassName("message-gift-icon")[0];
+				image.src = channel.customBonfireImage
+			}
+		}
+	}
+}
 
 // checks if the user is tagged by another user and adds the event to tag another user
 
@@ -1324,7 +1356,7 @@ function checkTag(event, messageContent, usernameContainer,usernameElement, mess
 		}
 
 		taggedUsers.forEach(username =>{
-			username = username.replace('@','')
+			username = username.replace('@','').replaceAll('_',' ')
 
 			if (username.toLowerCase() == selfUsername.toLowerCase() && username.toLowerCase() != channel.name.toLowerCase()) {
 			
@@ -1393,6 +1425,8 @@ function modifyMessage(event) {
 		console.log('usernameElement:',usernameElement)
 		console.log('messageText:',messageText)*/
 
+		replaceBonfires(message)
+
 		copyMessage(message, messageText.innerHTML)
 		
 		if (channel.streamVipWords){
@@ -1445,6 +1479,12 @@ function autoclickNewMessage(){
 		clearInterval(interval)
 	});
 	
+}
+
+function replace_srcset(target, replacement)
+{
+    // Search for the target
+    $('source[srcset="'+target+'"]').attr('srcset', replacement);
 }
 
 function initExtension() {
@@ -1723,7 +1763,33 @@ function initExtension() {
 						
 						replaceURLSinTextarea()
 					}, 200);
-				}			  
+				}			
+				
+				// remplasa el icono de las fogatas por uno custom
+
+				if(channel.customBonfire){
+					
+					if ($('.views-channel-gift-icon').first().length) {
+						$('.views-channel-gift-icon').click(function(){
+							setTimeout(function(){
+								
+								$('.gift-name').each(function(){
+									if($(this).text() == 'Fogata'){
+										$(this).text(channel.customBonfire)	
+									}
+								});
+
+								$('.gift-icon').each(function(){
+									if($(this).attr('src') == 'https://resmambet-a.akamaihd.net/mambet-storage/Server/Admin/Gift/346c389a-89b2-4091-8647-7155a9dfe5f8.png') {
+										$(this).attr('src', channel.customBonfireImage)	
+										replace_srcset('https://resmambet-a.akamaihd.net/mambet-storage/Server/Admin/Gift/346c389a-89b2-4091-8647-7155a9dfe5f8.png', channel.customBonfireImage);
+									}
+									
+								})
+							},50)
+						})
+					}
+				}
 									
 				// emotes en el titulo
 
@@ -2109,17 +2175,6 @@ function insertEmotesPanel(currentChannel) {
 		</div>
 	</div>`
 
-	$('#emotes-icon').click(function() {
-
-		if(document.getElementById('emoteList').style.display == 'inline-flex') {
-			toggleEmotePanel(false)
-		}
-		else {
-			toggleEmotePanel(true)
-		}
-
-	});
-
 	if (!document.body.contains(document.getElementById("emoteButton"))) {
 		console.log("[BOOYAH.TV] Creating emote button");
 
@@ -2495,9 +2550,9 @@ function setTextareaValue(message, isAdd) {
 }
 
 function tagUserByMessage(usernameContainer) {
-	console.log(usernameContainer.textContent);
+	const scapedUsername = usernameContainer.textContent.replaceAll(' ','_')
 
-	setTextareaValue('@'+usernameContainer.textContent +' ', true)
+	setTextareaValue('@'+scapedUsername +' ', true)
 	
 }  
 
@@ -2806,10 +2861,10 @@ var url = window.location.href
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.message === 'TabUpdated') {
-		console.log('====================PAGE CHANGED====================')
 		if (url != request.url){
 			
 			initExtension()
+			console.log('PAGE CHANGED')
 		}
 		
 		url = request.url
