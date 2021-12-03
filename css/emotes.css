@@ -9,11 +9,26 @@
 .zero-width{
   transform: translate(-120%);
   position: absolute;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+  
 }
 
 .zero-width-hat{
   transform: translate(-120%, -24%);
   position: absolute;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
 }
 
 /* .highlighted {
@@ -134,11 +149,12 @@ body {
 }
 
 .scroll-container {
-  margin-left: 9px;
+  padding-left: 0px!important;
+  margin-left: 0px!important;
 }
 
 #emotes-icon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/halloween/emote-menu.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/resources/icons/emote-menu.png");
   background-position: 0px 0px;
   width: 26px;
   height: 28px;

@@ -8,17 +8,19 @@ const betterTTVChannelBaseURL = "https://api.betterttv.net/3/cached/users/twitch
 const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
 const booyahApiBaseURL = "https://bapi.zzls.xyz/api/" // "https://bapi.zzls.xyz/api/"
-const twitchClientID = 'k4j3nkws4mwx90yqfa3mlpn0i0udom'
 
 // twitch id grabed at https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
 
 var channel;
+var chatroom;
+var isPopup;
 var donations;
 
 var selfUsername;
 var userPoints;
+var userBonfires;
 
-const maxLenghtUsername = 25
+const maxLenghtUsername = 10
 
 const blip = new Audio(chrome.runtime.getURL("resources/sounds/blip.wav"));
 
@@ -232,23 +234,14 @@ const channels = [{
 		],
 		botName: 'AweonasoBot',
 		streamVipWords: [
-			['você ainda não possui', 'Aún no tienes puntos'],
-			['você possui', 'tiene'],
-			['pontos', 'puntos'],
-			['assistiu a live', 'ha visto el live'],
-			['A live está offline. 😐', 'El directo está offline Sadge'],
 			['A live está aberta há','HYPERS El directo esta online hace'],
-			['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
-			['o usuário', 'el usuario'],
-			['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
-			['foi criado há','creó su cuenta hace'],
-			['está ativo no canal há','esta activo en el canal hace'],
-			['Loja da live','Tienda EpicoD'],
-			['foi visto pela última vez em', 'ha visto por ultima vez el live el'],
-			['ainda não assistiu esse canal. 😕', 'no ha visto aún el canal :-( '],
+			['comandos del directo: ', 'comandos del directo: HACKERMANS'],
 			['https://streamvip.app/cristianghost/store','<a class="chaturl" target="__blank" href="https://streamvip.app/cristianghost/store">https://streamvip.app/cristianghost/store</a>'],
 			['https://streamvip.app/cristianghost/commands','<a class="chaturl" target="__blank" href="https://streamvip.app/cristianghost/commands">https://streamvip.app/cristianghost/commands</a>'],
-			['às','a las'],
+			['🛒','EpicoD'],
+			['❌','Sadge'],
+			['😕', ':-( '],
+			['😐', 'Sadge'],
 			['💰','BASED'],
 			['💬',''],
 			['♥',''],
@@ -307,20 +300,18 @@ const channels = [{
 		],
 		botName: 'Moaicito',
 		streamVipWords: [
-			['você ainda não possui', 'Aún no tienes puntos'],
-			['você possui', 'tiene'],
-			['pontos', 'puntos'],
-			['assistiu a live', 'ha visto el live'],
-			['A live está offline. 😐', 'El directo está offline Sadge'],
 			['A live está aberta há','HYPERS El directo esta online hace'],
-			['Lista de comandos da live', 'HACKERMANS Lista de comandos del stream'],
-			['o usuário', 'el usuario'],
-			['ainda não ha visto a esse canal', 'aún no ha visto este canal'],
-			['foi criado há','creó su cuenta hace'],
-			['está ativo no canal há','esta activo en el canal hace'],
+			['comandos del directo: ', 'comandos del directo: HACKERMANS'],
+			['https://streamvip.app/moaigr/store','<a class="chaturl" target="__blank" href="https://streamvip.app/moaigr/store">https://streamvip.app/moaigr/store</a>'],
+			['https://streamvip.app/moaigr/commands','<a class="chaturl" target="__blank" href="https://streamvip.app/moaigr/commands">https://streamvip.app/moaigr/commands</a>'],
+			['🛒','POGGERS'],
+			['❌','Sadge'],
+			['😕', ':-( '],
+			['😐', 'Sadge'],
 			['💰','CHAD'],
 			['💬',''],
 			['♥',''],
+			['😍','PeepoJuice'],
 			['⏱️','clubPls'],
 			['👍','POGGERS']
 		]
@@ -366,27 +357,19 @@ const channels = [{
 		],
 		botName: 'doñasBot',
 		streamVipWords: [
-			['você ainda não possui', 'Aún no tienes puntos'],
-			['você possui', 'tiene'],
-			['pontos', 'puntos'],
-			['assistiu a live', 'ha visto el live'],
-			['A live está offline. 😐', 'El directo está offline Sadge'],
 			['A live está aberta há','HYPERS El directo esta online hace'],
-			['Lista de comandos da live', 'hackerCD Lista de comandos del stream'],
-			['o usuário', 'el usuario'],
-			['foi criado há','creó su cuenta hace'],
-			['está ativo no canal há','esta activo en el canal hace'],
-			['Loja da live','Tienda del Viejas dylanteroPlata2'],
-			['foi visto pela última vez em', 'ha visto por ultima vez el live el'],
-			['ainda não assistiu esse canal. 😕', 'no ha visto aún el canal :-( '],
-			['às','a las'],
+			['comandos del directo: ', 'comandos del directo: hackerCD'],
 			['https://streamvip.app/dylantero/store','<a class="chaturl" target="__blank" href="https://streamvip.app/dylantero/store">https://streamvip.app/dylantero/store</a>'],
 			['https://streamvip.app/dylantero/commands','<a class="chaturl" target="__blank" href="https://streamvip.app/dylantero/commands">https://streamvip.app/dylantero/commands</a>'],
+			['🛒','peepoClap'],
+			['❌','Sadge'],
+			['😕', ':-( '],
+			['😐', 'Sadge'],
 			['💰','dylanteroStonks'],
 			['💬',''],
 			['♥',''],
-			['😍',''],
 			['😎','peepoClap'],
+			['😍',''],
 			['⏱️','HAPPIES'],
 			['👍','TriKool']
 		]
@@ -493,51 +476,6 @@ const channels = [{
 			},
 		],
 	},
-	{
-		name: 'elmarceloc',
-		twitchFakeName: 'markilokurasy',
-		twitchID: 75802639,
-		booyahID: 'MarkiLokuras',
-		booyahNumericID: 81868670,
-		chatroomID: 81522979,
-		bttv: true,
-		ffz: false,
-		customBTTV: [
-			//{ code: "Monouwu", id: "5ae0347b0af0ce6122a11663" }
-		],
-		customFFZ: [
-			//{ name: 'monkaW', id: 214681 }
-		],
-		customSubsEmotes: [
-			//{ id: '303892010', code: 'cristianSerotonina', url: '' }
-		],
-		botName: 'markiBot',
-		streamVipWords: [
-			['você ainda não possui', 'Aún no tienes puntos'],
-			['você possui', 'tiene'],
-			['pontos', 'puntos'],
-			['assistiu a live', 'ha visto el live'],
-			['A live está offline. 😐', 'El directo está offline'],
-			['A live está aberta há','El directo esta online hace'],
-			['Lista de comandos da live', 'Lista de comandos del stream'],
-			['o usuário', 'el usuario'],
-			['foi criado há','creó su cuenta hace'],
-			['está ativo no canal há','esta activo en el canal hace'],
-			['Loja da live','Tienda'],
-			['foi visto pela última vez em', 'ha visto por ultima vez el live el'],
-			['ainda não assistiu esse canal. 😕', 'no ha visto aún el canal :-( '],
-			['às','a las'],
-			['https://streamvip.app/markilokuras/store','<a class="chaturl" target="__blank" href="https://streamvip.app/markilokuras/store">https://streamvip.app/markilokuras/store</a>'],
-			['https://streamvip.app/markilokuras/commands','<a class="chaturl" target="__blank" href="https://streamvip.app/markilokuras/commands">https://streamvip.app/markilokuras/commands</a>'],
-			['💰',''],
-			['💬',''],
-			['♥',''],
-			['😍',''],
-			['😎',''],
-			['⏱️',''],
-			['👍','']
-		]
-	},
 	{ // test channel
 		name: 'aedrons_tv',
 		twitchID: 134037766,
@@ -581,6 +519,7 @@ var twitchEmotes = [
 	// https://twitchemotes.com
 
 	{ id: '425618', name: 'LUL' },
+	{ id: '160400', name: 'KonCha' },
 	{ id: '160404', name: 'TehePelo' },
 	{ id: '120232', name: 'TriHard' },
 	{ id: '114836', name: 'Jebaited' },
@@ -597,6 +536,9 @@ var twitchEmotes = [
 	{ id: '41', name: 'Kreygasm' },
 	{ id: '25', name: 'Kappa' },
 	{ id: '1902', name: 'Keepo' },
+	{ id: '70433', name: 'KappaRoss' },
+	{ id: '81997', name: 'KappaWealth' },
+	{ id: '74510', name: 'KappaClaus' },
 	{ id: '461298', name: 'DarkMode' },
 	{ id: '245', name: 'ResidentSleeper' },
 	{ id: '114856', name: 'UncleNox' },
@@ -609,7 +551,19 @@ var twitchEmotes = [
 	{ id: '191764', name: "Squid3", scaped: true },
 	{ id: '191767', name: "Squid4", scaped: true },
 
-	
+
+	{ id: '354', name: '4Head' },
+	{ id: '38436', name: 'TTour' },
+	{ id: '106294', name: 'VoteNay' },
+	{ id: '106293', name: 'VoteYea' },
+	{ id: '52', name: 'SMOrc' },
+	{ id: '1441281', name: 'FBCatch' },
+	{ id: '1441276', name: 'FBBlock' },
+	{ id: '58127', name: 'CoolCat' },
+	{ id: '123171', name: 'CoolStoryBob' },
+	{ id: '301428702', name: 'BOP' },
+	{ id: '112292', name: 'TakeNRG' },	
+
 	{ id: '555555579', name: '8-)', scaped: true },
 	{ id: '2', name: ':(', scaped: true },
 	{ id: '1', name: ':)', scaped: true },
@@ -630,6 +584,7 @@ var twitchEmotes = [
 var booyahtvEmotes = [
 	{ url: 'https://zzls.xyz/booyah.tv/1x.png', name: 'YEAHBUTBOOYAHTV' },
 	{ url: 'https://cdn.betterttv.net/emote/604f8eac306b602acc59d6d2/1x', name: 'forsenBased' },
+	{ url: 'https://cdn.frankerfacez.com/emoticon/143930/4', name: 'OiMinna' },
 
 	{ id: '521050', name: 'forsenE' },
 	{ id: '116051', name: 'forsen1' },
@@ -777,6 +732,10 @@ var checkEmotesInterval;
 
 // Escapes a regex string
 
+function decodeHTML(str){
+	return str.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"');
+}
+
 function escapeRegex(string) {
 	return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
@@ -789,17 +748,104 @@ function toggleEmotePanel(visible){
 
 	if(visible){
 		emoteList.style.display = 'inline-flex';
-		emojis.style.display = 'none';
+		//emojis.style.display = 'none';
 		$( ".components-input-element" ).autocomplete( "disable" );
 	}else {
 		emoteList.style.display = 'none';
-		emojis.style.display = '';
+		//emojis.style.display = '';
 		$( ".components-input-element" ).autocomplete( "enable" );
 
 	}
 
 
 }
+
+
+function getColorByNickname(nickname){
+    
+	const colors = [
+		"#002FA7",
+		"#8a2be2",
+		"#5f9ea0",
+		"#E4717A",
+		"#1e90ff",
+		"#b22222",
+		"#00FF00",
+		"#ff69b4",
+		"#ff4500",
+		"#ff0000",
+	];
+
+	var hash = nickname.charCodeAt(0);
+
+	var color = "#6525a1";
+	
+	for (let i = 0; i < colors.length; i++) {
+		if (hash % i === 0) {
+			color = colors[i];
+		}
+	}
+
+	return color
+}
+
+function isBTTV(url) {
+	const { hostname, pathname } = new URL(url);
+
+	const isDomain = hostname.includes('betterttv.com')
+	const isEmote = pathname.length == 32 
+
+	return isDomain && isEmote
+}
+
+function isFFZ(url) {
+	const { hostname, pathname } = new URL(url);
+
+	const isDomain = hostname.includes('frankerfacez.com')
+	const isEmote = pathname.includes('emoticon') && pathname.includes('-')
+
+	return isDomain && isEmote
+}
+
+function getBTTVId(url) {
+	const id = url.split('emotes/')[1]
+
+	return id
+}
+
+
+function getFFZId(url) {
+	const id = url.split('emoticon/')[1].split('-')[0]
+
+	return id
+}
+
+function getEmote(url) {
+	var id;
+	var source;
+
+	try {
+		new URL(url);
+	} catch (_) {
+		return false;  
+	}
+
+	if (isBTTV(url)){
+		id = getBTTVId(url)
+		source = 'bttv'
+	}else if(isFFZ(url)){
+		id = getFFZId(url)
+		source = 'ffz'
+	}else{
+		return false
+	}
+
+	return {
+		id: id,
+		source: source,
+	};
+}
+
 
 // Clipboard auciliar functions
 
@@ -841,6 +887,16 @@ function copyTextToClipboard(text) {
 
 function replaceAll(str, find, replace) {
 	return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function allCharactersSame(s)
+{
+	let n = s.length;
+	for (let i = 1; i < n; i++)
+		if (s[i] != s[0])
+			return false;
+
+	return true;
 }
 
 // crea el <a href="url"> url </a>
@@ -1052,7 +1108,7 @@ function replaceURLS(msg) {
 
 	if (msg.match(garticphonePrefixRegex) !== null){ 
 		msg.match(garticphonePrefixRegex).forEach((garticURL) => {
-			msg = createAnchor(msg, garticURL, 'https://garticphone.com' ,3)
+			msg = createAnchor(msg, garticURL, 'https://garticphone.com/es?' ,3)
 		});
 	}
 
@@ -1072,9 +1128,13 @@ function replaceEmote(msg, regex, url, fullurl, title, from) {
 	if (zerowidthEmotes.includes(title)) zerowidth = 'zero-width'
 	if (zerowidthHatEmotes.includes(title)) zerowidth = 'zero-width-hat'
 	 
+	var src = url
+
+	if (isPopup) src = fullurl
+	
 	return msg.replace(
 		regex,
-		`<img title="${title}" class='emote in-chat-emote ${zerowidth}' rel="emote" src='${url}' data-fullemote="${fullurl}" data-from="${from}">`
+		`<img title="${title}" class='emote in-chat-emote ${zerowidth}' rel="emote" src='${src}' data-fullemote="${fullurl}" data-from="${from}">`
 	);
 }
 
@@ -1202,14 +1262,16 @@ function copyMessage(message, messageValue){
 				tweetRegex.test(messageValue) ||
 				imgurRegex.test(messageValue) ||
 				instagramRegex.test(messageValue) ||
-				messageValue.includes('sticker-image')
+				messageValue.includes('sticker-image') ||
+				messageValue.includes('message-gift-icon')
 			) return
 
 			
 			// remplaces the emotes with their corresponding title, ex : OMEGALUL
-			console.log('original message',messageValue)
+			
 			messageValue = messageValue.replace(/<img.*?title="(.*?)"[^\>]+>/g, '$1'); 
-			console.log('emote parsed message',messageValue)
+
+			messageValue = decodeHTML(messageValue);
 
 			// sets the value in the textarea
 			setTextareaValue(messageValue, false)
@@ -1230,7 +1292,28 @@ function translateStreamVip(username, messageElement){
 		messageElement.innerHTML = messageElement.innerHTML.replace(word[0], word[1])
 	})
 
+}
 
+function addBadgeHTML(container, user){
+
+	if (user.badge){
+		if (user.badge_source == 'bttv'){
+			user.url = 'https://cdn.betterttv.net/emote/'+user.badge+'/1x'
+			user.fullurl = 'https://cdn.betterttv.net/emote/'+user.badge+'/3x'
+
+		}else if(user.badge_source == 'ffz'){
+			user.url = 'https://cdn.frankerfacez.com/emoticon/'+user.badge+'/1'
+			user.fullurl = 'https://cdn.frankerfacez.com/emoticon/'+user.badge+'/4'
+			
+		}
+	}
+
+	var src = user.url
+
+	if (isPopup) src = user.fullurl
+
+	const badgeHTML = `<img title="${user.title}" src="${src}" class="btv-badge" data-subtitle="${user.subtitle}" data-fullimage="${user.fullurl}" rel="badge">`
+	$(container).prepend(badgeHTML); 
 }
 
 function addBadges(usernameContainer, username) {
@@ -1244,6 +1327,7 @@ function addBadges(usernameContainer, username) {
 				$( this )[0].classList.add('btv-badge') 
 				$( this )[0].setAttribute('title',badge.title) 
 				$( this )[0].setAttribute('data-subtitle',badge.subtitle) 
+				
 				if (badge.alternative){
 					$( this )[0].src = badge.alternative
 					$( this )[0].setAttribute('data-fullimage',badge.alternative) 
@@ -1260,39 +1344,52 @@ function addBadges(usernameContainer, username) {
 		}
 	  });
 	
-	// staff badge
-	if (username.innerText == 'elmarceloc') {
-		var staffBadge = `<img title="Staff" src="https://static-cdn.jtvnw.net/badges/v1/d97c37bd-a6f5-4c38-8f57-4e4bef88af34/1" class="btv-badge" data-subtitle="Booyah.tv dev" data-fullimage="https://static-cdn.jtvnw.net/badges/v1/d97c37bd-a6f5-4c38-8f57-4e4bef88af34/3" rel="badge">`
-		$(usernameContainer).prepend(staffBadge); 
-	}
 
-	if (username == null) return
+	const booyahtvUser = channelBooyahtvBadges[username.innerText]
 
-	var booyahtvUser = channelBooyahtvBadges[username.innerText]
-
+	// adds the badge
 	if (booyahtvUser != null) {
+		// if the user has multiple badges (array)
 		if(Array.isArray(booyahtvUser)){
 			booyahtvUser.forEach(user => {
-				const badgeHTML = `<img title="${user.title}" src="${user.url}" class="btv-badge" data-subtitle="${user.subtitle}" data-fullimage="${user.fullurl}" rel="badge">`
-				$(usernameContainer).prepend(badgeHTML); 
+				addBadgeHTML(usernameContainer, user)
 			})
 		}else{
-			// adds the badge
-			const badgeHTML = `<img title="${booyahtvUser.title}" src="${booyahtvUser.url}" class="btv-badge" data-subtitle="${booyahtvUser.subtitle}" data-fullimage="${booyahtvUser.fullurl}" rel="badge">`
-			$(usernameContainer).prepend(badgeHTML); 
+			addBadgeHTML(usernameContainer, booyahtvUser)
 		}
 	}	
 	// fix
 	if (typeof hashedPoints !== 'undefined'){
 
-		var user = hashedPoints[username.innerText.toLowerCase()]
+		const user = hashedPoints[username.innerText.toLowerCase()]
 		
 		if (user != null) {
 			// adds the badge
-			const badgeHTML = `<img title="Top #${user[1]}" src="${channelBadges[user[0]].image_url_1x}" class="btv-badge" data-subtitle="${user[2]} Puntos." data-fullimage="${channelBadges[user[0]].image_url_4x}" rel="badge">`
+			var src = channelBadges[user[0]].image_url_1x
+
+			if (isPopup) src = channelBadges[user[0]].image_url_4x
+
+			let badgeHTML = `<img title="Top #${user[1]}" src="${src}" class="btv-badge" data-subtitle="${user[2]} Puntos." data-fullimage="${channelBadges[user[0]].image_url_4x}" rel="badge">`
 			$(usernameContainer).prepend(badgeHTML); 
 		}	
 	}
+
+	if (typeof hashedChatters !== 'undefined'){
+
+		const user = hashedChatters[username.innerText.toLowerCase()]
+		
+		if (user != null) {
+			// adds the badge
+			var src = 'https://cdn.betterttv.net/emote/60f067db8ed8b373e4222dfc/1x'
+			var srcfull = 'https://cdn.betterttv.net/emote/60f067db8ed8b373e4222dfc/3x'
+
+			if (isPopup) src = srcfull
+
+			const badgeHTML = `<img title="Top #${user[0]}" src="${src}" class="btv-badge" data-subtitle="${user[1]} Mensajes." data-fullimage="${srcfull}" rel="badge">`
+			$(usernameContainer).prepend(badgeHTML); 
+		}	
+	}
+
 
 }
 
@@ -1300,9 +1397,10 @@ function changeUsernameColor(username) {
 
 	if (username === null) return
 
-	var hash = username.innerText.charCodeAt(0);
+	let color = "#6525a1";
 
-	var color = "#6525a1";
+	let hash = username.innerText.charCodeAt(0);
+
 	
 	for (let i = 0; i < colors.length; i++) {
 		if (hash % i === 0) {
@@ -1310,16 +1408,38 @@ function changeUsernameColor(username) {
 		}
 	}
 
+	let booyahtvUser = channelBooyahtvBadges[username.innerText]
+
+	if (booyahtvUser != null) {
+		// if the user has multiple badges (array)
+		if(Array.isArray(booyahtvUser)){
+			booyahtvUser.forEach(user => {
+				if (user.color) {
+					color = user.color
+				}
+			})
+		}else{
+			if (booyahtvUser.color) {
+				console.log('color found',booyahtvUser.color)
+				color = booyahtvUser.color
+			}
+		}
+	}	
+
+
+	
+
 	username.style.color = color;
 }
+
+
 
 // Acorta los nombres de usuario muy largo
 function shortenUsernames(username) {
 
 	if (username === null) return
 
-
-	if(username.textContent.length > maxLenghtUsername) {
+	if(allCharactersSame(username.textContent) && username.textContent.length > maxLenghtUsername) {
 		username.textContent = username.textContent.substr(0,maxLenghtUsername)
 	}
 
@@ -1353,6 +1473,18 @@ function checkTag(event, messageContent, usernameContainer,usernameElement, mess
 
 		if (usernameElement.innerHTML == channel.botName && messageContent.includes(selfUsername)){
 			taggedUsers.push(selfUsername)
+			// if its a clip message
+
+			if(messageContent.match(clipsRegex) !== null){
+				messageContent.match(clipsRegex).forEach((clipURL) => {
+					window.open(clipURL);
+
+				});
+			}
+
+			if(usernameElement.innerHTML.includes('https://streamvip.app/clips/')){
+
+			}
 		}
 
 		taggedUsers.forEach(username =>{
@@ -1439,6 +1571,7 @@ function modifyMessage(event) {
 
 		changeUsernameColor(usernameElement)
 
+		// se acorta el link despues de agregar badges, checkear tags,etc.
 		shortenUsernames(usernameElement)
 
 
@@ -1487,6 +1620,272 @@ function replace_srcset(target, replacement)
     $('source[srcset="'+target+'"]').attr('srcset', replacement);
 }
 
+function insertAccount(){
+	var donoPreferences = `
+	<div id="dono" class="description-row" style="margin: 24px;">
+  <h2 class="components-title-h2">
+    Configuración de Donador de Booyah TV<img
+      src="https://cdn.betterttv.net/emote/616162ffb63cc97ee6d57add/1x"
+      style="width: 28px"
+    /><img />
+  </h2>
+  <div id="usernamecolor" class="row">
+    <div class="label empty"><span>Color del nombre</span></div>
+    <div class="value empty">
+      <input
+        type="color"
+        id="colorpicker"
+        onchange="clickColor()"
+        value="#ff0000"
+        style="width: 50%; border: none; background-color: transparent"
+      />
+    </div>
+  </div>
+  <div class="label" style="width: 400px">
+    Link del emblema (Puede ser de
+    <a
+      href="https://betterttv.com/emotes/top"
+      style="color: #ffab00"
+      target="__blank"
+      >Better TTV</a
+    >
+    o
+    <a
+      href="https://www.frankerfacez.com/emoticons/"
+      style="color: #ffab00"
+      target="__blank"
+      >Franker Face Z</a
+    >
+    )
+  </div>
+  <div>
+    <div
+      class="
+        components-input components-input-textarea components-input-size-normal
+      "
+    >
+      <input
+        class="components-input-element"
+        maxlength="1024"
+        rows="4"
+        placeholder="https://www.frankerfacez.com/emoticon/410314-Okayge"
+        id="emote-url"
+        style="border: none; !important"
+      />
+    </div>
+    <div
+      class="label"
+      style="width: 500px; color: red; display: none"
+      id="error-emote"
+    >
+      Debes poner un link valido de BTTV o de FFZ o dejarlo en blanco si
+      prefieres el emblema por defecto
+    </div>
+    <div style="margin-bottom: 10px">
+	  <div class="label" style="width: 400px">Mensaje del Emblema</div>
+	  <div class="
+        components-input components-input-textarea components-input-size-normal
+      " style="
+    width: 50%;
+">
+      <input class="components-input-element" maxlength="1024" rows="4" placeholder="Donador de Booyah.tv" id="message-title" style="border: none; !important">
+    <input class="components-input-element" maxlength="1024" rows="4" placeholder="<3" id="message-subtitle" style="border: none; !important;margin-left: 10px;"></div>
+      <img
+	    class="btv-badge"
+		rel="badge"
+        src=""
+        style="
+          max-height: 48px;
+          width: 18px !important;
+          max-height: 18px;
+          width: 30px;
+        "
+        id="emote-preview"
+      /><span style="color: #16c033 !important" id="nickname-preview"
+        ></span
+      >: hola
+      <img
+        title="peepoHey"
+        class="emote in-chat-emote"
+        rel="emote"
+        src="https://cdn.betterttv.net/emote/5c0e1a3c6c146e7be4ff5c0c/1x"
+        data-fullemote="https://cdn.betterttv.net/emote/5c0e1a3c6c146e7be4ff5c0c/3x"
+        data-from="Better TTV"
+        style="max-height: 20px"
+      />
+    </div>
+  </div>
+  <button
+    class="
+      components-button
+      components-button-size-small
+      components-button-type-orange
+      desktop
+      components-button-inline
+    "
+    style="
+      background-image: linear-gradient(265deg, #9b06e0 0%, #9801df 100%);
+      color: white;
+    "
+  >
+    <span class="button-content" id="send-preferences"
+      >Actualizar configuración de donador</span
+    >
+  </button>
+</div>
+`
+
+	if (!$("#dono").first().length) {
+			
+		$('.description-row').after(donoPreferences)
+
+		$( "#colorpicker" ).change(function() { 
+		
+			const newColor = $( this ).val()
+			$('#nickname-preview').attr('style', 'color: '+ newColor +' !important');
+		
+		});
+		
+		$( "#emote-url" ).change(function() { 
+			
+			const newUrl = $( this ).val()
+			const emote = getEmote(newUrl)
+		
+			console.log(emote)
+		
+			if (emote){
+				var url = ''
+		
+				if(emote.source == 'bttv'){
+					url = 'https://cdn.betterttv.net/emote/'+emote.id+'/1x'
+				}else if(emote.source == 'ffz'){
+					url = 'https://cdn.frankerfacez.com/emoticon/'+emote.id+'/1'
+				}
+		
+				$("#emote-preview").attr('data-subtitle', '<3');
+				$("#emote-preview").attr('data-fullimage', url);
+
+				$("#emote-preview").attr('src', url);
+				$("#emote-url").attr('style', 'border: none; !important');
+				$("#error-emote").hide()
+		
+			}else{
+				// is is not an emote, but is empty, dont show error
+				if (newUrl == '') {
+					$("#emote-url").attr('style', 'border: none; !important');
+					$("#error-emote").hide()
+				}else {
+					$("#emote-url").attr('style', 'border: red solid 2px; !important');
+					$("#error-emote").show()
+				}
+			}
+		
+		
+		});
+		
+		$( "#send-preferences" ).click(async function() { 
+			const nickname = $('.nickname-row .value').text()
+			const newColor = $('#colorpicker').val()
+			const emoteUrl = $('#emote-url').val()
+		
+			const messagetitle = $('#message-title').val()
+			const messagesubtitle = $('#message-subtitle').val()
+
+
+			const emote = getEmote(emoteUrl)
+		
+			if (!emote && emoteUrl != '') {
+				console.log('Emote is not valid')
+				return
+			}
+			const rawResponse = await fetch(booyahApiBaseURL+'profile/edit', {
+				method: 'POST',
+				headers: {
+				  'Accept': 'application/json',
+				  'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(
+					{
+						nickname: nickname,
+						newColor: newColor,
+						badgeUrl: emoteUrl,
+						title: messagetitle,
+						subtitle: messagesubtitle
+					}
+				)
+			  });
+			  
+			  const result = await rawResponse.json();
+			
+			  if (result.success){
+				  alert('Configuración Actualizada')
+			  }else{
+				  console.log('error on update',result)
+			  }
+		
+		})
+		
+		
+		const nickname = $('.nickname-row .value').text()
+		
+		fetch(booyahApiBaseURL+'profile/preferences?nickname='+nickname)
+		  .then(response => response.json())
+		  .then(data => {
+			  
+			  if(data.success){
+				
+				$('#nickname-preview').text(nickname)
+
+				if (data.preferences.title){
+					$('#message-title').val(data.preferences.title)
+				}
+
+				if (data.preferences.subtitle){
+					$('#message-subtitle').val(data.preferences.subtitle)
+				}
+
+				if (data.preferences.color){
+					$('#nickname-preview').attr('style', 'color: '+ data.preferences.color +' !important');
+					$('#colorpicker').val(data.preferences.color)
+				}else{
+					$('#colorpicker').val(getColorByNickname(nickname))
+					$('#nickname-preview').attr('style', 'color: '+ getColorByNickname(nickname) +' !important');
+				}
+		
+				if (data.preferences.badge){
+					var url = ''
+					var emoteURL = ''
+	
+					if(data.preferences.badge_source == 'bttv'){
+						url = 'https://cdn.betterttv.net/emote/'+data.preferences.badge+'/1x'
+						emoteURL = 'https://betterttv.com/emotes/'+data.preferences.badge
+						
+					}else if(data.preferences.badge_source == 'ffz'){
+						url = 'https://cdn.frankerfacez.com/emoticon/'+data.preferences.badge+'/1'
+						emoteURL = 'https://www.frankerfacez.com/emoticon/'+data.preferences.badge+'-'
+
+					}
+		
+					$("#emote-preview").attr('title-subtitle', '<3');
+					$("#emote-preview").attr('data-subtitle', '<3');
+					$("#emote-preview").attr('data-fullimage', url);	
+
+					$("#emote-preview").attr('src', url);
+					$('#emote-url').val(emoteURL)
+
+				}
+		
+		
+			  }
+			});
+
+
+
+
+		
+	}
+}
+
 function initExtension() {
 	var currentURL = window.location.href
 
@@ -1500,6 +1899,99 @@ function initExtension() {
 			insertVOD(currentURL)
 		}
 	}, 3000);
+
+
+	// save nickname
+	let uid = localStorage.getItem('loggedUID')
+	console.log('[BOOYAH.TV] USER ID: ' + uid)
+
+	if (uid) {
+		fetch(`https://booyah.live/api/v3/users/${uid}`)
+			.then(response => response.json())
+			.then(data => {
+				selfUsername = data.user.nickname
+				console.log('[BOOYAH.TV] self username: ' + selfUsername)
+
+				fetch(booyahApiBaseURL + 'badges/a' ) // + channel.name
+					.then(value => value.json())
+					.then(response => {
+						console.log('[Bootah.TV] API BADGES', response)
+						channelBooyahtvBadges = response
+						
+						if (selfUsername in channelBooyahtvBadges) {
+							
+							setTimeout(function() {
+								if (currentURL.includes('accounts') ) {
+									insertAccount()
+								}
+							},3000)
+			
+						}
+			
+					})
+
+			});
+	}
+
+
+
+	
+	$("body").tooltip({   
+		trigger: 'hover',
+		show: false,
+		hide: false,
+		content: function( response ) {
+			var element = $( this );
+			
+			/*if ( element.hasClass( "in-chat-emote" ) ) {
+				return `<img class="emote-preview" src="${element.attr( "data-fullemote" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br>Emote de ${element.attr( "data-from" )}</p>`;
+			}*/
+			
+			if ( element.hasClass( "btv-badge" ) ) {
+				// mostrar puntaje / tiempo de visualisacion
+				return `<img class="emote-preview" src="${element.attr( "data-fullimage" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br> ${element.attr( "data-subtitle" )}</p>`;
+			}
+
+			if ( element.attr( "data-source" ) == 'https://youtu.be' ) {
+
+			
+				/*$.ajax(`https://noembed.com/embed?url=${element.attr('href')}`).then(function(result) {
+					response( data );
+					data = JSON.parse(result.responseText)
+					console.log(data)
+					return `<img class="youtube-preview" src="${data.thumbnail_url}"> </img><p class="tooltip-text">${data.title} </br> Canal: ${data.author_name}</p>`;
+				});*/
+
+			}
+
+		},
+	/*	open: function(event, ui) {
+			var element = $(this);
+
+			if ( event.toElement && event.toElement.getAttribute("data-source") == 'https://youtu.be' ) {
+			console.log('aa')
+			$.ajax(`https://noembed.com/embed?url=${event.toElement.getAttribute('href')}`).always(function(result) {
+					data = JSON.parse(result.responseText)
+					console.log(data)
+					element.tooltip('option', 'content', `<img class="youtube-preview" src="${data.thumbnail_url}"> </img><p class="tooltip-text">${data.title} </br> Canal: ${data.author_name}</p>`);
+				});
+
+			}
+		},*/
+		position: { 
+			my: "center bottom", 
+			at: "center top",
+		},
+		selector: '[rel=emote],[rel=badge],[rel=chaturl]' 
+	});
+
+
+//	$("div[role=tooltip]").remove();
+
+	$(document).on("click", function() {
+		$("div[role=tooltip]").remove();
+	});
+
 
 
 	// delates the panels
@@ -1519,83 +2011,12 @@ function initExtension() {
 			|| currentURL.includes(currentChannel.chatroomID))) return;
 
 		channel = currentChannel
+		chatroom = currentChannel.chatroomID
+		isPopup = currentURL.includes(currentChannel.chatroomID)
 
-		// save nickname
-		let uid = localStorage.getItem('loggedUID')
-		console.log('[BOOYAH.TV] USER ID: ' + uid)
-
-		if (uid) {
-			fetch(`https://booyah.live/api/v3/users/${uid}`)
-				.then(response => response.json())
-				.then(data => {
-					selfUsername = data.user.nickname
-					console.log('[BOOYAH.TV] self username: ' + selfUsername)
-					console.log(channel.name, selfUsername)
-
-
-						
-					$("body").tooltip({   
-						trigger: 'hover',
-						show: false,
-						hide: false,
-						content: function(response ) {
-							var element = $( this );
-							
-							/*if ( element.hasClass( "in-chat-emote" ) ) {
-								return `<img class="emote-preview" src="${element.attr( "data-fullemote" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br>Emote de ${element.attr( "data-from" )}</p>`;
-							}*/
-							
-							if ( element.hasClass( "btv-badge" ) ) {
-								// mostrar puntaje / tiempo de visualisacion
-								return `<img class="emote-preview" src="${element.attr( "data-fullimage" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br> ${element.attr( "data-subtitle" )}</p>`;
-							}
-
-							if ( element.attr( "data-source" ) == 'https://youtu.be' ) {
-
-							
-								/*$.ajax(`https://noembed.com/embed?url=${element.attr('href')}`).then(function(result) {
-									response( data );
-									data = JSON.parse(result.responseText)
-									console.log(data)
-									return `<img class="youtube-preview" src="${data.thumbnail_url}"> </img><p class="tooltip-text">${data.title} </br> Canal: ${data.author_name}</p>`;
-								});*/
-
-							}
-
-						},
-					/*	open: function(event, ui) {
-							var element = $(this);
-
-							if ( event.toElement && event.toElement.getAttribute("data-source") == 'https://youtu.be' ) {
-							console.log('aa')
-							$.ajax(`https://noembed.com/embed?url=${event.toElement.getAttribute('href')}`).always(function(result) {
-									data = JSON.parse(result.responseText)
-									console.log(data)
-									element.tooltip('option', 'content', `<img class="youtube-preview" src="${data.thumbnail_url}"> </img><p class="tooltip-text">${data.title} </br> Canal: ${data.author_name}</p>`);
-								});
-
-							}
-						},*/
-						position: { 
-							my: "center bottom", 
-							at: "center top",
-						},
-						selector: '[rel=emote],[rel=badge],[rel=chaturl]' 
-					});
-
-
-				//	$("div[role=tooltip]").remove();
-
-                    $(document).on("click", function() {
-						$("div[role=tooltip]").remove();
-					});
-
-					
-				});
-		}
-
-
+		
 		console.log("[BOOYAH.TV] You are in " + currentChannel.booyahID + " Channel.");
+		console.log("[BOOYAH.TV] IS POPUP: "+ isPopup);
 
 		console.log("[BOOYAH.TV] fetching betterttv for channel: ", betterTTVChannelBaseURL + currentChannel.twitchID);
 		console.log("[BOOYAH.TV] fetching frankerFaceZ for channel: ", frankerfaceZChannelBaseURL + currentChannel.twitchID);
@@ -1619,7 +2040,7 @@ function initExtension() {
 				channelSubsEmotes = []
 				sevenTvChannelEmotes = []
 				channelBadges = []
-				channelBooyahtvBadges = []
+				//channelBooyahtvBadges = []
 
 				
 				// guardamos los emotes globales de bttv
@@ -1742,14 +2163,6 @@ function initExtension() {
 				}
 
 
-				fetch(booyahApiBaseURL + 'badges/' + channel.name)
-					.then(value => value.json())
-					.then(response => {
-						console.log('[Bootah.TV] API BADGES', response)
-						channelBooyahtvBadges = response
-						
-					})
-
 				console.log("[BOOYAH.TV] subsEmotes: ", channelSubsEmotes);
 				console.log("[BOOYAH.TV] channelBadges: ", channelBadges);
 				console.log("[BOOYAH.TV] channelBooyahtvBadges: ", channelBooyahtvBadges);
@@ -1808,6 +2221,7 @@ function initExtension() {
 						twitchChat()
 
 						delay()
+						clip()
 						
 					}
 				}, 5000)
@@ -1848,6 +2262,7 @@ function initExtension() {
 						clearInterval(autocompleteExist);
 
 						initAutocomplete()
+						//initUsernameAutocomplete()
 
 						$('textarea').focus(function() {
 							$( ".components-input-element" ).autocomplete( "enable" );
@@ -1867,11 +2282,41 @@ function initExtension() {
 				// si el usuario tiene activa la tabla de posisiones (streamVip)
 				if(channel.leaderboard){
 					// fogatas
-				/*	fetch(booyahApiBaseURL + 'bonfires/' + channel.name)
+					
+					fetch(booyahApiBaseURL + 'bonfires/' + channel.name)
 						.then(value => value.json())
 						.then(bonfires => {
 							userBonfires = bonfires
-						})	*/
+
+							hashedBonfires = []
+
+							userBonfires.map((user,i) => {
+								var rank = user[0].replace('#','')
+								
+								hashedBonfires[user[1].toLowerCase()] = [rank, user[3]]
+							})
+
+
+							console.log(hashedBonfires)
+						})
+						
+					// chatters
+
+					fetch(booyahApiBaseURL + 'chatters/' + channel.name)
+						.then(value => value.json())
+						.then(chatters => {
+							userChatters = chatters
+
+							hashedChatters = []
+
+							userChatters.map((user,i) => {
+								var rank = user[0].replace('#','')
+								
+								hashedChatters[user[1].toLowerCase()] = [rank, user[3]]
+							})
+
+						})
+
 					// puntos
 					fetch(booyahApiBaseURL + 'points/' + channel.name)
 						.then(value => value.json())
@@ -2069,7 +2514,7 @@ function checkifoffline() {
 				$('.chatroom-head')[0].innerHTML = `El Chat Offline <img title="TriHard" class="emote" src="https://static-cdn.jtvnw.net/emoticons/v2/120232/default/dark/1.0">`
 			}
 			
-			// $('.viewer-count').attr('style','color: #9a9a9a !important'); halloween
+			 $('.viewer-count').attr('style','color: #9a9a9a !important');
 
 		} else {
 			$('.chatroom-head')[0].innerHTML = `El Chat`
@@ -2137,9 +2582,16 @@ function insertEmotesPanel(currentChannel) {
 
 			saveMessage()
 
-			if(document.getElementsByTagName('textarea')[0].innerHTML == '!snake'){	
-				playMinigame('snake')
+			switch (document.getElementsByTagName('textarea')[0].innerHTML) {
+				case '!snake':
+					playMinigame('snake')
+					break;
+			
+				case '!agario':
+					playMinigame('agario')
+					break;
 			}
+
 		});
 	}
 	
@@ -2326,7 +2778,7 @@ function twitchChat(){
 	twitchChatHTML = 
 	`<div id="twitchchat" class="btn-ellipsis">
 		<div  onclick="window.open('https://www.twitch.tv/popout/${channelName}/chat?popout=','popup','width=400,height=660');" class="components-icon components-icon-channel-more">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#f80107" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#adadba" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
 		</div>
 	</div>`
 
@@ -2353,7 +2805,7 @@ function delay(){
 		width="24"
 		height="24"
 		viewBox="0 0 24 24"
-		fill="#ff0600"
+		fill="#adadba"
 		>
 		<path
 			d="M5.782 0c-6.059 11.831 4.489 22.204 16.18 16.211l-16.18-16.211zm-.832 24h-2.95l6.5-6 6.5 6h-2.949c-1-.923-2.004-2-3.55-2-1.548 0-2.551 1.077-3.551 2zm17.05-22.493c-.004.829-.679 1.497-1.507 1.493-.226-.001-.437-.056-.629-.146l-3.266 5.144-2.549-2.554 5.12-3.268c-.106-.206-.17-.436-.169-.684.005-.828.68-1.497 1.508-1.492.828.004 1.497.679 1.492 1.507z"
@@ -2382,6 +2834,51 @@ function delay(){
 
 	}, 2000);
 
+}
+
+function clip() {
+
+	var clipHTML = `<div id="clipbtn" class="btn-ellipsis">
+	<div
+		onclick="const textarea = document.getElementsByTagName('textarea')[0];
+		function setNativeValue(element, value) {
+			const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
+			const prototype = Object.getPrototypeOf(element)
+			const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
+	
+			if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+				prototypeValueSetter.call(element, value)
+			} else if (valueSetter) {
+				valueSetter.call(element, value)
+			} else {
+				throw new Error('The given element does not have a value setter')
+			}
+		}
+		setNativeValue(textarea, '!clip');
+		console.log('insertar !clip');
+		setTimeout(function(){
+			console.log('enviar mensaje');
+			document.querySelector('.send-btn').click()
+		},400)"
+
+		class="components-icon components-icon-channel-more"
+	>
+	<svg fill="#f44336" width="24px" height="24px" version="1.1" viewBox="0 0 20 20" x="0px" y="0px" class="ScIconSVG-sc-1bgeryd-1 eOJUoR"><g><path d="M14.594 4.495l-.585-1.91L15.922 2l.585 1.91-1.913.585zM11.14 3.46l.585 1.911 1.913-.584-.585-1.91-1.913.583zM8.856 6.247l-.584-1.91 1.912-.584.585 1.91-1.913.584zM5.403 5.213l.584 1.91L7.9 6.54l-.585-1.911-1.912.584zM2.534 6.09L3.118 8l1.913-.584-.585-1.91-1.912.583zM5 9H3v7a2 2 0 002 2h10a2 2 0 002-2V9h-2v7H5V9z"></path><path d="M8 9H6v2h2V9zM9 9h2v2H9V9zM14 9h-2v2h2V9z"></path></g></svg>
+	<span style="
+    position: absolute;
+    bottom: 2px;
+    font-size: 12px;
+    color: #f44336;
+">Clip</span>
+	</div>
+	</div>
+	`
+
+	if (document.body.contains(document.getElementById("clipbtn"))){
+		document.getElementById("clipbtn").remove();
+	};
+
+	$('.channel-profile-btns').append(clipHTML)
 }
 
 
@@ -2523,6 +3020,7 @@ function insertVOD(currentURL) {
 	});
 }
 
+
 function setTextareaValue(message, isAdd) {
 	// https://github.com/facebook/react/issues/10135
 	const textarea = document.getElementsByTagName('textarea')[0]
@@ -2607,6 +3105,7 @@ function retriveMessage(){
 }
 
 // Let users close emote list with Escape and Enter if is focusing the textarea.
+// TODO: refactor to textarea-only event
 document.addEventListener('keydown', (event) => {
 	// dummy element
 	var txtArea =  document.getElementsByTagName('textarea')[0]
@@ -2616,8 +3115,14 @@ document.addEventListener('keydown', (event) => {
 	if ( event.code === 'Escape' || ( event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {		
 		toggleEmotePanel(false)
 
-		if(document.getElementsByTagName('textarea')[0].innerHTML == '!snake'){	
-			playMinigame('snake')
+		switch (document.getElementsByTagName('textarea')[0].innerHTML) {
+			case '!snake':
+				playMinigame('snake')
+				break;
+		
+			case '!agario':
+				playMinigame('agario')
+				break;
 		}
 	}
 
@@ -2646,13 +3151,27 @@ document.addEventListener('keydown', (event) => {
 	
 });
 
-function playMinigame() {
+function playMinigame(minigame) {
 	if(!selfUsername) return // si no tiene nombre de usuario (no a cargado o no esta logueado) salir de la funcion
 	
 	const left = (screen.width/2)-(675/2);
 	const top = (screen.height/2)-(735/2);
 
-	var minigameWindow = window.open('https://bapi.zzls.xyz/minigames/snake/'+selfUsername,'snake', 'width=675,height=735, top='+top+', left='+left);
+	var url = ''
+
+	switch (minigame) {
+		case 'snake':
+			url = 'https://bapi.zzls.xyz/minigames/snake/'+selfUsername
+			break;
+		case 'agario':
+			url = 'http://199.195.254.68:3000/?nickname='+selfUsername
+			break;
+
+	}
+
+	console.log(url)
+
+	var minigameWindow = window.open(url,minigame, 'width=675,height=735, top='+top+', left='+left);
 
 
 }
@@ -2705,6 +3224,28 @@ var videexists = setInterval(function() {
 	});
 
   })(jQuery);
+
+async function formatUsernamesToAutocomplete() {
+	var users = []
+
+	let response = await fetch(`https://booyah.live/api/v3/chatrooms/${chatroom}/audiences?cursor=0&count=10000`).then((response) => {
+		if (response.ok) {
+			return response.json();
+		} else {
+			throw new Error('Something went wrong');
+		}
+	})
+
+	response.audience_list.forEach(user => {
+		users.push({
+			label: user.nick_name.replaceAll(' ','_'),
+			img: user.thumbnail,
+		})
+	})
+
+	return users
+
+}
 
 function formatEmotesToAutocomplete() {
 	let emotes = []
@@ -2770,11 +3311,13 @@ function formatEmotesToAutocomplete() {
 	return emotes
 }
 
-function initAutocomplete(){
+async function initAutocomplete(){
 	// add twitch, booyahtv, subs, bttv global, bttv channel, ffz emotes
 	// to the autocomplete list
 
 	var emotes = formatEmotesToAutocomplete()
+
+	//var users = await formatUsernamesToAutocomplete()
 
 	function split(val) {
 		return val.split(/ \s*/);
@@ -2814,7 +3357,91 @@ function initAutocomplete(){
 			toggleEmotePanel(false)
 		},
 		source: function (request, response) {
-		   var results = $.ui.autocomplete.filter(emotes, extractLast(request.term))
+			var items;
+
+		/*	if (searchingUsernames) {
+				items = users;
+			} else{*/
+				items = emotes;
+		//	}
+			
+			var results = $.ui.autocomplete.filter(items, extractLast(request.term))
+
+			results = results.slice(0, 10)
+
+			response(results);
+
+		},
+		focus: function (event, ui) {
+			// prevent value inserted on focus
+			$(".ui-helper-hidden-accessible").hide();
+			event.preventDefault();
+
+			return false;
+		},
+		select: function (event, ui) {
+			var terms = split(this.value);
+			console.log(terms);
+			// remove the current input
+			terms.pop();
+			// add the selected item
+			terms.push(ui.item.value);
+			// add placeholder to get the space at the end
+			terms.push("");
+			this.value = terms.join(" ");
+
+			setTextareaValue('',true)
+			return false;
+		},
+	});	
+
+}
+
+async function initUsernameAutocomplete(){
+	// add twitch, booyahtv, subs, bttv global, bttv channel, ffz emotes
+	// to the autocomplete list
+
+	var users = await formatUsernamesToAutocomplete()
+
+	console.log(users)
+
+	function split(val) {
+		return val.split(/ \s*/);
+	}
+	function extractLast(term) {
+		return split(term).pop();
+	}
+
+	// inject results div
+	$(".components-desktop-chatroom").first().after(`<div id="results"></div>`);
+
+	$(".components-input-element")
+	.on("keydown", function (event) {
+		if (
+			event.keyCode === $.ui.keyCode.TAB /*&&
+			$(this).autocomplete("instance").menu.active*/
+		) {
+			event.preventDefault();
+		}
+	})
+	.autocomplete({
+		appendTo: "#results",
+		minLength: 2,
+		delay: 100,
+		highlightItem: true,
+		position: { my: "left bottom", at: "left top", collision: "flip" },
+
+		open: function () {
+			var position = $("#results").position(),
+				left = position.left
+
+			$("#results > ul").css({
+				left: left + "px",
+
+			});
+		},
+		source: function (request, response) {
+		   var results = $.ui.autocomplete.filter(users, extractLast(request.term))
 
 		   /*var results = $.map(emotes, function (emote) {
 				if (emote.label.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
@@ -2852,6 +3479,7 @@ function initAutocomplete(){
 
 }
 
+
 // //init estension when the page is first loaded
 
 initExtension();
@@ -2864,7 +3492,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		if (url != request.url){
 			
 			initExtension()
-			console.log('PAGE CHANGED')
+			console.log('PAGE CHANGED',request.url)
 		}
 		
 		url = request.url

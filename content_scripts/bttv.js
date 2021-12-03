@@ -13,8 +13,8 @@ function initExtension() {
 
         var baseurl = 'https://bapi.zzls.xyz/api'
 
-        var username = $('#betterttv-header-nav').children().last().text()
-        var emoteName = $("h4[class*='Emote_header']").text().split(' ')[0]
+        var username = $('#betterttv-header-nav img').parent().text()
+        var emoteName = document.title.replace('BetterTTV - ','').split('by')[0].trim()
         var emoteID = window.location.href.replace('https://betterttv.com/emotes/', '')
 
         console.log(username, emoteName, emoteID)
@@ -61,6 +61,8 @@ function initExtension() {
 
                     if(!$('#btv-button').length){
                         $(".btn-outline-primary").parent().append(button);
+                        $('small.text-muted').parent().prepend(button);
+                        
                     }
                 }else{
                     var button = $(`<button type="button" id="btv-button" class="btn btn-outline-warning">Agregar a booyah.tv</button>`);
@@ -91,6 +93,7 @@ function initExtension() {
 
                     if(!$('#btv-button').length){
                         $(".btn-outline-primary").parent().append(button);
+                        $('small.text-muted').parent().prepend(button);
                     }
                 }
 

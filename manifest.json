@@ -1,6 +1,6 @@
 {
 	"name": "Booyah.tv",
-	"version": "1.22",
+	"version": "1.33",
 	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 3,
 
@@ -16,9 +16,7 @@
 				"css/jquery.modal.min.css",
 				"css/jquery-ui.css",
 				"css/emotes.css",
-				"css/autocomplete.css",
-
-				"halloween/style.css"
+				"css/autocomplete.css"
 			],
 			"js": [
 				"libs/jquery.min.js",
@@ -26,10 +24,7 @@
 				"libs/jquery.modal.min.js",
 				"libs/tmi.min.js",
 				"libs/tabcomplete.min.js",
-				
-				"content_scripts/emotes.js",
-
-				"halloween/logo.js"
+				"content_scripts/emotes.js"
 			],
 			"matches": ["https://booyah.live/*"],
 			"exclude_matches": [
@@ -62,7 +57,7 @@
 		}
 	],
 	"web_accessible_resources": [
-		{  "resources":["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav","halloween/emote-menu.png"],
+		{  "resources":["resources/icons/emote-menu.png","resources/icons/twitch.svg","resources/badges/staff.png", "resources/sounds/blip.wav"],
 		    "matches": ["https://booyah.live/*"]
 		}
 	],
