@@ -21,13 +21,13 @@
 
 Canales donde esta disponible la extensión:
 
-* Cristianghost
-* Dylantero
+* [Cristianghost](https://booyah.live/cristianghost)
+* [Dylantero](https://booyah.live/dylantero)
 * [MoaiGR](https://booyah.live/channels/63681555)
 * [Suwie](https://booyah.live/channels/71614581)
 * [donsebastian](https://booyah.live/donsebastian)
 * [puvlo](https://booyah.live/channels/62813927)
-
+https://booyah.live/cristianghost?source=8
 ## Emotes
 
 Emotes que estan incorporados:
