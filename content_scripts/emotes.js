@@ -1465,13 +1465,14 @@ function checkTag(event, messageContent, usernameContainer,usernameElement, mess
 	if (selfUsername) { //&& !messageText.innerHTML.includes(channel.name)
 
 		var taggedUsers = []
+		
 
 		// checks if the message is sent by the bot, if it is, the user
 		// will be taged by their name, otherwise will be tagged with @
 
 		taggedUsers = messageContent.match(tagRegex) != null ? messageContent.match(tagRegex) : [];
 
-		if (usernameElement.innerHTML == channel.botName && messageContent.includes(selfUsername)){
+		if ((usernameElement.innerHTML == channel.botName && messageContent.includes(selfUsername)) && (usernameElement.innerHTML.toLowerCase() != channel.name.toLowerCase())){
 			taggedUsers.push(selfUsername)
 			// if its a clip message
 
@@ -1490,7 +1491,10 @@ function checkTag(event, messageContent, usernameContainer,usernameElement, mess
 		taggedUsers.forEach(username =>{
 			username = username.replace('@','').replaceAll('_',' ')
 
-			if (username.toLowerCase() == selfUsername.toLowerCase() && username.toLowerCase() != channel.name.toLowerCase()) {
+			
+			const isBroadcaster = username.toLowerCase() == channel.name.toLowerCase()
+
+			if (username.toLowerCase() == selfUsername.toLowerCase() && !isBroadcaster) {
 			
 				event.target.style.background = 'rgb(197 25 25 / 32%)' // makes the message red
 				messageContainer.style.color = 'rgb(255 255 255)' // makes the username white for more readeability
