@@ -1993,6 +1993,10 @@ function initExtension() {
 
 			}
 
+			if ( element.hasClass( "in-chat-emote" ) ) {
+				return `<img class="emote-preview" src="${element.attr( "data-fullemote" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br> from: ${element.attr( "data-from" )}</p>`;
+			}
+
 		},
 	/*	open: function(event, ui) {
 			var element = $(this);
