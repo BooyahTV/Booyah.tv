@@ -56,10 +56,3 @@ Emotes que estan incorporados:
 |    BloodTrail    | ![](https://static-cdn.jtvnw.net/emoticons/v2/69/default/dark/1.0)  |
 |    Kreygasm    |  ![](https://static-cdn.jtvnw.net/emoticons/v2/41/default/dark/1.0) |
 |    Kappa    |  ![](https://static-cdn.jtvnw.net/emoticons/v2/25/default/dark/1.0) |
-
-## Falta por implementar...
-
-- [x] Autocompletador de emotes de Franker Face Z (**:OMEGA..** y se despliega un panel de emotes)
-- [x] Popup
-- [ ] Tooltip para los emotes (eso que sale al pasar por encima de un emote en el panel, sale el nombre del emote, canal,etc)
-- [ ] Crear una version para Firefox, Safari,etc
