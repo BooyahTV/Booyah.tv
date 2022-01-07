@@ -9,6 +9,7 @@ const frankerfaceZChannelBaseURL = "https://api.frankerfacez.com/v1/room/id/";
 
 const booyahApiBaseURL = "https://bapi.zzls.xyz/api/" // "https://bapi.zzls.xyz/api/"
 
+
 // twitch id grabed at https://api.twitch.tv/kraken/users?login={username} -h Accept = application/vnd.twitchtv.v5+json, Client-ID = cclk5hafv1i7lksfauerry4w7ythu2
 
 var channel;
@@ -414,7 +415,6 @@ const channels = [{
 			},
 		],
 	},
-	,
 	{
 		name: 'maau',
 		twitchID: 47594707,
@@ -495,6 +495,31 @@ const channels = [{
 			},
 		],
 	},
+
+	{
+		name: 'xcry',
+		twitchID: 406093737,//406093737,
+		booyahID: 'xcry',
+		booyahNumericID: 82076153,
+		chatroomID: 81729799,
+		bttv: false,
+		ffz: false,
+		panels: [
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 itdjvg default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-5"><h3 data-test-selector="title_test_selector" class="CoreText-sc-cpl358-0 ScTitleText-sc-1gsen4-0 pASmB bMnEsX tw-title">DONACIONES PAYPAL</h3><a data-test-selector="link_url_test_selector" class="ScCoreLink-sc-udwpw5-0 ffziHP tw-link" rel="noopener noreferrer" target="_blank" href="https://streamelements.com/xcry/tip"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-96246531-image-995371c3-0cf5-4571-a874-b9dc5fb996f8" alt="Contenido del panel"></a><div data-test-selector="description_test_selector"><div class="Layout-sc-nxg1ff-0 ScTypeset-sc-xkayed-0 fnirHR bNzLGi tw-typeset"><div class="panel-description"><p>Cualquier ayuda para seguir alimentando a mis 7 hijos se agradece mucho jefe.</p></div></div></div></div>`
+			},
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 itdjvg default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-1"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-96246531-image-b71ef9e8-2e15-4805-9c60-d0bb8a9c2259" alt="Contenido del panel"></div>`,
+			},
+			{
+				type: "html",
+				html: `<div class="Layout-sc-nxg1ff-0 itdjvg default-panel" data-test-selector="channel_panel_test_selector" data-a-target="panel-3"><img data-test-selector="image_test_selector" src="https://panels-images.twitch.tv/panel-96246531-image-eddcf625-b276-4931-bf74-ad677533c7b0" alt="Contenido del panel"><div data-test-selector="description_test_selector"><div class="Layout-sc-nxg1ff-0 ScTypeset-sc-xkayed-0 fnirHR bNzLGi tw-typeset"><div class="panel-description"><p>Cry<br>21 años<br>Siempre tengo sueño.</p></div></div></div></div>`,
+			}
+		],
+	},
+
 	{ // test channel
 		name: 'elmarceloc',
 		twitchID: 28638761,
@@ -1822,7 +1847,7 @@ function insertAccount(){
 			  const result = await rawResponse.json();
 			
 			  if (result.success){
-				  alert('Configuración Actualizada')
+				  alert('Tu emblema a sido enviado a revición, sera actualizado en breve ')
 			  }else{
 				  console.log('error on update',result)
 			  }
@@ -2008,6 +2033,7 @@ function initExtension() {
 
 	console.log("[BOOYAH.TV] CURRENT URL: " + currentURL)
 
+	
 	channels.forEach((currentChannel) => {
 		// check if user is in channel or its chatroom (popup)
 		if (!(currentURL.includes(currentChannel.booyahID) 
@@ -2017,13 +2043,15 @@ function initExtension() {
 		channel = currentChannel
 		chatroom = currentChannel.chatroomID
 		isPopup = currentURL.includes(currentChannel.chatroomID)
-
 		
 		console.log("[BOOYAH.TV] You are in " + currentChannel.booyahID + " Channel.");
 		console.log("[BOOYAH.TV] IS POPUP: "+ isPopup);
 
 		console.log("[BOOYAH.TV] fetching betterttv for channel: ", betterTTVChannelBaseURL + currentChannel.twitchID);
 		console.log("[BOOYAH.TV] fetching frankerFaceZ for channel: ", frankerfaceZChannelBaseURL + currentChannel.twitchID);
+
+
+		// TODO: make requests optional
 
 		Promise.all([
 				fetch(globalBetterttvURL).then((value) => value.json()),
@@ -2037,7 +2065,6 @@ function initExtension() {
 			])
 			.then(([globalBetterttv, globalBooyahtv, channelBetterttv, channelFrankerfaceZ, subsEmotes, badges, apiEmotes]) => {
 				// limiamos los emotes para que no se junten con los de otro streamer
-
 				bttvGlobalEmotes = []
 				frankerFaceZ = []
 				bttvChannelEmotes = []
@@ -2832,7 +2859,9 @@ function delay(){
 			document.querySelector('.controller-btn.controller-btn-play').onclick = function(){
 				vid = document.querySelector('video');
 				videoTime = vid.duration;
-				vid.currentTime = videoTime;
+				if (videoTime) {	
+					vid.currentTime = videoTime;
+				}
 			}
 		}
 
@@ -3147,7 +3176,9 @@ document.addEventListener('keydown', (event) => {
 
 		if (vid) {
 			videoTime = vid.duration;
-			vid.currentTime = videoTime;
+			if (videoTime) {	
+				vid.currentTime = videoTime;
+			}
 		}
 	}
 
@@ -3191,9 +3222,12 @@ var videexists = setInterval(function() {
 		
 
 		var videoTime = video.duration;
-		video.currentTime = videoTime;
-
-		console.log('[Booyah.TV] video skiped to last loaded frame: ',videoTime)
+		if (videoTime) {
+			
+			video.currentTime = videoTime;
+			
+			console.log('[Booyah.TV] video skiped to last loaded frame: ',videoTime)
+		}
 
 	}
 		
