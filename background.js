@@ -1,3 +1,5 @@
+const loginUrl = "https://localhost/login"
+
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     // changeInfo object: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/onUpdated#changeInfo
     // status is more reliable (in my case)
@@ -29,3 +31,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         }
     }
   );*/
+
+chrome.runtime.onMessageExternal.addListener(
+  (request, sender, sendResponse) => {
+    if(!sender.url.startsWith(loginUrl)) return
+    chrome.storage.local.set({ token: request.options.token }, function () {
+      console.log("Token guardado");
+    });        
+  }
+);
