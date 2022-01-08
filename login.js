@@ -5,9 +5,15 @@ const clientId = "npnnjnv3yyqoh0qcdx8andwqktx3d3";
     const token = await readLocalStorage("token").catch((error) =>
         console.log(error)
     );
-    const isValidToken = await verifyToken(token);
+
+    const isValidToken = token ? await verifyToken(token) : false;
 
     if (!isValidToken) {
+        logout();
+        // verificar si el token es valido tarda un poco por la api de twitch
+        // entonces si no es valido lo borramos asi no tenemos que volver a verificar
+        // cada vez que abramos el popup
+
         addLoginButton();
         document
             .getElementById("loginButton")
@@ -17,6 +23,7 @@ const clientId = "npnnjnv3yyqoh0qcdx8andwqktx3d3";
         document
             .getElementById("logoutButton")
             .addEventListener("click", logout);
+        window.close();
     }
 })();
 
@@ -60,7 +67,6 @@ function logout() {
             console.error(error);
         }
     });
-    window.close();
 }
 
 function addLoginButton() {
