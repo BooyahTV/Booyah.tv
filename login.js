@@ -1,5 +1,5 @@
-const loginUrl = "https://localhost/login";
-const clientId = "npnnjnv3yyqoh0qcdx8andwqktx3d3";
+const loginUrl = "https://localhost/login"; // cambiar por url de la pagina que hagas vos (en la aplicacion de twitch tiene que estar exactamente esta url)
+const clientId = "npnnjnv3yyqoh0qcdx8andwqktx3d3"; // cambiar por tu id de la aplicacion registrada en https://dev.twitch.tv/console/
 
 (async () => {
     const token = await readLocalStorage("token").catch((error) =>
@@ -53,6 +53,7 @@ async function verifyToken(token) {
     return response.ok;
 }
 
+// https://dev.twitch.tv/docs/authentication/getting-tokens-oauth#oauth-implicit-code-flow
 function openLoginTab() {
     chrome.tabs.create({
         active: true,
