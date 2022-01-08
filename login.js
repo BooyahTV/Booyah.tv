@@ -9,7 +9,7 @@ const clientId = "npnnjnv3yyqoh0qcdx8andwqktx3d3"; // cambiar por tu id de la ap
     const isValidToken = token ? await verifyToken(token) : false;
 
     if (!isValidToken) {
-        logout();
+        deleteToken();
         // verificar si el token es valido tarda un poco por la api de twitch
         // entonces si no es valido lo borramos asi no tenemos que volver a verificar
         // cada vez que abramos el popup
@@ -23,7 +23,6 @@ const clientId = "npnnjnv3yyqoh0qcdx8andwqktx3d3"; // cambiar por tu id de la ap
         document
             .getElementById("logoutButton")
             .addEventListener("click", logout);
-        window.close();
     }
 })();
 
@@ -62,6 +61,11 @@ function openLoginTab() {
 }
 
 function logout() {
+    window.close();
+    deleteToken()
+}
+
+function deleteToken(){
     chrome.storage.local.clear(function () {
         var error = chrome.runtime.lastError;
         if (error) {
