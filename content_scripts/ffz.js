@@ -51,7 +51,9 @@ function initExtension() {
         
     setTimeout(async () => {
 
-        const token = await readLocalStorage(token);
+        const token = await readLocalStorage("token").catch((error) =>
+        console.log(error)
+    );;
 
         const isValidToken = await verifyToken(token);
         if (!isValidToken) return;
