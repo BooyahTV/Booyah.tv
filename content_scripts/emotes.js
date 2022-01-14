@@ -1993,10 +1993,6 @@ function initExtension() {
 
 			}
 
-			if ( element.hasClass( "in-chat-emote" ) ) {
-				return `<img class="emote-preview" src="${element.attr( "data-fullemote" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br> from: ${element.attr( "data-from" )}</p>`;
-			}
-
 		},
 	/*	open: function(event, ui) {
 			var element = $(this);
@@ -3399,15 +3395,7 @@ async function initAutocomplete(){
 			toggleEmotePanel(false)
 		},
 		source: function (request, response) {
-			var items;
-
-		/*	if (searchingUsernames) {
-				items = users;
-			} else{*/
-				items = emotes;
-		//	}
-			
-			var results = $.ui.autocomplete.filter(items, extractLast(request.term))
+			var results = $.ui.autocomplete.filter(emotes, extractLast(request.term))
 
 			results = results.slice(0, 10)
 
