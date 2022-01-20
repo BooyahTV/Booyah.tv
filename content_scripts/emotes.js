@@ -576,7 +576,9 @@ var twitchEmotes = [
 	{ id: '191764', name: "Squid3", scaped: true },
 	{ id: '191767', name: "Squid4", scaped: true },
 
-
+	{ id: '115234', name: 'BatChest'},
+	{ id: '114836', name: 'Jebaited'},
+	{ id: 'emotesv2_031bf329c21040a897d55ef471da3dd3', name: 'Jebasted'},
 	{ id: '354', name: '4Head' },
 	{ id: '38436', name: 'TTour' },
 	{ id: '106294', name: 'VoteNay' },
