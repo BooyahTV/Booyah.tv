@@ -577,7 +577,6 @@ var twitchEmotes = [
 	{ id: '191767', name: "Squid4", scaped: true },
 
 	{ id: '115234', name: 'BatChest'},
-	{ id: '114836', name: 'Jebaited'},
 	{ id: 'emotesv2_031bf329c21040a897d55ef471da3dd3', name: 'Jebasted'},
 	{ id: '354', name: '4Head' },
 	{ id: '38436', name: 'TTour' },
@@ -2738,27 +2737,27 @@ function insertEmotesPanel(currentChannel) {
 
 
 	var emoteCount = bttvGlobalEmotes.length + 1 +  bttvChannelEmotes.length + 1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1 + sevenTvChannelEmotes.length + 1
-	
+	//<span>Emotes</span>
+	//<span class="ccu">${ emoteCount } emotes disponibles  <a target="__blank" href="https://bit.ly/3mvUYM0" title="Nuevo: Emblema de donador"><img class="supporter-info" src="https://cdn.betterttv.net/emote/616162ffb63cc97ee6d57add/1x"></img></a> </span>
 	var emotesHTML =
 	`<div class="
 		components-popover-container components-chat-menu-users-popover
 		theme-dark"
 		id="emoteList" style="min-height: 300px;">
 		<div class="title">
-		<span>Emotes</span
-		><span class="ccu">${ emoteCount } emotes disponibles  <a target="__blank" href="https://bit.ly/3mvUYM0" title="Nuevo: Emblema de donador"><img class="supporter-info" src="https://cdn.betterttv.net/emote/616162ffb63cc97ee6d57add/1x"></img></a> </span>
+		
 		</div>
 		<div class="user-list-wrapper" data-infinite-scrollable="true">
 			<div id="emoteGroups" class="components-infinite-view has-data" style="text-align: center;">
 				<div>
-				<div class="title emoteCategory" title="twitch"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="foldArrow">▼</span></div>
-				<div id="twitch">${twitchHTML} </div>
-				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="subsicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
-				<div id="subs"> ${subHTML} </div>
-				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>Emotes Globales</span><span class="foldArrow">▼</span></div>`: ''}
-				<div id="bttv">${channel.bttv ? bttvHTML : ''}</div>
-				${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"></div><span>Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}
-				<div id="channelEmotes"> ${channelHTML}
+				<div class="title emoteCategory" title="twitch"><div id="twitchicon"><span class="wrapperTitle">Emotes de Twitch</span><span class="foldArrow">▼</span></div></div>
+				<div id="twitch" class="wrapper">${twitchHTML} </div>
+				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="subsicon"><span class="wrapperTitle">Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}</div>
+				<div id="subs" class="wrapper"> ${subHTML} </div>
+				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"><span class="wrapperTitle">Emotes Globales</span><span class="foldArrow">▼</span></div>`: ''}</div>
+				<div id="bttv" class="wrapper">${channel.bttv ? bttvHTML : ''}</div>
+				${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"><span class="wrapperTitle">Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}</div>
+				<div id="channelEmotes" class="wrapper"> ${channelHTML}
 				${ffzHTML} </div>
 				</div>
 			</div>
