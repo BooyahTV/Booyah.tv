@@ -2751,14 +2751,14 @@ function insertEmotesPanel(currentChannel) {
 		<div class="user-list-wrapper" data-infinite-scrollable="true">
 			<div id="emoteGroups" class="components-infinite-view has-data" style="text-align: center;">
 				<div>
-				<div class="title emoteCategory" title="twitch"><div id="twitchicon"></div><span>Emotes de Twitch</span><span class="foldArrow">▼</span></div>
-				<div id="twitch">${twitchHTML} </div>
-				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="subsicon"></div><span>Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}
-				<div id="subs"> ${subHTML} </div>
-				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"></div><span>Emotes Globales</span><span class="foldArrow">▼</span></div>`: ''}
-				<div id="bttv">${channel.bttv ? bttvHTML : ''}</div>
-				${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"></div><span>Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}
-				<div id="channelEmotes"> ${channelHTML}
+				<div class="title emoteCategory" title="twitch"><div id="twitchicon"><span class="wrapperTitle">Emotes de Twitch</span><span class="foldArrow">▼</span></div></div>
+				<div id="twitch" class="wrapper">${twitchHTML} </div>
+				${channelSubsEmotes && channelSubsEmotes.length > 0 ? `<div class="title emoteCategory" title="subs"><div id="subsicon"><span class="wrapperTitle">Emotes de subs</span><span class="foldArrow">▼</span></div>` : ''}</div>
+				<div id="subs" class="wrapper"> ${subHTML} </div>
+				${channel.bttv ? `<div class="title emoteCategory" title="bttv"><div id="bttvicon"><span class="wrapperTitle">Emotes Globales</span><span class="foldArrow">▼</span></div>`: ''}</div>
+				<div id="bttv" class="wrapper">${channel.bttv ? bttvHTML : ''}</div>
+				${ channel.bttv || channel.ffz ? `<div class="title emoteCategory" title="channelEmotes"><div id="ffzicon"><span class="wrapperTitle">Emotes del canal</span><span class="foldArrow">▼</span></div>` : ''}</div>
+				<div id="channelEmotes" class="wrapper"> ${channelHTML}
 				${ffzHTML} </div>
 				</div>
 			</div>

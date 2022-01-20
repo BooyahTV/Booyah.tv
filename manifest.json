@@ -4,7 +4,10 @@
 	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 3,
 
-	"permissions": ["tabs"],
+	"permissions": ["tabs","storage"],
+	"externally_connectable": {
+		"matches": ["https://localhost/*"]
+	},
 	"icons": {
 		"16": "16.png",
 		"48": "48.png",
@@ -63,5 +66,8 @@
 	],
 	"background": {
 		"service_worker": "background.js"
+	},
+	"action":{
+		"default_popup": "popup.html"
 	}
 }

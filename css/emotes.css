@@ -5,7 +5,28 @@
   width: auto;
   height: auto;
 }
+.wrapper {
+  margin: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  padding: 5px; 
+  width: 320px;
+  gap: 4px;
+}
 
+.wrapper div img {
+  height: 100%;
+  cursor: pointer;
+}
+
+.user-list-wrapper{
+  overflow-x: hidden;
+	overflow-y: scroll;
+}
 .zero-width{
   transform: translate(-120%);
   position: absolute;
@@ -196,28 +217,26 @@ body {
 #bttvicon {
   background-image: url("https://cdn.betterttv.net/emote/5590b223b344e2c42a9e28e3/1x");
   background-position: 0px 0px;
-  width: 28px;
+  background-repeat: no-repeat;
   height: 28px;
 }
 
 #ffzicon {
   background-image: url("https://cdn.frankerfacez.com/emoticon/243789/1");
   background-position: 0px 0px;
-  width: 32px;
+  background-repeat: no-repeat;
   height: 25px;
 }
 
 #twitchicon {
   background-image: url("chrome-extension://__MSG_@@extension_id__/resources/icons/twitch.svg");
-  width: 24px;
   height: 24px;
+  background-repeat: no-repeat;
 }
 #subsicon {
-  background-image: url("https://i.imgur.com/86lodev.png");
-  width: 24px;
+  background-image: url("https://imgur.com/V2pMZPv.png");
   height: 24px;
-  background-size: cover;
-  border-radius: 2px;
+  background-repeat: no-repeat;
 }
 
 #channelIcon {
@@ -272,7 +291,10 @@ body {
   left: 10px !important;
   color: rgb(255, 176, 0);
 }
-
+.wrapperTitle{
+  position: relative !important;
+  left: -80px !important;
+}
 .panelsTitle {
   margin-left: 16px;
 }

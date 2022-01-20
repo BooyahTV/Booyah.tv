@@ -11,13 +11,59 @@ function showNotification(success, message) {
 
 }
 
+async function readLocalStorage(key) {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get([key], function (result) {
+            if (result[key] === undefined) {
+                reject();
+            } else {
+                resolve(result[key]);
+            }
+        });
+    });
+}
+
+async function verifyToken(token) {
+    const params = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    const response = await fetch(
+        `https://id.twitch.tv/oauth2/validate`,
+        params
+    );
+    console.log(response);
+    return response.ok;
+}
+
+async function getUsername(token){
+    const params = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    const response = await fetch(
+        `https://id.twitch.tv/oauth2/validate`,
+        params
+    );
+    const json = await response.json();
+    return json.login;
+}
+
 function initExtension() {
         
-    setTimeout(() => {
+    setTimeout(async () => {
+        const token = await readLocalStorage("token").catch((error) =>
+        console.log(error)
+    );;
+
+        const isValidToken = await verifyToken(token);
+        if (!isValidToken) return;
 
         var baseurl = 'https://bapi.zzls.xyz/api'
 
-        var username = $('.mat-toolbar-single-row .username-container').text().trim()
+        var username = await getUsername(token);
         var emoteName = $('.mat-elevation-z2 .ml-2').text().split(' ')[1]
         var emoteID = window.location.href.replace('https://7tv.app/emotes/', '')
 
@@ -57,7 +103,7 @@ function initExtension() {
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({id: emoteID})
+                            body: JSON.stringify({id: emoteID, token: token})
                         }).then(response => {
                             
                             if(response.ok){
@@ -88,7 +134,8 @@ function initExtension() {
                         var newEmote = {
                             id: emoteID,
                             name: emoteName,
-                            source: '7tv'
+                            source: '7tv',
+                            token: token
                         }
 
                         fetch(baseurl + '/emotes/add/' + username, {

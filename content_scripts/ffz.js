@@ -7,13 +7,60 @@ function showNotification(success, message) {
 
 }
 
+async function readLocalStorage(key) {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get([key], function (result) {
+            if (result[key] === undefined) {
+                reject();
+            } else {
+                resolve(result[key]);
+            }
+        });
+    });
+}
+
+async function verifyToken(token) {
+    const params = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    const response = await fetch(
+        `https://id.twitch.tv/oauth2/validate`,
+        params
+    );
+    console.log(response);
+    return response.ok;
+}
+
+async function getUsername(token){
+    const params = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    const response = await fetch(
+        `https://id.twitch.tv/oauth2/validate`,
+        params
+    );
+    const json = await response.json();
+    return json.login;
+}
+
 function initExtension() {
         
-    setTimeout(() => {
+    setTimeout(async () => {
+
+        const token = await readLocalStorage("token").catch((error) =>
+        console.log(error)
+    );;
+
+        const isValidToken = await verifyToken(token);
+        if (!isValidToken) return;
 
         var baseurl = 'https://bapi.zzls.xyz/api'
 
-        var username = $('.dropdown-toggle').last().text().trim()
+        var username = await getUsername(token);
         var emoteName = $("#emoticon").text().split(' ')[0]
 
         var emoteID = window.location.href.replace('https://www.frankerfacez.com/emoticon/', '').split('-')[0]
@@ -51,7 +98,7 @@ function initExtension() {
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({id: emoteID})
+                            body: JSON.stringify({id: emoteID, token: token})
                         }).then(response => {
                             
                             if(response.ok){
@@ -75,7 +122,8 @@ function initExtension() {
                             name: emoteName,
                             source: 'ffz',
                             width: width,
-                            height: height
+                            height: height,
+                            token: token
                         }
 
                         fetch(baseurl + '/emotes/add/' + username, {
