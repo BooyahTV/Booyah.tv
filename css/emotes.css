@@ -268,7 +268,8 @@ body {
 }
 
 .foldArrow {
-  position: absolute!important;
+  /*position: absolute!important;*/
+  position: relative !important;
   right: -310px;
   color: rgb(255, 176, 0);
 }
