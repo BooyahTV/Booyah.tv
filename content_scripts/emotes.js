@@ -2065,7 +2065,7 @@ function initExtension() {
 				fetch(booyahApiBaseURL + 'emotes/' + channel.name).then((value) => value.json() ),
 			])
 			.then(([globalBetterttv, globalBooyahtv, channelBetterttv, channelFrankerfaceZ, subsEmotes, badges, apiEmotes]) => {
-				// limiamos los emotes para que no se junten con los de otro streamer
+				// limpiamos los emotes para que no se junten con los de otro streamer
 				bttvGlobalEmotes = []
 				frankerFaceZ = []
 				bttvChannelEmotes = []
@@ -2074,7 +2074,6 @@ function initExtension() {
 				channelBadges = []
 				//channelBooyahtvBadges = []
 
-				
 				// guardamos los emotes globales de bttv
 				bttvGlobalEmotes = globalBetterttv
 
@@ -2392,8 +2391,8 @@ function initExtension() {
 										<tr class="rank-tr">
 											<td class="rank-td rank"><span>#</span>${user[0].replace('#','')}</td>
 											<td class="rank-td rank-color">
-												${ user[4] ? `<img title='${user[5]}' class='rank-emote' src='${user[4]}'/> ` : ""}
-												 ${ user[1] }</td>
+												${ user[4] ? `<img title='${user[5]}' class='rank-emote' src='${user[4]}'/>` : ""}
+												${ user[1] }</td>
 											<td class="rank-td rank-points">${user[3]}</td>
 										</tr>
 										`)
@@ -2705,35 +2704,50 @@ function insertEmotesPanel(currentChannel) {
 		})
 	}
 
-	/* Emotes globales de BTTV*/ 
+	/* Emotes globales de BTTV*/
 
 	if (bttvGlobalEmotes && bttvGlobalEmotes.length > 0) {
-		bttvGlobalEmotes.forEach(emote => {
-			bttvHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
-		})
+	bttvGlobalEmotes.forEach((emote) => {
+		bttvHTML += createEmoteHTML(
+		emote.code,
+		`https://cdn.betterttv.net/emote/${emote.id}/1x`
+		);
+	});
 	}
 
 	/* Emotes globales de FFZ*/
 
 	if (frankerFaceZ && frankerFaceZ.length > 0) {
-		frankerFaceZ.forEach(emote => {
-			ffzHTML += createEmoteHTML(emote.name, `https://cdn.frankerfacez.com/emote/${emote.id}/1`, emote.width, emote.height)
-		})
+	frankerFaceZ.forEach((emote) => {
+		ffzHTML += createEmoteHTML(
+		emote.name,
+		`https://cdn.frankerfacez.com/emote/${emote.id}/1`,
+		emote.width,
+		emote.height
+		);
+	});
 	}
 
 	/* Emotes de canal de BTTV*/
 
 	if (bttvChannelEmotes && bttvChannelEmotes.length > 0) {
-		bttvChannelEmotes.forEach(emote => {
-			channelHTML += createEmoteHTML(emote.code, `https://cdn.betterttv.net/emote/${emote.id}/1x`)
-		})
+	bttvChannelEmotes.forEach((emote) => {
+		channelHTML += createEmoteHTML(
+		emote.code,
+		`https://cdn.betterttv.net/emote/${emote.id}/1x`
+		);
+	});
 	}
-	
+
 	if (sevenTvChannelEmotes && sevenTvChannelEmotes.length > 0) {
-		sevenTvChannelEmotes.forEach(emote => {
-			channelHTML += createEmoteHTML(emote.name, `https://cdn.7tv.app/emote/${emote.id}/1x`)
-		})
+	sevenTvChannelEmotes.forEach((emote) => {
+		channelHTML += createEmoteHTML(
+		emote.name,
+		`https://cdn.7tv.app/emote/${emote.id}/1x`
+		);
+	});
 	}
+
 
 
 	var emoteCount = bttvGlobalEmotes.length + 1 +  bttvChannelEmotes.length + 1 + frankerFaceZ.length + 1 + twitchEmotes.length + 1 + sevenTvChannelEmotes.length + 1
@@ -2766,33 +2780,36 @@ function insertEmotesPanel(currentChannel) {
 
 	// insert emote panel to the DOM emote panel
 
-	if (document.body.contains(document.getElementById("emoteList"))){
-		document.getElementById("emoteList").remove();
-	};
+	if (document.body.contains(document.getElementById("emoteList"))) {
+	document.getElementById("emoteList").remove();
+	}
 
-	$('.components-chat-menu-users').first().append(emotesHTML).ready(function () {
-		$('#emoteGroups .title').click(function () {
-			let title = $( this ).attr( "title" )
+	$(".components-chat-menu-users")
+	.first()
+	.append(emotesHTML)
+	.ready(function () {
+		$("#emoteGroups .title").click(function () {
+		let title = $(this).attr("title");
 
-			foldEmoteGroup($(this).find('.foldArrow')[0], title)
-		})    
-
+		foldEmoteGroup($(this).find(".foldArrow")[0], title);
+		});
 	});
 	
 	// closes the emote panel when his outside is clicked
 
-	$(document).click(function(event) { 
+	$(document).click(function (event) {
 		var $target = $(event.target);
-
-		if($target.attr('id') == 'emotes-icon') return
-		
-		if($target.attr('id') != 'emotes-icon' &&
-		 !$target.closest('#emoteList').length && 
-		$('#emoteList').is(":visible")) {
-			$('#emoteList').hide();
-			//toggleEmotePanel(false)
-		}   
-
+	  
+		if ($target.attr("id") == "emotes-icon") return;
+	  
+		if (
+		  $target.attr("id") != "emotes-icon" &&
+		  !$target.closest("#emoteList").length &&
+		  $("#emoteList").is(":visible")
+		) {
+		  $("#emoteList").hide();
+		  //toggleEmotePanel(false)
+		}
 	});
 	
 //	document.getElementById("channelIcon").style.backgroundImage = `url(${document.querySelector('.channel-top-bar .components-avatar-image').src}`
@@ -2800,26 +2817,24 @@ function insertEmotesPanel(currentChannel) {
 }
 
 
-function twitchChat(){
-	// original color: adadba
+function twitchChat() {
+  // original color: adadba
 
-	var channelName = channel.name
+  var channelName = channel.name;
 
-	if (channel.twitchFakeName) channelName = channel.twitchFakeName
+  if (channel.twitchFakeName) channelName = channel.twitchFakeName;
 
-	twitchChatHTML = 
-	`<div id="twitchchat" class="btn-ellipsis">
+  twitchChatHTML = `<div id="twitchchat" class="btn-ellipsis">
 		<div  onclick="window.open('https://www.twitch.tv/popout/${channelName}/chat?popout=','popup','width=400,height=660');" class="components-icon components-icon-channel-more">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#adadba" d="M2.149 0l-1.612 4.119v16.836h5.731v3.045h3.224l3.045-3.045h4.657l6.269-6.269v-14.686h-21.314zm19.164 13.612l-3.582 3.582h-5.731l-3.045 3.045v-3.045h-4.836v-15.045h17.194v11.463zm-3.582-7.343v6.262h-2.149v-6.262h2.149zm-5.731 0v6.262h-2.149v-6.262h2.149z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
 		</div>
-	</div>`
+	</div>`;
 
-	if (document.body.contains(document.getElementById("twitchchat"))){
-		document.getElementById("twitchchat").remove();
-	};
+  if (document.body.contains(document.getElementById("twitchchat"))) {
+    document.getElementById("twitchchat").remove();
+  }
 
-	$('.channel-profile-btns').append(twitchChatHTML)
-
+  $(".channel-profile-btns").append(twitchChatHTML);
 }
 
 
@@ -2934,10 +2949,8 @@ function insertChannelPanels(channel) {
 	}
 }
 
-function insertClipBtn(parent){
-
-
-	var clipBtnHTML = `
+function insertClipBtn(parent) {
+  var clipBtnHTML = `
 
 		<!-- Modal HTML embedded directly into document -->
 		<div id="clipModal" class="modal" style="z-index: 100;">
@@ -2956,137 +2969,137 @@ function insertClipBtn(parent){
 		</span>
 		</a>
 	`;
-	
-	parent.first().append(clipBtnHTML).ready(function () {
-		
-		clipBtn.addEventListener('click', function(event) {
-			var clipBtn = document.querySelector('#clipBtn');
-			var clipName = document.querySelector('#clipName');
-			var clipMessage = document.querySelector('#clipMessage');
 
-			console.log('clip '+clipName.value)
-			
-			if(clipName.value == "") return
+  parent
+    .first()
+    .append(clipBtnHTML)
+    .ready(function () {
+      clipBtn.addEventListener("click", function (event) {
+        var clipBtn = document.querySelector("#clipBtn");
+        var clipName = document.querySelector("#clipName");
+        var clipMessage = document.querySelector("#clipMessage");
 
-			var nicknameParam = ''
+        console.log("clip " + clipName.value);
 
-			
-			if(selfUsername !== null){
-				nicknameParam = `&nickname=${selfUsername.replaceAll(' ','+')}`
-			}
+        if (clipName.value == "") return;
 
+        var nicknameParam = "";
 
-			var video = document.getElementById("vjs_video_3_html5_api");
+        if (selfUsername !== null) {
+          nicknameParam = `&nickname=${selfUsername.replaceAll(" ", "+")}`;
+        }
 
-			copyTextToClipboard( `${window.location.href.split('?')[0]}?timestamp=${Math.floor(video.currentTime)}&clipname=${clipName.value.replaceAll(' ','+')}${nicknameParam}`);
-			
-			clipMessage.style.display = "block"
+        var video = document.getElementById("vjs_video_3_html5_api");
 
-			setTimeout(function(){
-				clipMessage.style.display = "none"
-			},5000)
-		});
-		
-	});
+        copyTextToClipboard(
+          `${window.location.href.split("?")[0]}?timestamp=${Math.floor(
+            video.currentTime
+          )}&clipname=${clipName.value.replaceAll(" ", "+")}${nicknameParam}`
+        );
+
+        clipMessage.style.display = "block";
+
+        setTimeout(function () {
+          clipMessage.style.display = "none";
+        }, 5000);
+      });
+    });
 }
 
 function insertVOD(currentURL) {
-	const segments = new URL(currentURL).pathname.split("/");
-	const VODID = segments.pop() || segments.pop(); // Handle potential trailing slash
+  const segments = new URL(currentURL).pathname.split("/");
+  const VODID = segments.pop() || segments.pop(); // Handle potential trailing slash
 
-	let url = `https://booyah.live/api/v3/playbacks/${VODID}`;
+  let url = `https://booyah.live/api/v3/playbacks/${VODID}`;
 
-	setTimeout(function(){
+  setTimeout(function () {
+    var url = new URL(currentURL);
 
-		var url = new URL(currentURL);
+    var timestamp = url.searchParams.get("timestamp");
+    var clipname = url.searchParams.get("clipname");
+    var nickname = url.searchParams.get("nickname");
 
-		var timestamp = url.searchParams.get("timestamp");
-		var clipname = url.searchParams.get("clipname");
-		var nickname = url.searchParams.get("nickname");
+    console.log(clipname);
 
-		console.log(clipname)
-		
-		if(timestamp){
-			var video = document.getElementById("vjs_video_3_html5_api"); //factorise selectors to consts
-			video.currentTime = timestamp; // set time (in secounds)
-		}
+    if (timestamp) {
+      var video = document.getElementById("vjs_video_3_html5_api"); //factorise selectors to consts
+      video.currentTime = timestamp; // set time (in secounds)
+    }
 
-		if(nickname){
-			nickname = nickname.replaceAll('+',' ')
-			document.querySelector('.video-date-count').innerHTML ='clipeado por ' + nickname
-		}
+    if (nickname) {
+      nickname = nickname.replaceAll("+", " ");
+      document.querySelector(".video-date-count").innerHTML =
+        "clipeado por " + nickname;
+    }
 
-		if(clipname){
-			document.querySelector('.video-bottom .video-title').innerHTML = '<span style="color:#4949ff">[CLIP]</span> ' + clipname.replaceAll('+',' ')
-		}
-	},2000)
+    if (clipname) {
+      document.querySelector(".video-bottom .video-title").innerHTML =
+        '<span style="color:#4949ff">[CLIP]</span> ' +
+        clipname.replaceAll("+", " ");
+    }
+  }, 2000);
 
+  if (!$("#createClip").length) {
+    insertClipBtn($(".video-btns"));
+  }
 
-	if (!$("#createClip").length) {
-		insertClipBtn($(".video-btns"))
-	}
+  console.log(VODID, url);
 
-	console.log(VODID, url);
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      var resolution = data.playback.endpoint_list[0].resolution; // 1080
+      var downloadurl = data.playback.endpoint_list[0].download_url;
 
-	fetch(url)
-		.then((response) => response.json())
-		.then((data) => {
-		
-		var resolution = data.playback.endpoint_list[0].resolution; // 1080
-		var downloadurl = data.playback.endpoint_list[0].download_url;
+      // todo crear inicio/fin del clip
 
-		// todo crear inicio/fin del clip
-		
-
-		var vodHTML = `
+      var vodHTML = `
 		<a id="downloadVOD" title="Desacargar VOD en ${resolution}p" target="_blank" download="${data.playback.name}.mp4" href="${downloadurl}" class="downloadvod components-button components-button-size-small components-button-type-outlined-dark desktop components-button-inline components-button-has-icon">
 			<span class="button-content">
 			<i class="follow-btn-divider"></i>Descargar VOD
 			</span>
-		</a>`
+		</a>`;
 
-		if (!$("#downloadVOD").length) {
-			
-			$(".video-btns").first().append(vodHTML)
-			
-		}
-
-	});
+      if (!$("#downloadVOD").length) {
+        $(".video-btns").first().append(vodHTML);
+      }
+    });
 }
 
 
 function setTextareaValue(message, isAdd) {
-	// https://github.com/facebook/react/issues/10135
-	const textarea = document.getElementsByTagName('textarea')[0]
+  // https://github.com/facebook/react/issues/10135
+  const textarea = document.getElementsByTagName("textarea")[0];
 
-	function setNativeValue(element, value) {
-		const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, 'value') || {}
-		const prototype = Object.getPrototypeOf(element)
-		const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, 'value') || {}
+  function setNativeValue(element, value) {
+    const { set: valueSetter } =
+      Object.getOwnPropertyDescriptor(element, "value") || {};
+    const prototype = Object.getPrototypeOf(element);
+    const { set: prototypeValueSetter } =
+      Object.getOwnPropertyDescriptor(prototype, "value") || {};
 
-		if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
-			prototypeValueSetter.call(element, value)
-		} else if (valueSetter) {
-			valueSetter.call(element, value)
-		} else {
-			throw new Error('The given element does not have a value setter')
-		}
-	}
-	if(isAdd){
-		setNativeValue(textarea, textarea.value + message)
-	}else{
-		setNativeValue(textarea, message)
-	}
+    if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+      prototypeValueSetter.call(element, value);
+    } else if (valueSetter) {
+      valueSetter.call(element, value);
+    } else {
+      throw new Error("The given element does not have a value setter");
+    }
+  }
+  if (isAdd) {
+    setNativeValue(textarea, textarea.value + message);
+  } else {
+    setNativeValue(textarea, message);
+  }
 
-	textarea.dispatchEvent(new Event('input', { bubbles: true }))
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 function tagUserByMessage(usernameContainer) {
-	const scapedUsername = usernameContainer.textContent.replaceAll(' ','_')
+  const scapedUsername = usernameContainer.textContent.replaceAll(" ", "_");
 
-	setTextareaValue('@'+scapedUsername +' ', true)
-	
-}  
+  setTextareaValue("@" + scapedUsername + " ", true);
+}
 
 // keyboard events
 
@@ -3124,7 +3137,6 @@ function saveMessage(){
 }
 
 function retriveMessage(){
-
 	if (messageLog.length < 1) return
 
 	setTextareaValue(messageLog[messageCursor], false)
@@ -3140,104 +3152,106 @@ function retriveMessage(){
 
 // Let users close emote list with Escape and Enter if is focusing the textarea.
 // TODO: refactor to textarea-only event
-document.addEventListener('keydown', (event) => {
-	// dummy element
-	var txtArea =  document.getElementsByTagName('textarea')[0]
-	
-	var autocomplete = document.getElementsByClassName('ui-autocomplete')[0]
+document.addEventListener("keydown", (event) => {
+  // dummy element
+  var txtArea = document.getElementsByTagName("textarea")[0];
 
-	if ( event.code === 'Escape' || ( event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea) {		
-		toggleEmotePanel(false)
+  var autocomplete = document.getElementsByClassName("ui-autocomplete")[0];
 
-		switch (document.getElementsByTagName('textarea')[0].innerHTML) {
-			case '!snake':
-				playMinigame('snake')
-				break;
-		
-			case '!agario':
-				playMinigame('agario')
-				break;
-		}
-	}
+  if (
+    event.code === "Escape" ||
+    ((event.code === "Enter" || event.code === "NumpadEnter") &&
+      document.activeElement === txtArea)
+  ) {
+    toggleEmotePanel(false);
 
-	
-	if ( (event.code === 'Enter' || event.code === 'NumpadEnter') && document.activeElement === txtArea ) {
-		saveMessage()
-		
-	}
+    switch (document.getElementsByTagName("textarea")[0].innerHTML) {
+      case "!snake":
+        playMinigame("snake");
+        break;
 
-	if ( event.code === 'ArrowUp' && document.activeElement === txtArea && autocomplete.style.display == 'none' ) {
-		//TODO: volver a colocarlo
-		//retriveMessage()
-		
-	}
+      case "!agario":
+        playMinigame("agario");
+        break;
+    }
+  }
 
-	if ( event.code === 'Space' && document.activeElement !== txtArea && !window.location.href.includes('vods')) {
-		vid = document.querySelector('video');
+  if (
+    (event.code === "Enter" || event.code === "NumpadEnter") &&
+    document.activeElement === txtArea
+  ) {
+    saveMessage();
+  }
 
-		if (vid) {
-			videoTime = vid.duration;
-			if (videoTime) {	
-				vid.currentTime = videoTime;
-			}
-		}
-	}
+  if (
+    event.code === "ArrowUp" &&
+    document.activeElement === txtArea &&
+    autocomplete.style.display == "none"
+  ) {
+    //TODO: volver a colocarlo
+    //retriveMessage()
+  }
 
+  if (
+    event.code === "Space" &&
+    document.activeElement !== txtArea &&
+    !window.location.href.includes("vods")
+  ) {
+    vid = document.querySelector("video");
 
-	
+    if (vid) {
+      videoTime = vid.duration;
+      if (videoTime) {
+        vid.currentTime = videoTime;
+      }
+    }
+  }
 });
 
 function playMinigame(minigame) {
-	if(!selfUsername) return // si no tiene nombre de usuario (no a cargado o no esta logueado) salir de la funcion
-	
-	const left = (screen.width/2)-(675/2);
-	const top = (screen.height/2)-(735/2);
+  if (!selfUsername) return; // si no tiene nombre de usuario (no a cargado o no esta logueado) salir de la funcion
 
-	var url = ''
+  const left = screen.width / 2 - 675 / 2;
+  const top = screen.height / 2 - 735 / 2;
 
-	switch (minigame) {
-		case 'snake':
-			url = 'https://bapi.zzls.xyz/minigames/snake/'+selfUsername
-			break;
-		case 'agario':
-			url = 'http://199.195.254.68:3000/?nickname='+selfUsername
-			break;
+  var url = "";
 
-	}
+  switch (minigame) {
+    case "snake":
+      url = "https://bapi.zzls.xyz/minigames/snake/" + selfUsername;
+      break;
+    case "agario":
+      url = "http://199.195.254.68:3000/?nickname=" + selfUsername;
+      break;
+  }
 
-	console.log(url)
+  console.log(url);
 
-	var minigameWindow = window.open(url,minigame, 'width=675,height=735, top='+top+', left='+left);
-
-
+  var minigameWindow = window.open(
+    url,
+    minigame,
+    "width=675,height=735, top=" + top + ", left=" + left
+  );
 }
 
 // delay fixer
 
-var videexists = setInterval(function() {
-	video = document.querySelector('video');
-
+var videexists = setInterval(function () {
+	video = document.querySelector("video");
+  
 	if (video && !video.paused) {
-
-		clearInterval(videexists);
-		
-
-		var videoTime = video.duration;
-		if (videoTime) {
-			
-			video.currentTime = videoTime;
-			
-			console.log('[Booyah.TV] video skiped to last loaded frame: ',videoTime)
-		}
-
+	  clearInterval(videexists);
+  
+	  var videoTime = video.duration;
+	  if (videoTime) {
+		video.currentTime = videoTime;
+  
+		console.log("[Booyah.TV] video skiped to last loaded frame: ", videoTime);
+	  }
 	}
-		
-}, 3000);
-
-
+  }, 3000);
 
 //  AUTOCOMPLETE
-
 
 (function ($) {
 	// Extend the autocomplete widget, using our own application namespace.
@@ -3261,253 +3275,252 @@ var videexists = setInterval(function() {
 		return result;
 	  },
 	});
-
-  })(jQuery);
+})(jQuery);
 
 async function formatUsernamesToAutocomplete() {
-	var users = []
+  var users = [];
 
-	let response = await fetch(`https://booyah.live/api/v3/chatrooms/${chatroom}/audiences?cursor=0&count=10000`).then((response) => {
-		if (response.ok) {
-			return response.json();
-		} else {
-			throw new Error('Something went wrong');
-		}
-	})
+  let response = await fetch(
+    `https://booyah.live/api/v3/chatrooms/${chatroom}/audiences?cursor=0&count=10000`
+  ).then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error("Something went wrong");
+    }
+  });
 
-	response.audience_list.forEach(user => {
-		users.push({
-			label: user.nick_name.replaceAll(' ','_'),
-			img: user.thumbnail,
-		})
-	})
+  response.audience_list.forEach((user) => {
+    users.push({
+      label: user.nick_name.replaceAll(" ", "_"),
+      img: user.thumbnail,
+    });
+  });
 
-	return users
-
+  return users;
 }
 
 function formatEmotesToAutocomplete() {
-	let emotes = []
-
-	twitchEmotes.forEach(emote => {
-		emotes.push({
-			label: emote.name,
-			img: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
-		})
-	})
-
-	booyahtvEmotes.forEach(emote => {
-
-		if (emote.url) {
-			url = emote.url
-		} else {
-			url = `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`;
-		}
-
-		emotes.push({
-			label: emote.name,
-			img: url,
-		})
-	})
-
-	channelSubsEmotes.forEach(emote => {
-		emotes.push({
-			label: emote.code,
-			img: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
-		})
-	})
-
-	bttvGlobalEmotes.forEach(emote => {
-		emotes.push({
-			label: emote.code,
-			img: `https://cdn.betterttv.net/emote/${emote.id}/1x`,
-		})
-	})
-
-	bttvChannelEmotes.forEach(emote => {
-		emotes.push({
-			label: emote.code,
-			img: `https://cdn.betterttv.net/emote/${emote.id}/1x`,
-		})
-	})
-
-	sevenTvChannelEmotes.forEach(emote => {
-		emotes.push({
-			label: emote.name,
-			img: `https://cdn.7tv.app/emote/${emote.id}/1x`,
-		})
-	})
-	
-
-
-	frankerFaceZ.forEach(emote => {
-		emotes.push({
-			label: emote.name,
-			img: `https://cdn.frankerfacez.com/emote/${emote.id}/1`,
-		})
-	})
-
-	return emotes
+	let emotes = [];
+  
+	twitchEmotes.forEach((emote) => {
+	  emotes.push({
+		label: emote.name,
+		img: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
+	  });
+	});
+  
+	booyahtvEmotes.forEach((emote) => {
+	  if (emote.url) {
+		url = emote.url;
+	  } else {
+		url = `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`;
+	  }
+  
+	  emotes.push({
+		label: emote.name,
+		img: url,
+	  });
+	});
+  
+	channelSubsEmotes.forEach((emote) => {
+	  emotes.push({
+		label: emote.code,
+		img: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
+	  });
+	});
+  
+	bttvGlobalEmotes.forEach((emote) => {
+	  emotes.push({
+		label: emote.code,
+		img: `https://cdn.betterttv.net/emote/${emote.id}/1x`,
+	  });
+	});
+  
+	bttvChannelEmotes.forEach((emote) => {
+	  emotes.push({
+		label: emote.code,
+		img: `https://cdn.betterttv.net/emote/${emote.id}/1x`,
+	  });
+	});
+  
+	sevenTvChannelEmotes.forEach((emote) => {
+	  emotes.push({
+		label: emote.name,
+		img: `https://cdn.7tv.app/emote/${emote.id}/1x`,
+	  });
+	});
+  
+	frankerFaceZ.forEach((emote) => {
+	  emotes.push({
+		label: emote.name,
+		img: `https://cdn.frankerfacez.com/emote/${emote.id}/1`,
+	  });
+	});
+  
+	return emotes;
 }
+  
 
-async function initAutocomplete(){
+async function initAutocomplete() {
 	// add twitch, booyahtv, subs, bttv global, bttv channel, ffz emotes
 	// to the autocomplete list
-
-	var emotes = formatEmotesToAutocomplete()
-
+  
+	var emotes = formatEmotesToAutocomplete();
+  
 	//var users = await formatUsernamesToAutocomplete()
-
+  
 	function split(val) {
-		return val.split(/ \s*/);
+	  return val.split(/ \s*/);
 	}
 	function extractLast(term) {
-		return split(term).pop();
+	  return split(term).pop();
 	}
-
+  
 	// inject results div
 	$(".components-desktop-chatroom").first().after(`<div id="results"></div>`);
-
+  
 	$(".components-input-element")
-	.on("keydown", function (event) {
+	  .on("keydown", function (event) {
 		if (
-			event.keyCode === $.ui.keyCode.TAB /*&&
-			$(this).autocomplete("instance").menu.active*/
+		  event.keyCode === $.ui.keyCode.TAB /*&&
+			  $(this).autocomplete("instance").menu.active*/
 		) {
-			event.preventDefault();
+		  event.preventDefault();
 		}
-	})
-	.autocomplete({
+	  })
+	  .autocomplete({
 		appendTo: "#results",
 		minLength: 2,
 		delay: 100,
 		highlightItem: true,
 		position: { my: "left bottom", at: "left top", collision: "flip" },
-
+  
 		open: function () {
-			var position = $("#results").position(),
-				left = position.left
-
-			$("#results > ul").css({
-				left: left + "px",
-
-			});
-
-			toggleEmotePanel(false)
+		  var position = $("#results").position(),
+			left = position.left;
+  
+		  $("#results > ul").css({
+			left: left + "px",
+		  });
+  
+		  toggleEmotePanel(false);
 		},
 		source: function (request, response) {
-			var results = $.ui.autocomplete.filter(emotes, extractLast(request.term))
-
-			results = results.slice(0, 10)
-
-			response(results);
-
+		  var results = $.ui.autocomplete.filter(
+			emotes,
+			extractLast(request.term)
+		  );
+  
+		  results = results.slice(0, 10);
+  
+		  response(results);
 		},
 		focus: function (event, ui) {
-			// prevent value inserted on focus
-			$(".ui-helper-hidden-accessible").hide();
-			event.preventDefault();
-
-			return false;
+		  // prevent value inserted on focus
+		  $(".ui-helper-hidden-accessible").hide();
+		  event.preventDefault();
+  
+		  return false;
 		},
 		select: function (event, ui) {
-			var terms = split(this.value);
-			console.log(terms);
-			// remove the current input
-			terms.pop();
-			// add the selected item
-			terms.push(ui.item.value);
-			// add placeholder to get the space at the end
-			terms.push("");
-			this.value = terms.join(" ");
-
-			setTextareaValue('',true)
-			return false;
+		  var terms = split(this.value);
+		  console.log(terms);
+		  // remove the current input
+		  terms.pop();
+		  // add the selected item
+		  terms.push(ui.item.value);
+		  // add placeholder to get the space at the end
+		  terms.push("");
+		  this.value = terms.join(" ");
+  
+		  setTextareaValue("", true);
+		  return false;
 		},
-	});	
-
+	});
 }
+  
 
-async function initUsernameAutocomplete(){
+async function initUsernameAutocomplete() {
 	// add twitch, booyahtv, subs, bttv global, bttv channel, ffz emotes
 	// to the autocomplete list
-
-	var users = await formatUsernamesToAutocomplete()
-
-	console.log(users)
-
+  
+	var users = await formatUsernamesToAutocomplete();
+  
+	console.log(users);
+  
 	function split(val) {
-		return val.split(/ \s*/);
+	  return val.split(/ \s*/);
 	}
 	function extractLast(term) {
-		return split(term).pop();
+	  return split(term).pop();
 	}
-
+  
 	// inject results div
 	$(".components-desktop-chatroom").first().after(`<div id="results"></div>`);
-
+  
 	$(".components-input-element")
-	.on("keydown", function (event) {
+	  .on("keydown", function (event) {
 		if (
-			event.keyCode === $.ui.keyCode.TAB /*&&
-			$(this).autocomplete("instance").menu.active*/
+		  event.keyCode === $.ui.keyCode.TAB /*&&
+			  $(this).autocomplete("instance").menu.active*/
 		) {
-			event.preventDefault();
+		  event.preventDefault();
 		}
-	})
-	.autocomplete({
+	  })
+	  .autocomplete({
 		appendTo: "#results",
 		minLength: 2,
 		delay: 100,
 		highlightItem: true,
 		position: { my: "left bottom", at: "left top", collision: "flip" },
-
+  
 		open: function () {
-			var position = $("#results").position(),
-				left = position.left
-
-			$("#results > ul").css({
-				left: left + "px",
-
-			});
+		  var position = $("#results").position(),
+			left = position.left;
+  
+		  $("#results > ul").css({
+			left: left + "px",
+		  });
 		},
 		source: function (request, response) {
-		   var results = $.ui.autocomplete.filter(users, extractLast(request.term))
-
-		   /*var results = $.map(emotes, function (emote) {
-				if (emote.label.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
-					return emote;
-				}
-			});
-			*/
-			results = results.slice(0, 10)
-
-			response(results);
-
+		  var results = $.ui.autocomplete.filter(
+			users,
+			extractLast(request.term)
+		  );
+  
+		  /*var results = $.map(emotes, function (emote) {
+				  if (emote.label.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+					  return emote;
+				  }
+			  });
+			  */
+		  results = results.slice(0, 10);
+  
+		  response(results);
 		},
 		focus: function (event, ui) {
-			// prevent value inserted on focus
-			$(".ui-helper-hidden-accessible").hide();
-			event.preventDefault();
-
-			return false;
+		  // prevent value inserted on focus
+		  $(".ui-helper-hidden-accessible").hide();
+		  event.preventDefault();
+  
+		  return false;
 		},
 		select: function (event, ui) {
-			var terms = split(this.value);
-			console.log(terms);
-			// remove the current input
-			terms.pop();
-			// add the selected item
-			terms.push(ui.item.value);
-			// add placeholder to get the space at the end
-			terms.push("");
-			this.value = terms.join(" ");
-
-			setTextareaValue('',true)
-			return false;
+		  var terms = split(this.value);
+		  console.log(terms);
+		  // remove the current input
+		  terms.pop();
+		  // add the selected item
+		  terms.push(ui.item.value);
+		  // add placeholder to get the space at the end
+		  terms.push("");
+		  this.value = terms.join(" ");
+  
+		  setTextareaValue("", true);
+		  return false;
 		},
-	});	
-
+	});
 }
 
 
@@ -3515,19 +3528,20 @@ async function initUsernameAutocomplete(){
 
 initExtension();
 
-
-var url = window.location.href
+var url = window.location.href;
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-	if (request.message === 'TabUpdated') {
-		if (url != request.url){
-			
-			initExtension()
-			console.log('PAGE CHANGED',request.url)
-		}
-		
-		url = request.url
-	}
-})
+  if (request.message === "TabUpdated") {
+    if (url != request.url) {
+      initExtension();
+      console.log("PAGE CHANGED", request.url);
+    }
 
-chrome.runtime.sendMessage({type: "setUID", uid: localStorage.getItem('loggedUID')});
+    url = request.url;
+  }
+}).then;
+
+chrome.runtime.sendMessage({
+  type: "setUID",
+  uid: localStorage.getItem("loggedUID"),
+});
