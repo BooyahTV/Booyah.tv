@@ -1157,7 +1157,7 @@ function replaceEmote(msg, regex, url, fullurl, title, from) {
 	var src = url
 
 	if (isPopup) src = fullurl
-	
+
 	return msg.replace(
 		regex,
 		`<img title="${title}" class='emote in-chat-emote ${zerowidth}' rel="emote" src='${src}' data-fullemote="${fullurl}" data-from="${from}">`
@@ -3522,6 +3522,13 @@ async function initUsernameAutocomplete() {
 		},
 	});
 }
+
+document.addEventListener('copy', (event) => {
+    const selection = document.getSelection();
+	console.log(selection)
+    event.clipboardData.setData('text/plain', selection.toString().replace('[','').replace(']','').replace(']',''));
+    event.preventDefault();
+});
 
 
 // //init estension when the page is first loaded
