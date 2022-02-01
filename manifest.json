@@ -9,8 +9,8 @@
 	},
 	"applications": {
     		"gecko": {
-      			"strict_min_version": "48.0",
-      			"id": "9d7ee71fac26af51a2df365b0efe7990a3522d4f@temporary-addon"
+      			"strict_min_version": "60.0",
+      			"id": "{e81430dc-cecc-4d51-8ccf-08716d5cb5ec}"
     			}
   	},
 	"permissions": [
