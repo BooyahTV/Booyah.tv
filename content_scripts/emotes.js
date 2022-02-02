@@ -1972,7 +1972,7 @@ function initExtension() {
 		hide: false,
 		content: function( response ) {
 			var element = $( this );
-			if ( element.hasClass( "in-chat-emote" ) && selfUsername != booyahID ) {
+			if ( element.hasClass( "in-chat-emote" ) && selfUsername != channel.booyahID ) {
 				return `<img class="emote-preview" src="${element.attr( "data-fullemote" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br>Emote de ${element.attr( "data-from" )}</p>`;
 			}
 			
