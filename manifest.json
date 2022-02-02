@@ -1,6 +1,6 @@
 {
 	"name": "Booyah.tv",
-	"version": "1.36",
+	"version": "1.38",
 	"description": "Mejora la experiencia de Booyah.live",
 	"manifest_version": 2,
 	"background": {

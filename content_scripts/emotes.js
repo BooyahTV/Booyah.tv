@@ -1972,13 +1972,11 @@ function initExtension() {
 		hide: false,
 		content: function( response ) {
 			var element = $( this );
-			
-			/*if ( element.hasClass( "in-chat-emote" ) ) {
+			if ( element.hasClass( "in-chat-emote" ) && selfUsername != booyahID ) {
 				return `<img class="emote-preview" src="${element.attr( "data-fullemote" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br>Emote de ${element.attr( "data-from" )}</p>`;
-			}*/
+			}
 			
 			if ( element.hasClass( "btv-badge" ) ) {
-				// mostrar puntaje / tiempo de visualisacion
 				return `<img class="emote-preview" src="${element.attr( "data-fullimage" )}"> </img> <p class="tooltip-text">${element.attr( "title" )} </br> ${element.attr( "data-subtitle" )}</p>`;
 			}
 
