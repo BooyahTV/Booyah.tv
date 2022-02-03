@@ -3524,7 +3524,7 @@ async function initUsernameAutocomplete() {
 document.addEventListener('copy', (event) => {
     const selection = document.getSelection();
 	console.log(selection)
-    event.clipboardData.setData('text/plain', selection.toString().replace('[','').replace(']','').replace(']',''));
+    event.clipboardData.setData('text/plain', selection.toString().replaceAll(' [','').replaceAll('] ','').replaceAll('] ',''));
     event.preventDefault();
 });
 
